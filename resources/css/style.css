@@ -26,7 +26,6 @@ section {
     justify-content: center;
 }
 
-
 /* === Navbar Modern === */
 nav {
     background: linear-gradient(90deg, #8B0000, #a60000);
@@ -152,7 +151,6 @@ nav.scrolled {
     }
 }
 
-
 /* === Header / Slider === */
 #beranda {
     position: relative;
@@ -210,7 +208,6 @@ nav.scrolled {
   box-sizing: border-box;
 }
 
-
 /* Fade + move in animation */
 /* === CENTER (dari bawah ke tengah) === */
 @keyframes fadeInUp {
@@ -267,9 +264,11 @@ nav.scrolled {
     background-size: cover;
     background-position: center;
 }
+
 .slider-slide.slider-active {
     opacity: 1;
 }
+
 #beranda h1,
 #beranda p,
 #beranda .cta-btn,
@@ -382,7 +381,6 @@ nav.scrolled {
         margin-bottom: 0px;
     }
 }
-
 
 /* === CTA Button === */
 .cta-btn {
