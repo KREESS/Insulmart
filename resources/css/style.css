@@ -39,12 +39,12 @@ nav {
 }
 
 .navbar {
-    max-width: 1200px;
+    max-width: 1350px;
     margin: 0 auto;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 12px 24px;
+    padding: 1px 24px;
     position: relative;
 }
 
@@ -55,7 +55,7 @@ nav {
 }
 
 .logo-img {
-    height: 65px;
+    height: 85px;
     width: auto;
     object-fit: contain;
     transition: transform 0.3s ease;
@@ -67,7 +67,7 @@ nav {
 
 .navbar-menu {
     display: flex;
-    gap: 28px;
+    gap: 20px;
 }
 
 .navbar-menu a {
@@ -85,6 +85,12 @@ nav {
     color: #ffe082;
 }
 
+nav.scrolled {
+    background: rgba(139, 0, 0, 0.7); /* merah tua semi-transparan */
+    backdrop-filter: blur(5px); /* efek blur elegan */
+    transition: background 0s ease, backdrop-filter 0.3s ease;
+}
+
 /* === Toggle Button === */
 .navbar-toggle {
     display: none;
@@ -99,7 +105,7 @@ nav {
 @media (max-width: 768px) {
     .navbar {
         flex-direction: row;
-        padding: 10px 1px;
+        padding: 1px 1px;
     }
 
     .navbar-logo {
@@ -153,7 +159,7 @@ nav {
     height: 500px;
     color: white;
     text-align: center;
-    padding: 100px 20px 60px;
+    padding: 75px 20px 60px;
     overflow: hidden;
 }
 .slider-container {
@@ -163,6 +169,94 @@ nav {
     height: 100%;
     z-index: 1;
 }
+
+.slider-content {
+    position: absolute;
+    top: 25%;
+    transform: translateY(-50%);
+    width: 100%;
+    padding: 0 2rem;
+    /* color: white; */
+    z-index: 2;
+    transition: all 0.9s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+/* Posisi kiri */
+.text-left {
+    align-items: flex-start;
+    text-align: left;
+    padding-left: 5%;
+    padding-right: 5%;
+}
+
+/* Posisi kanan */
+.text-right {
+    align-items: flex-end;
+    text-align: right;
+    padding-right: 8%;
+    padding-left: 8%;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.slider-inner {
+  max-width: 600px;
+  width: 100%;
+  padding: 0 2rem;
+  box-sizing: border-box;
+}
+
+
+/* Fade + move in animation */
+/* === CENTER (dari bawah ke tengah) === */
+@keyframes fadeInUp {
+    0% {
+    opacity: 0;
+    transform: translateY(100px); /* LEBIH JAUH agar terasa */
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* === KIRI (dari kiri ke kiri) === */
+@keyframes fadeInLeft {
+0% {
+    opacity: 0;
+    transform: translateX(-100px); /* LEBIH JAUH dari kiri */
+}
+100% {
+    opacity: 1;
+    transform: translateX(0);
+}
+}
+
+/* === KANAN (dari kanan ke kanan) === */
+@keyframes fadeInRight {
+0% {
+    opacity: 0;
+    transform: translateX(100px); /* dari kanan */
+}
+100% {
+    opacity: 1;
+    transform: translateX(0);
+}
+}
+
+/* === ANIMASI MASUK DINAMIS === */
+.animate-left {
+  animation: fadeInLeft 0.9.5s ease forwards;
+}
+
+.animate-right {
+  animation: fadeInRight 0.9.5s ease forwards;
+}
+
 .slider-slide {
     position: absolute;
     top: 0; left: 0;
@@ -182,7 +276,7 @@ nav {
 .welcome-text {
     position: relative;
     z-index: 2;
-    text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.6);
     color: #050505;
 }
 .welcome-text {
@@ -214,11 +308,12 @@ nav {
 /* === Keunggulan Section === */
 .keunggulan-wrapper {
     max-width: 1200px;
-    margin: 0 auto 60px auto;
+    margin: 0 auto 10px auto;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+    gap: 30px;
     padding: 0 20px;
+    justify-content: center;
 }
 
 .keunggulan-card {
@@ -252,7 +347,7 @@ nav {
 }
 
 .section-title {
-    margin-top: 0;
+    margin-top: 80px;
     margin-bottom: 80px;
     text-align: center;
     font-size: 1.7rem;
@@ -274,6 +369,7 @@ nav {
 @media (max-width: 600px) {
     .keunggulan-wrapper {
         grid-template-columns: 1fr;
+        display: grid;
     }
 }
 
@@ -381,6 +477,66 @@ nav {
     background: #5f0000;
 }
 
+/* === Testimoni Section === */
+.testimoni-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 25px;
+}
+
+.testimoni-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  transition: all 0.3s ease-in-out;
+  border-left: 6px solid #8B0000;
+}
+
+.testimoni-card:hover {
+  transform: translateY(-6px);
+}
+
+.testimoni-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.testimoni-header img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.testimoni-header h5 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.testimoni-header .bintang {
+  color: #fbbf24;
+  font-size: 1rem;
+  display: block;
+  margin-top: 2px;
+}
+
+.kota {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.testimoni-card p {
+  margin: 0;
+  color: #444;
+  font-style: italic;
+}
 
 /* === Footer Modern === */
 footer {
@@ -484,8 +640,6 @@ footer ul {
         justify-content: flex-start;
     }
 }
-
-
 
 /* === Responsif === */
 @media (max-width: 900px) {
