@@ -1,0 +1,524 @@
+body {
+    scroll-behavior: smooth;
+    height: 100%;
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
+    margin: 0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #fdfdfd;
+    color: #222;
+    
+}
+
+section {
+    scroll-snap-align: start;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.snap-section {
+    scroll-snap-align: start;
+    min-height: 74vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+
+/* === Navbar Modern === */
+nav {
+    background: linear-gradient(90deg, #8B0000, #a60000);
+    padding: 0;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 9999;
+}
+
+.navbar {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 24px;
+    position: relative;
+}
+
+.navbar-logo {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.logo-img {
+    height: 65px;
+    width: auto;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+}
+
+.logo-img:hover {
+    transform: scale(1.05);
+}
+
+.navbar-menu {
+    display: flex;
+    gap: 28px;
+}
+
+.navbar-menu a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 8px 12px;
+    border-radius: 6px;
+    transition: all 0.25s ease;
+}
+
+.navbar-menu a:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    color: #ffe082;
+}
+
+/* === Toggle Button === */
+.navbar-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.8rem;
+    color: #fff;
+    cursor: pointer;
+}
+
+/* === Responsive (Mobile) === */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: row;
+        padding: 10px 1px;
+    }
+
+    .navbar-logo {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex: 1;
+    }
+
+    .navbar-toggle {
+        display: block;
+        position: absolute;
+        right: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .navbar-menu {
+        display: none;
+        flex-direction: column;
+        align-items: start;
+        background: #8B0000;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        padding: 12px 20px;
+        border-radius: 0 0 12px 12px;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .navbar-menu.show {
+        display: flex;
+    }
+
+    .navbar-menu a {
+        width: 100%;
+        padding: 15px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .navbar-menu a:last-child {
+        border-bottom: none;
+    }
+}
+
+
+/* === Header / Slider === */
+#beranda {
+    position: relative;
+    height: 500px;
+    color: white;
+    text-align: center;
+    padding: 100px 20px 60px;
+    overflow: hidden;
+}
+.slider-container {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+.slider-slide {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+    background-size: cover;
+    background-position: center;
+}
+.slider-slide.slider-active {
+    opacity: 1;
+}
+#beranda h1,
+#beranda p,
+#beranda .cta-btn,
+.welcome-text {
+    position: relative;
+    z-index: 2;
+    text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
+    color: #050505;
+}
+.welcome-text {
+    font-size: 1.4rem;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+/* === Container & Sections === */
+/* Section Title (sudah ada di CSS sebelumnya) */
+.section-title {
+    margin-top: 60px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 1.7rem;
+    color: #8B0000;
+    position: relative;
+}
+.section-title::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 4px;
+    margin: 10px auto 0;
+    background: #8B0000;
+    border-radius: 2px;
+}
+
+/* === Keunggulan Section === */
+.keunggulan-wrapper {
+    max-width: 1200px;
+    margin: 0 auto 60px auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 0 20px;
+}
+
+.keunggulan-card {
+    background: #fff;
+    border: 2px solid #8B0000;
+    border-left: 8px solid #8B0000;
+    border-radius: 12px;
+    padding: 25px 20px;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #333;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s;
+    background-image: linear-gradient(to top left, #ffffff, #fffaf9);
+}
+
+.keunggulan-card b {
+    color: #8B0000;
+    font-size: 1.05rem;
+}
+
+.keunggulan-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(139,0,0,0.2);
+    border-color: #a50000;
+}
+
+#profile {
+    padding: 80px 0 180px;
+    background-color: #fafafa;
+}
+
+.section-title {
+    margin-top: 0;
+    margin-bottom: 80px;
+    text-align: center;
+    font-size: 1.7rem;
+    color: #8B0000;
+    position: relative;
+}
+
+.keunggulan-wrapper {
+    padding-top: 40px;
+}
+
+/* Responsive Layout */
+@media (max-width: 1024px) {
+    .keunggulan-wrapper {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .keunggulan-wrapper {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    #profile {
+        padding: 0px 0 80px;
+    }
+
+    .section-title {
+        margin-bottom: 0px;
+    }
+}
+
+
+/* === CTA Button === */
+.cta-btn {
+    display: inline-block;
+    margin-top: 30px;
+    padding: 15px 40px;
+    background: #8B0000;
+    color: #fff;
+    border: none;
+    border-radius: 30px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s;
+}
+.cta-btn:hover {
+    background: #5f0000;
+}
+
+/* === Produk / Katalog / Galeri / Brand / Proyek === */
+.produk-list,
+.katalog-list,
+.galeri-list,
+.features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 25px;
+    justify-content: center;
+}
+.produk-item,
+.katalog-item,
+.galeri-item,
+.feature {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+    padding: 20px;
+    width: 220px;
+    text-align: center;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s;
+}
+.produk-item:hover,
+.katalog-item:hover,
+.galeri-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+.produk-item img,
+.katalog-item img,
+.galeri-item img {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+.produk-item h4,
+.katalog-item h4,
+.galeri-item h4 {
+    color: #8B0000;
+}
+.produk-item p,
+.katalog-item p,
+.galeri-item p {
+    color: #444;
+}
+
+/* === Form Kontak === */
+.contact-section form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.contact-section input,
+.contact-section textarea {
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+}
+.contact-section button {
+    background: #8B0000;
+    color: #fff;
+    border: none;
+    border-radius: 30px;
+    padding: 12px 0;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.contact-section button:hover {
+    background: #5f0000;
+}
+
+
+/* === Footer Modern === */
+footer {
+    background: #8B0000;
+    color: #fff;
+    padding: 40px 20px;
+    font-size: 0.95rem;
+    margin-top: 60px;
+}
+
+footer h3,
+footer h4 {
+    margin-top: 0;
+    font-size: 1.2rem;
+    color: #fff;
+}
+
+footer a {
+    color: #ffe082;
+    text-decoration: underline;
+}
+footer a:hover {
+    color: #ffffff;
+}
+
+footer ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    justify-content: space-between;
+}
+
+.footer-column {
+    flex: 1;
+    min-width: 250px;
+}
+
+.footer-column ul {
+    list-style: none;
+    padding-left: 0;
+    column-count: 1;
+}
+
+.footer-column ul li a {
+    color: #ffe082;
+    text-decoration: underline;
+    transition: color 0.2s ease;
+}
+
+.footer-column ul li a:hover {
+    color: #ffffff;
+}
+
+.footer-bottom {
+    margin-top: 40px;
+    text-align: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    padding-top: 15px;
+    font-size: 0.9rem;
+}
+
+.social-icons {
+    display: flex;
+    gap: 12px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+}
+
+.social-icons a img {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #fff;
+    padding: 5px;
+    transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.social-icons a img:hover {
+    transform: scale(1.1);
+    background: #ffe082;
+}
+
+@media (max-width: 768px) {
+    .footer-container {
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    .footer-column ul {
+        column-count: 1;
+    }
+
+    .social-icons {
+        justify-content: flex-start;
+    }
+}
+
+
+
+/* === Responsif === */
+@media (max-width: 900px) {
+    .features,
+    .produk-list,
+    .katalog-list,
+    .galeri-list {
+        flex-direction: column;
+        align-items: center;
+    }
+    .feature,
+    .produk-item,
+    .katalog-item,
+    .galeri-item {
+        width: 90%;
+    }
+    .navbar {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .navbar-menu {
+        gap: 15px;
+    }
+}
+
+/* Animasi muncul dari bawah */
+.fade-up {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 1.8s ease-out, transform 1.8s ease-out;
+}
+
+.fade-up.show {
+    opacity: 1;
+    transform: translateY(0);
+}
