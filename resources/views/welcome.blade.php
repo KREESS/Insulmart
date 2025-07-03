@@ -57,28 +57,59 @@
 
         <!-- Produk Unggulan -->
         <section id="produk" class="snap-section fade-up">
-        <h2 class="section-title">Produk Unggulan</h2>
-        <div class="produk-list">
-            <div class="produk-item">
-            <img src="assets/img/fire-rock.png" alt="Rockwool Roll">
-            <h4>Rockwool Roll</h4>
-            <p>Rockwool gulung untuk insulasi atap dan dinding, tahan panas dan suara.</p>
+            <h2 class="section-title">Produk Unggulan</h2>
+            <div class="produk-list">
+                <div class="produk-item">
+                    <img src="assets/img/fire-rock.png" alt="Rockwool Roll">
+                    <h4>Firerock Blanket (Roll)</h4>
+                    <p>Isolasi termal dalam bentuk gulungan, ideal untuk dinding dan atap bangunan industri dan komersial.</p>
+                </div>
+                <div class="produk-item">
+                    <img src="assets/img/banner-landing-page.png" alt="Rockwool Board">
+                    <h4>Firerock Board/Slab (Lembaran)</h4>
+                    <p>Lembaran isolasi tahan api dan panas untuk aplikasi pada ruang mesin, dinding, dan langit-langit.</p>
+                </div>
+                <div class="produk-item">
+                    <img src="assets/img/banner-landing-page.png" alt="Glasswool">
+                    <h4>Rockwool Board/Slab (Lembaran)</h4>
+                    <p>Papan insulasi berbahan batu mineral, digunakan untuk peredaman suara dan proteksi panas.</p>
+                </div>
+                <div class="produk-item">
+                    <img src="assets/img/banner-landing-page.png" alt="Glasswool">
+                    <h4>Rockwool Blanket (Roll)</h4>
+                    <p>Isolasi fleksibel dalam bentuk gulungan, cocok untuk peredaman suara dan insulasi termal.</p>
+                </div>
+                <div class="produk-item">
+                    <img src="assets/img/banner-landing-page.png" alt="Glasswool">
+                    <h4>Rockwool Wired Blanket (Roll pakai Kawat)</h4>
+                    <p>Rockwool gulung diperkuat kawat galvanis, cocok untuk permukaan pipa, boiler, dan ducting.</p>
+                </div>
+                <div class="produk-item">
+                    <img src="assets/img/banner-landing-page.png" alt="Glasswool">
+                    <h4>Tombo/MG Board (Lembaran)</h4>
+                    <p>Lembaran insulasi ringan dari serat kaca, efektif untuk peredaman panas dan suara dalam ruangan.</p>
+                </div>
+                <div class="produk-item">
+                    <img src="assets/img/banner-landing-page.png" alt="Glasswool">
+                    <h4>Tombo MG Wired Blanket (Roll)</h4>
+                    <p>Isolasi gulungan dari serat kaca dengan kawat penyangga, digunakan untuk industri dan saluran pipa.</p>
+                </div>
+                <div class="produk-item">
+                    <img src="assets/img/banner-landing-page.png" alt="Glasswool">
+                    <h4>Tombo Pipa/MG Mighty Cover</h4>
+                    <p>Selongsong insulasi berbentuk pipa dari serat kaca, dirancang untuk insulasi pipa HVAC dan industri.</p>
+                </div>
+                <div class="produk-item">
+                    <img src="assets/img/banner-landing-page.png" alt="Glasswool">
+                    <h4>Tombo MG Mighty Roll</h4>
+                    <p>Isolasi gulungan ringan dari serat kaca yang fleksibel, digunakan untuk atap, dinding, dan lantai.</p>
+                </div>
             </div>
-            <div class="produk-item">
-            <img src="assets/img/banner-landing-page.png" alt="Rockwool Board">
-            <h4>Rockwool Board</h4>
-            <p>Papan insulasi padat untuk ruang mesin, studio, dan kebutuhan industri.</p>
-            </div>
-            <div class="produk-item">
-            <img src="assets/img/products/glasswool.jpg" alt="Glasswool">
-            <h4>Glasswool</h4>
-            <p>Isolasi ringan berbahan serat kaca untuk peredaman suara dan panas.</p>
-            </div>
-        </div>
         </section>
-<br>
-<br>
-<br>
+
+        <br>
+        <br>
+        <br>
 
         <!-- Testimoni -->
         <section id="testimoni" class="snap-section fade-up">

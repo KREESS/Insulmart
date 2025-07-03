@@ -160,6 +160,7 @@ nav.scrolled {
     padding: 75px 20px 60px;
     overflow: hidden;
 }
+
 .slider-container {
     position: absolute;
     top: 0; left: 0;
@@ -278,6 +279,7 @@ nav.scrolled {
     text-shadow: 1px 1px 1px rgba(0,0,0,0.6);
     color: #050505;
 }
+
 .welcome-text {
     font-size: 1.4rem;
     font-weight: 500;
@@ -294,6 +296,7 @@ nav.scrolled {
     color: #8B0000;
     position: relative;
 }
+
 .section-title::after {
     content: '';
     display: block;
@@ -396,6 +399,7 @@ nav.scrolled {
     text-decoration: none;
     transition: background 0.2s;
 }
+
 .cta-btn:hover {
     background: #5f0000;
 }
@@ -405,47 +409,107 @@ nav.scrolled {
 .katalog-list,
 .galeri-list,
 .features {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 25px;
-    justify-content: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 25px;
+  
+  justify-content: center;
+  margin-top: 20px;
 }
+
 .produk-item,
 .katalog-item,
 .galeri-item,
 .feature {
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.07);
-    padding: 20px;
-    width: 220px;
-    text-align: center;
-    transition: transform 0.2s ease-in-out, box-shadow 0.2s;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+  padding: 20px;
+  width: 220px;
+  text-align: center;
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
 }
+
 .produk-item:hover,
 .katalog-item:hover,
 .galeri-item:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  transform: translateY(-6px) scale(1.03);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.12);
 }
+
 .produk-item img,
 .katalog-item img,
 .galeri-item img {
-    width: 100%;
-    height: 120px;
-    object-fit: cover;
-    border-radius: 8px;
-    margin-bottom: 10px;
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  transition: transform 0.3s ease;
 }
+
 .produk-item h4,
 .katalog-item h4,
 .galeri-item h4 {
-    color: #8B0000;
+  color: #8B0000;
+  font-size: 1.05rem;
+  margin: 10px 0 6px;
 }
+
 .produk-item p,
 .katalog-item p,
 .galeri-item p {
-    color: #444;
+  color: #444;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+/* === Responsif === */
+@media (max-width: 992px) {
+  .produk-item,
+  .katalog-item,
+  .galeri-item {
+    width: 200px;
+  }
+  .produk-list{
+  margin-top: 40px; /* Tambahkan margin atas untuk jarak dengan elemen sebelumnya */
+}
+}
+
+@media (max-width: 768px) {
+  .produk-list,
+  .katalog-list,
+  .galeri-list {
+    flex-direction: column;
+    align-items: center;
+    gap: 35px;
+  }
+
+  .produk-item,
+  .katalog-item,
+  .galeri-item {
+    width: 90%;
+    max-width: 400px;
+  }
+
+  .produk-item img {
+    height: 160px;
+  }
+}
+
+@media (max-width: 480px) {
+  .produk-item h4 {
+    font-size: 1rem;
+  }
+
+  .produk-item p {
+    font-size: 0.9rem;
+  }
+
+  .produk-item img {
+    height: 140px;
+  }
 }
 
 /* === Form Kontak === */
@@ -454,6 +518,7 @@ nav.scrolled {
     flex-direction: column;
     gap: 15px;
 }
+
 .contact-section input,
 .contact-section textarea {
     padding: 10px;
@@ -461,6 +526,7 @@ nav.scrolled {
     border: 1px solid #ccc;
     font-size: 1rem;
 }
+
 .contact-section button {
     background: #8B0000;
     color: #fff;
@@ -471,6 +537,7 @@ nav.scrolled {
     cursor: pointer;
     transition: background 0.2s;
 }
+
 .contact-section button:hover {
     background: #5f0000;
 }
@@ -536,6 +603,27 @@ nav.scrolled {
   font-style: italic;
 }
 
+/* === Responsif: 1 kolom di layar kecil === */
+@media (max-width: 768px) {
+  .testimoni-wrapper {
+    grid-template-columns: 1fr;
+    margin-top: 40px; /* Tambahkan margin atas untuk jarak dengan elemen sebelumnya */
+  }
+
+  .testimoni-card {
+    padding: 18px;
+  }
+
+  .testimoni-header img {
+    width: 55px;
+    height: 55px;
+  }
+
+  .testimoni-card p {
+    font-size: 0.95rem;
+  }
+}
+
 /* === Footer Modern === */
 footer {
     background: #8B0000;
@@ -556,6 +644,7 @@ footer a {
     color: #ffe082;
     text-decoration: underline;
 }
+
 footer a:hover {
     color: #ffffff;
 }
