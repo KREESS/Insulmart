@@ -67,6 +67,9 @@
 
         .navbar-custom {
         background-color: var(--color-merah);
+        padding-top: 0.3rem;
+        padding-bottom: 0.3rem;
+        height: 80px; /* standar tinggi navbar Bootstrap */
         }
 
         .navbar-custom .navbar-brand,
@@ -74,19 +77,28 @@
         .navbar-custom .navbar-toggler-icon {
         color: #fff;
         }
+
+        .navbar-custom .navbar-brand img {
+        height: 35px; /* atur tinggi logo agar pas */
+        }
     </style>
 </head>
 <body>
 
 <!-- Navbar -->
 <nav class="navbar navbar-dark navbar-custom sticky-top d-flex justify-content-between">
-  <div class="container-fluid">
+  <div class="container-fluid d-flex align-items-center">
     <button class="btn text-white me-3" id="toggleSidebar">
       <i class="bi bi-list fs-3"></i>
     </button>
-    <span class="navbar-brand fw-bold">Dashboard Admin</span>
+
+    <!-- Ganti tulisan dengan logo -->
+    <a class="navbar-brand d-flex align-items-center" href="#">
+      <img src="{{ asset('assets/img/insulmart_new_bg_new.png') }}" alt="Logo PT" class="logo-img" style="height: 70px;">
+    </a>
   </div>
 </nav>
+
 
 <!-- Sidebar -->
 <aside class="sidebar p-3" id="sidebar">
