@@ -4,6 +4,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProdukController;
+use Illuminate\Support\Facades\Auth;
 // ======== BATAS =========
 
 // =========== NO ROLE LANDING PAGE ===========
@@ -43,18 +44,23 @@ Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('regi
 Route::post('/register', [AuthController::class, 'register']);
 
 
-// ======== DASHBOARD ADMIN ========
-Route::middleware(['role:admin'])->group(function () {
-    Route::get('/admin/dashboard', function () {
-        return view('admin.dashboard');
-    })->name('admin.dashboard');
-    Route::get('/produk', [ProdukController::class, 'index'])->name('produk.index');
-    Route::get('/produk/tambah', [ProdukController::class, 'create'])->name('produk.create');
-});
+// ======== PROTEKSI UMUM UNTUK YANG SUDAH LOGIN ========
+Route::middleware(['auth'])->group(function () {
 
-// ========DASHBOARD PELANGGAN========
-Route::middleware(['role:pelanggan'])->group(function () {
-    Route::get('/pelanggan/dashboard', function () {
-        return view('pelanggan.dashboard');
-    })->name('pelanggan.dashboard');
+    // ======== DASHBOARD ADMIN ========
+    Route::middleware(['role:admin'])->group(function () {
+        Route::get('/admin/dashboard', function () {
+            return view('admin.dashboard');
+        })->name('admin.dashboard');
+
+        Route::get('/produk', [ProdukController::class, 'index'])->name('produk.index');
+        Route::get('/produk/tambah', [ProdukController::class, 'create'])->name('produk.create');
+    });
+
+    // ======== DASHBOARD PELANGGAN ========
+    Route::middleware(['role:pelanggan'])->group(function () {
+        Route::get('/pelanggan/dashboard', function () {
+            return view('pelanggan.dashboard');
+        })->name('pelanggan.dashboard');
+    });
 });
