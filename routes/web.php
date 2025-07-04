@@ -1,7 +1,10 @@
 <?php
 
+// Laravel Routes for Web Application
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ProdukController;
+// ======== BATAS =========
 
 // =========== NO ROLE LANDING PAGE ===========
 Route::get('/', function () {
@@ -27,7 +30,7 @@ Route::get('/hubungi-kami', function () {
 Route::get('/hubungi-kami', function () {
     return view('hubungi_kami');
 });
-
+// ======== BATAS ===========
 
 // ======== LOGIN ========
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -45,6 +48,8 @@ Route::middleware(['role:admin'])->group(function () {
     Route::get('/admin/dashboard', function () {
         return view('admin.dashboard');
     })->name('admin.dashboard');
+    Route::get('/produk', [ProdukController::class, 'index'])->name('produk.index');
+    Route::get('/produk/tambah', [ProdukController::class, 'create'])->name('produk.create');
 });
 
 // ========DASHBOARD PELANGGAN========
