@@ -85,122 +85,121 @@
 </head>
 <body>
 
-<!-- Navbar -->
-<nav class="navbar navbar-dark navbar-custom sticky-top d-flex justify-content-between">
-  <div class="container-fluid d-flex align-items-center">
-    <button class="btn text-white me-3" id="toggleSidebar">
-      <i class="bi bi-list fs-3"></i>
-    </button>
+    <!-- Navbar -->
+    <nav class="navbar navbar-dark navbar-custom sticky-top d-flex justify-content-between">
+    <div class="container-fluid d-flex align-items-center">
+        <button class="btn text-white me-3" id="toggleSidebar">
+        <i class="bi bi-list fs-3"></i>
+        </button>
 
-    <!-- Ganti tulisan dengan logo -->
-    <a class="navbar-brand d-flex align-items-center" href="#">
-      <img src="{{ asset('assets/img/insulmart_new_bg_new.png') }}" alt="Logo PT" class="logo-img" style="height: 70px;">
-    </a>
-  </div>
-</nav>
-
-
-<!-- Sidebar -->
-<aside class="sidebar p-3" id="sidebar">
-  <h4 class="text-center mb-4 fw-bold">Admin Panel</h4>
-  <ul class="nav flex-column" id="navLinks">
-    <li class="nav-item mb-2">
-      <a href="#" class="nav-link active"><i class="bi bi-house-door-fill me-2"></i>Dashboard</a>
-    </li>
-    <li class="nav-item mb-2">
-      <a href="/produk" class="nav-link"><i class="bi bi-box-fill me-2"></i>Produk</a>
-    </li>
-    <li class="nav-item mb-2">
-      <a href="#" class="nav-link"><i class="bi bi-cart-fill me-2"></i>Pesanan</a>
-    </li>
-    <li class="nav-item mb-2">
-      <a href="#" class="nav-link"><i class="bi bi-people-fill me-2"></i>Pelanggan</a>
-    </li>
-    <li class="nav-item mb-2">
-      <a href="#" class="nav-link"><i class="bi bi-credit-card-fill me-2"></i>Pembayaran</a>
-    </li>
-    <li class="nav-item mb-2">
-      <a href="#" class="nav-link"><i class="bi bi-gear-fill me-2"></i>Pengaturan</a>
-    </li>
-    <li class="nav-item mt-3">
-      <form method="POST" action="#">
-        <button class="btn btn-outline-light w-100" type="submit">🚪 Logout</button>
-      </form>
-    </li>
-  </ul>
-</aside>
-
-<!-- Main Content -->
-<main class="main-content p-4 bg-light" id="mainContent">
-  <h3 class="mb-4">Selamat datang, Admin!</h3>
-
-  <div class="row g-4">
-    <div class="col-md-4">
-      <div class="card shadow-sm">
-        <div class="card-body d-flex justify-content-between align-items-center">
-          <div>
-            <h5 class="card-title">Total Produk</h5>
-            <h3 class="card-text">125</h3>
-          </div>
-          <div class="fs-2 text-danger">📦</div>
-        </div>
-      </div>
+        <!-- Ganti tulisan dengan logo -->
+        <a class="navbar-brand d-flex align-items-center" href="#">
+        <img src="{{ asset('assets/img/insulmart_new_bg_new.png') }}" alt="Logo PT" class="logo-img" style="height: 70px;">
+        </a>
     </div>
+    </nav>
 
-    <div class="col-md-4">
-      <div class="card shadow-sm">
-        <div class="card-body d-flex justify-content-between align-items-center">
-          <div>
-            <h5 class="card-title">Total Pesanan</h5>
-            <h3 class="card-text">89</h3>
-          </div>
-          <div class="fs-2 text-warning">🛒</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-4">
-      <div class="card shadow-sm">
-        <div class="card-body d-flex justify-content-between align-items-center">
-          <div>
-            <h5 class="card-title">Total Pelanggan</h5>
-            <h3 class="card-text">342</h3>
-          </div>
-          <div class="fs-2 text-success">👥</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="mt-5">
-    <h5>Aktivitas Terbaru</h5>
-    <ul class="list-group mt-3">
-      <li class="list-group-item">🛒 Pesanan baru oleh <strong>Putra</strong></li>
-      <li class="list-group-item">📦 Produk "Rockwool 100cm" ditambahkan</li>
-      <li class="list-group-item">💳 Pembayaran dikonfirmasi oleh <strong>Siti</strong></li>
+    <!-- Sidebar -->
+    <aside class="sidebar p-3" id="sidebar">
+    <h4 class="text-center mb-4 fw-bold">Admin Panel</h4>
+    <ul class="nav flex-column" id="navLinks">
+        <li class="nav-item mb-2">
+        <a href="#" class="nav-link active"><i class="bi bi-house-door-fill me-2"></i>Dashboard</a>
+        </li>
+        <li class="nav-item mb-2">
+        <a href="/produk" class="nav-link"><i class="bi bi-box-fill me-2"></i>Produk</a>
+        </li>
+        <li class="nav-item mb-2">
+        <a href="#" class="nav-link"><i class="bi bi-cart-fill me-2"></i>Pesanan</a>
+        </li>
+        <li class="nav-item mb-2">
+        <a href="#" class="nav-link"><i class="bi bi-people-fill me-2"></i>Pelanggan</a>
+        </li>
+        <li class="nav-item mb-2">
+        <a href="#" class="nav-link"><i class="bi bi-credit-card-fill me-2"></i>Pembayaran</a>
+        </li>
+        <li class="nav-item mb-2">
+        <a href="#" class="nav-link"><i class="bi bi-gear-fill me-2"></i>Pengaturan</a>
+        </li>
+        <li class="nav-item mt-3">
+        <form method="POST" action="#">
+            <button class="btn btn-outline-light w-100" type="submit">🚪 Logout</button>
+        </form>
+        </li>
     </ul>
-  </div>
-</main>
+    </aside>
 
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-    const toggleBtn = document.getElementById('toggleSidebar');
-    const sidebar = document.getElementById('sidebar');
-    const mainContent = document.getElementById('mainContent');
-    const navLinks = document.querySelectorAll('#navLinks .nav-link');
+    <!-- Main Content -->
+    <main class="main-content p-4 bg-light" id="mainContent">
+    <h3 class="mb-4">Selamat datang, Admin!</h3>
 
-    toggleBtn.addEventListener('click', () => {
-        sidebar.classList.toggle('collapsed');
-        mainContent.classList.toggle('expanded');
-    });
+    <div class="row g-4">
+        <div class="col-md-4">
+        <div class="card shadow-sm">
+            <div class="card-body d-flex justify-content-between align-items-center">
+            <div>
+                <h5 class="card-title">Total Produk</h5>
+                <h3 class="card-text">125</h3>
+            </div>
+            <div class="fs-2 text-danger">📦</div>
+            </div>
+        </div>
+        </div>
 
-    navLinks.forEach(link => {
-        link.addEventListener('click', function () {
-        navLinks.forEach(l => l.classList.remove('active'));
-        this.classList.add('active');
+        <div class="col-md-4">
+        <div class="card shadow-sm">
+            <div class="card-body d-flex justify-content-between align-items-center">
+            <div>
+                <h5 class="card-title">Total Pesanan</h5>
+                <h3 class="card-text">89</h3>
+            </div>
+            <div class="fs-2 text-warning">🛒</div>
+            </div>
+        </div>
+        </div>
+
+        <div class="col-md-4">
+        <div class="card shadow-sm">
+            <div class="card-body d-flex justify-content-between align-items-center">
+            <div>
+                <h5 class="card-title">Total Pelanggan</h5>
+                <h3 class="card-text">342</h3>
+            </div>
+            <div class="fs-2 text-success">👥</div>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <div class="mt-5">
+        <h5>Aktivitas Terbaru</h5>
+        <ul class="list-group mt-3">
+        <li class="list-group-item">🛒 Pesanan baru oleh <strong>Putra</strong></li>
+        <li class="list-group-item">📦 Produk "Rockwool 100cm" ditambahkan</li>
+        <li class="list-group-item">💳 Pembayaran dikonfirmasi oleh <strong>Siti</strong></li>
+        </ul>
+    </div>
+    </main>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const toggleBtn = document.getElementById('toggleSidebar');
+        const sidebar = document.getElementById('sidebar');
+        const mainContent = document.getElementById('mainContent');
+        const navLinks = document.querySelectorAll('#navLinks .nav-link');
+
+        toggleBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('collapsed');
+            mainContent.classList.toggle('expanded');
         });
-    });
-</script>
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', function () {
+            navLinks.forEach(l => l.classList.remove('active'));
+            this.classList.add('active');
+            });
+        });
+    </script>
 </body>
 </html>
