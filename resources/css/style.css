@@ -90,6 +90,77 @@ nav.scrolled {
     transition: background 0s ease, backdrop-filter 0.3s ease;
 }
 
+/* === Navbar Icons & Auth Buttons === */
+.navbar-icons {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.icon-link {
+    color: #fff;
+    font-size: 1.4rem;
+    transition: color 0.3s;
+}
+
+.icon-link:hover {
+    color: #ffe082;
+}
+
+.btn-auth {
+    padding: 6px 14px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: background 0.3s, color 0.3s, border 0.3s;
+    border: 1px solid transparent;
+}
+
+.btn-masuk {
+    color: #fff;
+    border: 1px solid #fff;
+}
+
+.btn-masuk:hover {
+    background-color: #fff;
+    color: #8B0000;
+}
+
+.btn-daftar {
+    background-color: #ffe082;
+    color: #8B0000;
+    border: 1px solid #ffe082;
+}
+
+.btn-daftar:hover {
+    background-color: #ffca28;
+    color: #8B0000;
+}
+
+/* === Responsive: Letakkan Icons di Bawah saat Mobile === */
+@media (max-width: 768px) {
+    .navbar-icons {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 12px 20px;
+        background: #8B0000;
+        width: 100%;
+    }
+
+    .btn-auth {
+        width: 100%;
+        text-align: left;
+        margin-top: 10px;
+    }
+
+    .icon-link {
+        margin-bottom: 10px;
+    }
+}
+
+
 /* === Toggle Button === */
 .navbar-toggle {
     display: none;

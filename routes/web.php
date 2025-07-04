@@ -1,7 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 
+// =========== NO ROLE LANDING PAGE ===========
 Route::get('/', function () {
     return view('welcome');
 });
@@ -20,4 +22,34 @@ Route::get('/galeri', function () {
 
 Route::get('/hubungi-kami', function () {
     return view('hubungi_kami');
+});
+
+Route::get('/hubungi-kami', function () {
+    return view('hubungi_kami');
+});
+
+
+// ======== LOGIN ========
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+
+// ======== REGISTER ========
+Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
+Route::post('/register', [AuthController::class, 'register']);
+
+
+// ======== DASHBOARD ADMIN ========
+Route::middleware(['role:admin'])->group(function () {
+    Route::get('/admin/dashboard', function () {
+        return view('admin.dashboard');
+    })->name('admin.dashboard');
+});
+
+// ========DASHBOARD PELANGGAN========
+Route::middleware(['role:pelanggan'])->group(function () {
+    Route::get('/pelanggan/dashboard', function () {
+        return view('pelanggan.dashboard');
+    })->name('pelanggan.dashboard');
 });

@@ -113,82 +113,82 @@
 
         <!-- Testimoni -->
         <section id="testimoni" class="snap-section fade-up">
-        <h2 class="section-title">Apa Kata Mereka?</h2>
-        <div class="testimoni-wrapper">
+            <h2 class="section-title">Apa Kata Mereka?</h2>
+            <div class="testimoni-wrapper">
 
-            <div class="testimoni-card fade-up">
-            <div class="testimoni-header">
-                <img src="https://i.pravatar.cc/80?img=12" alt="Foto Dedi">
-                <div>
-                <h5>Dedi Pratama</h5>
-                <span class="bintang">★★★★★</span>
-                <p class="kota">Jakarta - Pemilik Studio</p>
+                <div class="testimoni-card fade-up">
+                <div class="testimoni-header">
+                    <img src="https://i.pravatar.cc/80?img=12" alt="Foto Dedi">
+                    <div>
+                    <h5>Dedi Pratama</h5>
+                    <span class="bintang">★★★★★</span>
+                    <p class="kota">Jakarta - Pemilik Studio</p>
+                    </div>
                 </div>
-            </div>
-            <p>"Barang cepat sampai dan kualitas rockwool-nya mantap! Studio jadi lebih kedap suara. Recommended!"</p>
-            </div>
-
-            <div class="testimoni-card fade-up">
-            <div class="testimoni-header">
-                <img src="https://i.pravatar.cc/80?img=16" alt="Foto Lusi">
-                <div>
-                <h5>Lusi Andriani</h5>
-                <span class="bintang">★★★★☆</span>
-                <p class="kota">Surabaya - Kontraktor Hotel</p>
+                <p>"Barang cepat sampai dan kualitas rockwool-nya mantap! Studio jadi lebih kedap suara. Recommended!"</p>
                 </div>
-            </div>
-            <p>"Layanan cepat dan komunikatif. Order dalam jumlah besar untuk ballroom hotel selesai tepat waktu."</p>
-            </div>
 
-            <div class="testimoni-card fade-up">
-            <div class="testimoni-header">
-                <img src="https://i.pravatar.cc/80?img=25" alt="Foto Arif">
-                <div>
-                <h5>Arif Maulana</h5>
-                <span class="bintang">★★★★★</span>
-                <p class="kota">Bandung - Developer Rumah</p>
+                <div class="testimoni-card fade-up">
+                <div class="testimoni-header">
+                    <img src="https://i.pravatar.cc/80?img=16" alt="Foto Lusi">
+                    <div>
+                    <h5>Lusi Andriani</h5>
+                    <span class="bintang">★★★★☆</span>
+                    <p class="kota">Surabaya - Kontraktor Hotel</p>
+                    </div>
                 </div>
-            </div>
-            <p>"Website-nya mudah dipakai dan langsung dapat invoice. Cocok buat yang sering belanja material insulasi."</p>
-            </div>
-
-            <div class="testimoni-card fade-up">
-            <div class="testimoni-header">
-                <img src="https://i.pravatar.cc/80?img=35" alt="Foto Yuli">
-                <div>
-                <h5>Yuli Hartini</h5>
-                <span class="bintang">★★★★☆</span>
-                <p class="kota">Yogyakarta - Arsitek Interior</p>
+                <p>"Layanan cepat dan komunikatif. Order dalam jumlah besar untuk ballroom hotel selesai tepat waktu."</p>
                 </div>
-            </div>
-            <p>"Produk original dan pengemasan rapi. Klien saya puas karena suara ruangannya lebih terkontrol."</p>
-            </div>
 
-            <div class="testimoni-card fade-up">
-            <div class="testimoni-header">
-                <img src="https://i.pravatar.cc/80?img=7" alt="Foto Fajar">
-                <div>
-                <h5>Fajar Nugroho</h5>
-                <span class="bintang">★★★★★</span>
-                <p class="kota">Tangerang - Pelanggan Tetap</p>
+                <div class="testimoni-card fade-up">
+                <div class="testimoni-header">
+                    <img src="https://i.pravatar.cc/80?img=25" alt="Foto Arif">
+                    <div>
+                    <h5>Arif Maulana</h5>
+                    <span class="bintang">★★★★★</span>
+                    <p class="kota">Bandung - Developer Rumah</p>
+                    </div>
                 </div>
-            </div>
-            <p>"Udah 3x order di Insulmart, semuanya lancar. Barang cepat sampai dan harga paling oke."</p>
-            </div>
-
-            <div class="testimoni-card fade-up">
-            <div class="testimoni-header">
-                <img src="https://i.pravatar.cc/80?img=22" alt="Foto Melati">
-                <div>
-                <h5>Melati Saraswati</h5>
-                <span class="bintang">★★★★★</span>
-                <p class="kota">Semarang - Pengusaha Event</p>
+                <p>"Website-nya mudah dipakai dan langsung dapat invoice. Cocok buat yang sering belanja material insulasi."</p>
                 </div>
-            </div>
-            <p>"Kebutuhan insulasi buat event hall selalu saya percayakan ke Insulmart. Servisnya cepat, barangnya top!"</p>
-            </div>
 
-        </div>
+                <div class="testimoni-card fade-up">
+                <div class="testimoni-header">
+                    <img src="https://i.pravatar.cc/80?img=35" alt="Foto Yuli">
+                    <div>
+                    <h5>Yuli Hartini</h5>
+                    <span class="bintang">★★★★☆</span>
+                    <p class="kota">Yogyakarta - Arsitek Interior</p>
+                    </div>
+                </div>
+                <p>"Produk original dan pengemasan rapi. Klien saya puas karena suara ruangannya lebih terkontrol."</p>
+                </div>
+
+                <div class="testimoni-card fade-up">
+                <div class="testimoni-header">
+                    <img src="https://i.pravatar.cc/80?img=7" alt="Foto Fajar">
+                    <div>
+                    <h5>Fajar Nugroho</h5>
+                    <span class="bintang">★★★★★</span>
+                    <p class="kota">Tangerang - Pelanggan Tetap</p>
+                    </div>
+                </div>
+                <p>"Udah 3x order di Insulmart, semuanya lancar. Barang cepat sampai dan harga paling oke."</p>
+                </div>
+
+                <div class="testimoni-card fade-up">
+                <div class="testimoni-header">
+                    <img src="https://i.pravatar.cc/80?img=22" alt="Foto Melati">
+                    <div>
+                    <h5>Melati Saraswati</h5>
+                    <span class="bintang">★★★★★</span>
+                    <p class="kota">Semarang - Pengusaha Event</p>
+                    </div>
+                </div>
+                <p>"Kebutuhan insulasi buat event hall selalu saya percayakan ke Insulmart. Servisnya cepat, barangnya top!"</p>
+                </div>
+
+            </div>
         </section>
 
         <!-- Proyek Kami -->
