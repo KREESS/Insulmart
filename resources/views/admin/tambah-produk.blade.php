@@ -1,43 +1,153 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Tambah Produk</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
-</head>
-<body>
-  <div class="container py-5">
-    <h2 class="mb-4">Tambah Produk</h2>
+@extends('admin.components.app')
 
-    <form action="#" method="POST" enctype="multipart/form-data">
+@section('content')
+<style>
+  .btn-merah {
+    background-color: #8B0000;
+    color: #fff;
+    border-color: #8B0000;
+  }
+
+  .btn-merah:hover {
+    background-color: #a41515;
+    border-color: #a41515;
+    color: #fff;
+  }
+</style>
+
+<div class="main-content p-4">
+  <div class="container">
+    <h2 class="mb-4"><i class="bi bi-plus-circle me-2 text-success"></i>Tambah Produk Baru</h2>
+
+    <form action="{{ route('produk.store') }}" method="POST" enctype="multipart/form-data" class="bg-white p-4 rounded shadow-sm">
       @csrf
 
-      <div class="mb-3">
-        <label for="nama" class="form-label">Nama Produk</label>
-        <input type="text" class="form-control" id="nama" name="nama" required>
+      {{-- INFO UTAMA PRODUK --}}
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label for="nama_produk" class="form-label">Nama Produk</label>
+          <input type="text" name="nama_produk" id="nama_produk" class="form-control" placeholder="Contoh: Rockwool" required>
+        </div>
+
+        <div class="col-md-6">
+          <label for="jenis_produk" class="form-label">Jenis Produk</label>
+          <select name="jenis_produk" id="jenis_produk" class="form-select" required onchange="toggleInputJenis(this.value)">
+            <option disabled selected>Pilih jenis</option>
+            <option value="rockwool">Rockwool</option>
+            <option value="glasswool">Glasswool</option>
+            <option value="aluminium_foil">Aluminium Foil</option>
+            <option value="lainnya">+ Tambah Jenis Produk Baru</option>
+          </select>
+
+          <input type="text" id="inputJenisBaru" name="jenis_produk_baru" class="form-control mt-2 d-none" placeholder="Tulis jenis produk baru...">
+        </div>
+
+        <div class="col-12">
+          <label for="deskripsi" class="form-label">Deskripsi Produk</label>
+          <textarea name="deskripsi" id="deskripsi" rows="3" class="form-control" placeholder="Tulis deskripsi produk..."></textarea>
+        </div>
+
+        <div class="col-12">
+          <label for="gambar" class="form-label">Upload Gambar Produk</label>
+          <input type="file" name="gambar[]" id="gambar" class="form-control" accept="image/*" multiple required>
+          <small class="text-muted">Minimal 3 gambar. Format: JPG, PNG, JPEG.</small>
+        </div>
       </div>
 
-      <div class="mb-3">
-        <label for="deskripsi" class="form-label">Deskripsi</label>
-        <textarea class="form-control" id="deskripsi" name="deskripsi" rows="3" required></textarea>
+      <hr class="my-4">
+
+      {{-- VARIAN PRODUK --}}
+      <h5>Varian Produk</h5>
+      <p class="text-muted">Masukkan kombinasi varian produk seperti ukuran, ketebalan, densitas, harga & stok.</p>
+
+      <div id="varian-wrapper">
+        <div class="row g-2 mb-3 varian-row">
+          <div class="col-md-2">
+            <input type="text" name="varian[0][tipe]" class="form-control" placeholder="Tipe (misal: S60/25)" required>
+          </div>
+          <div class="col-md-2">
+            <input type="text" name="varian[0][ukuran]" class="form-control" placeholder="Ukuran" required>
+          </div>
+          <div class="col-md-2">
+            <input type="number" name="varian[0][ketebalan]" class="form-control" placeholder="Ketebalan" required>
+          </div>
+          <div class="col-md-2">
+            <input type="number" name="varian[0][densitas]" class="form-control" placeholder="Densitas" required>
+          </div>
+          <div class="col-md-3">
+            <input type="number" name="varian[0][harga]" class="form-control" placeholder="Harga (Rp)" required>
+          </div>
+          <div class="col-md-2">
+            <input type="number" name="varian[0][stok]" class="form-control" placeholder="Stok" required>
+          </div>
+          <div class="col-md-1 text-end">
+            <button type="button" class="btn btn-danger btn-sm btn-remove-varian d-none"><i class="bi bi-x"></i></button>
+          </div>
+        </div>
       </div>
 
-      <div class="mb-3">
-        <label for="harga" class="form-label">Harga</label>
-        <input type="number" class="form-control" id="harga" name="harga" required>
-      </div>
+      <button type="button" class="btn btn-outline-success btn-sm" id="btn-add-varian">
+        <i class="bi bi-plus-circle me-1"></i> Tambah Varian
+      </button>
 
-      <div class="mb-3">
-        <label for="gambar" class="form-label">Gambar Produk</label>
-        <input type="file" class="form-control" id="gambar" name="gambar" accept="image/*" required>
-      </div>
+      <div class="d-flex justify-content-between mt-4">
+        <a href="{{ route('produk.index') }}" class="btn btn-outline-secondary">
+          <i class="bi bi-arrow-left me-1"></i> Kembali
+        </a>
 
-      <button type="submit" class="btn btn-primary">Simpan</button>
-      <a href="{{ route('produk.index') }}" class="btn btn-secondary">Batal</a>
+        <button type="submit" class="btn btn-merah">
+          <i class="bi bi-save me-1"></i> Simpan Produk
+        </button>
+      </div>
     </form>
   </div>
+</div>
+<br>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+<script>
+function toggleInputJenis(value) {
+  const inputBaru = document.getElementById('inputJenisBaru');
+  if (value === 'lainnya') {
+    inputBaru.classList.remove('d-none');
+    inputBaru.required = true;
+  } else {
+    inputBaru.classList.add('d-none');
+    inputBaru.required = false;
+  }
+}
+</script>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  let varianIndex = 1;
+  const wrapper = document.getElementById('varian-wrapper');
+  const addBtn = document.getElementById('btn-add-varian');
+
+  addBtn.addEventListener('click', () => {
+    const row = document.createElement('div');
+    row.classList.add('row', 'g-2', 'mb-3', 'varian-row');
+    row.innerHTML = `
+      <div class="col-md-2"><input type="text" name="varian[${varianIndex}][tipe]" class="form-control" placeholder="Tipe (misal: S60/25)" required></div>
+      <div class="col-md-2"><input type="text" name="varian[${varianIndex}][ukuran]" class="form-control" placeholder="Ukuran" required></div>
+      <div class="col-md-2"><input type="number" name="varian[${varianIndex}][ketebalan]" class="form-control" placeholder="Ketebalan" required></div>
+      <div class="col-md-2"><input type="number" name="varian[${varianIndex}][densitas]" class="form-control" placeholder="Densitas" required></div>
+      <div class="col-md-3"><input type="number" name="varian[${varianIndex}][harga]" class="form-control" placeholder="Harga (Rp)" required></div>
+      <div class="col-md-2"><input type="number" name="varian[${varianIndex}][stok]" class="form-control" placeholder="Stok" required></div>
+      <div class="col-md-1 text-end">
+        <button type="button" class="btn btn-danger btn-sm btn-remove-varian"><i class="bi bi-x"></i></button>
+      </div>
+    `;
+    wrapper.appendChild(row);
+    varianIndex++;
+  });
+
+  wrapper.addEventListener('click', function (e) {
+    if (e.target.closest('.btn-remove-varian')) {
+      e.target.closest('.varian-row').remove();
+    }
+  });
+});
+</script>
+
+@endsection

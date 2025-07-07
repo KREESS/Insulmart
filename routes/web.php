@@ -53,8 +53,14 @@ Route::middleware(['auth'])->group(function () {
             return view('admin.dashboard');
         })->name('admin.dashboard');
 
-        Route::get('/produk', [ProdukController::class, 'index'])->name('produk.index');
-        Route::get('/produk/tambah', [ProdukController::class, 'create'])->name('produk.create');
+        Route::get('/admin/produk', [ProdukController::class, 'index'])->name('produk.index');
+        Route::get('/admin/produk/tambah', [ProdukController::class, 'create'])->name('produk.create');
+        Route::post('/admin/produk/tambah-produk', [ProdukController::class, 'store'])->name('produk.store');
+        Route::get('/admin/produk/{produk}', [ProdukController::class, 'show'])->name('produk.show');
+
+        Route::get('/produk/{id}/edit', [ProdukController::class, 'edit'])->name('produk.edit');
+        Route::put('/produk/{id}', [ProdukController::class, 'update'])->name('produk.update');
+        Route::delete('/admin/produk/gambar/{id}', [ProdukController::class, 'destroyGambar'])->name('produk.gambar.destroy');
     });
 
     // ======== DASHBOARD PELANGGAN ========

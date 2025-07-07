@@ -1,93 +1,157 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Daftar Produk</title>
+@extends('admin.components.app')
 
-  <!-- Bootstrap 5 -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <!-- Bootstrap Icons -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet"/>
+@section('content')
 
-  <style>
-    body {
-      background-color: #f8f9fa;
-    }
-    .card-title {
-      font-weight: 600;
-      color: #343a40;
-    }
-    .card-text {
-      font-size: 0.95rem;
-    }
-    .card-price {
-      font-size: 1.1rem;
-      color: #198754;
-    }
-    .btn-add {
-      float: right;
-    }
-  </style>
-</head>
-<body>
-  <div class="container py-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-      <h2 class="mb-0"><i class="bi bi-box-fill me-2"></i>Daftar Produk</h2>
-      <a href="/produk/tambah" class="btn btn-success btn-add">
-        <i class="bi bi-plus-circle me-1"></i>Tambah Produk
-      </a>
+<style>
+  :root {
+    --color-merah-tua: #8B0000;
+    --color-merah-hover: #a41515;
+    --color-text: #ffffff;
+  }
+
+  .btn-merah {
+    background-color: var(--color-merah-tua);
+    border-color: var(--color-merah-tua);
+    color: var(--color-text);
+  }
+
+  .btn-merah:hover {
+    background-color: var(--color-merah-hover);
+    border-color: var(--color-merah-hover);
+    color: var(--color-text);
+  }
+
+  .btn-outline-merah {
+    color: var(--color-merah-tua);
+    border-color: var(--color-merah-tua);
+  }
+
+  .btn-outline-merah:hover {
+    background-color: var(--color-merah-tua);
+    color: var(--color-text);
+  }
+
+  .text-merah {
+    color: var(--color-merah-tua);
+  }
+
+  .card {
+    transition: all 0.3s ease-in-out;
+  }
+
+  .card:hover {
+    transform: translateY(-5px) scale(1.01);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
+  }
+
+.produk-img-wrapper {
+  background-color: #fff;
+  height: 200px;
+  border-bottom: 1px solid #eee;
+  overflow: hidden;
+  position: relative;
+}
+
+.carousel-inner,
+.carousel-item {
+  height: 100%;
+  width: 100%;
+}
+
+.carousel-item > div {
+  height: 100%;
+  width: 100%;
+}
+
+.produk-img {
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+
+
+</style>
+
+<main class="main-content p-4 bg-light" id="mainContent">
+
+  <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-2">
+    <div>
+      <h3 class="mb-1 fw-bold text-merah d-flex align-items-center">
+        📦 Daftar Produk
+      </h3>
+      <p class="text-muted small mb-0">Kelola semua produk yang tersedia di toko Anda dengan mudah.</p>
     </div>
-
-    <div class="row row-cols-1 row-cols-md-3 g-4">
-      <!-- Produk A -->
-      <div class="col">
-        <div class="card h-100 shadow-sm border-0">
-          <img src="assets/img/produk1.jpg" class="card-img-top" alt="Produk A">
-          <div class="card-body">
-            <h5 class="card-title">Produk A</h5>
-            <p class="card-text">Deskripsi singkat produk A. Cocok untuk berbagai kebutuhan Anda.</p>
-            <div class="card-price fw-bold">Rp120.000</div>
-          </div>
-          <div class="card-footer bg-white border-0 text-end">
-            <a href="#" class="btn btn-outline-primary btn-sm">Lihat Detail</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Produk B -->
-      <div class="col">
-        <div class="card h-100 shadow-sm border-0">
-          <img src="assets/img/produk2.jpg" class="card-img-top" alt="Produk B">
-          <div class="card-body">
-            <h5 class="card-title">Produk B</h5>
-            <p class="card-text">Produk unggulan dengan kualitas terbaik dan harga bersaing.</p>
-            <div class="card-price fw-bold">Rp95.000</div>
-          </div>
-          <div class="card-footer bg-white border-0 text-end">
-            <a href="#" class="btn btn-outline-primary btn-sm">Lihat Detail</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Produk C -->
-      <div class="col">
-        <div class="card h-100 shadow-sm border-0">
-          <img src="assets/img/produk3.jpg" class="card-img-top" alt="Produk C">
-          <div class="card-body">
-            <h5 class="card-title">Produk C</h5>
-            <p class="card-text">Efisien dan praktis digunakan untuk berbagai aktivitas harian.</p>
-            <div class="card-price fw-bold">Rp75.000</div>
-          </div>
-          <div class="card-footer bg-white border-0 text-end">
-            <a href="#" class="btn btn-outline-primary btn-sm">Lihat Detail</a>
-          </div>
-        </div>
-      </div>
-    </div>
+    <a href="{{ route('produk.create') }}" class="btn btn-merah d-flex align-items-center gap-2 shadow-sm">
+      <i class="bi bi-plus-circle"></i> Tambah Produk
+    </a>
   </div>
 
-  <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+
+  <div class="row row-cols-1 row-cols-md-3 g-4">
+    @forelse ($produks as $produk)
+    <div class="col">
+      <div class="card h-100 shadow-sm border-0 rounded-4 overflow-hidden bg-white">
+        @if ($produk->gambars->count() > 0)
+          <div id="carouselProduk{{ $produk->id }}" class="carousel slide produk-img-wrapper" data-bs-ride="carousel" data-bs-interval="3000">
+            <div class="carousel-inner h-100 w-100">
+              @foreach ($produk->gambars as $index => $gambar)
+                <div class="carousel-item {{ $index == 0 ? 'active' : '' }} h-100">
+                  <div class="d-flex justify-content-center align-items-center h-100 w-100">
+                    <img src="{{ asset('storage/' . $gambar->path) }}"
+                        class="produk-img d-block"
+                        alt="Gambar {{ $index + 1 }}">
+                  </div>
+                </div>
+              @endforeach
+            </div>
+          </div>
+        @else
+          <div class="produk-img-wrapper">
+            <img src="{{ asset('storage/' . $produk->gambar) }}" class="produk-img" alt="{{ $produk->nama_produk }}">
+          </div>
+        @endif
+
+
+        <div class="card-body">
+          <h5 class="card-title text-merah">{{ $produk->nama_produk }}</h5>
+          <p class="text-muted mb-1"><i class="bi bi-tag me-1"></i>{{ ucfirst($produk->jenis_produk) }}</p>
+          <p class="small text-secondary">{{ \Illuminate\Support\Str::limit($produk->deskripsi, 80) }}</p>
+
+          @php
+              $hargaMin = $produk->varians->min('harga');
+              $hargaMax = $produk->varians->max('harga');
+          @endphp
+
+          <hr class="my-2">
+          <p class="fw-bold mb-1 text-dark">Harga:</p>
+          <p class="text-success fw-semibold mb-0">
+            Rp{{ number_format($hargaMin, 0, ',', '.') }}
+            @if($hargaMax !== $hargaMin)
+              ~ Rp{{ number_format($hargaMax, 0, ',', '.') }}
+            @endif
+          </p>
+        </div>
+
+        <div class="card-footer bg-white border-0 d-flex justify-content-between px-3 pb-3">
+          <a href="{{ route('produk.show', $produk->id) }}" class="btn btn-outline-merah btn-sm px-3">
+            <i class="bi bi-eye"></i> Lihat
+          </a>
+          <a href="{{ route('produk.edit', $produk->id) }}" class="btn btn-outline-secondary btn-sm px-3">
+            <i class="bi bi-pencil-square"></i> Edit
+          </a>
+        </div>
+      </div>
+    </div>
+    @empty
+    <div class="col-12 text-center">
+      <h5 class="text-muted">Belum ada produk yang ditambahkan.</h5>
+    </div>
+    @endforelse
+  </div>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+@endsection
