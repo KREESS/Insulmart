@@ -6,7 +6,7 @@
             </button>
 
             <!-- Ganti tulisan dengan logo -->
-            <a class="navbar-brand d-flex align-items-center" href="#">
+            <a class="navbar-brand d-flex align-items-center" href="{{ url('/') }}">
             <img src="{{ asset('assets/img/insulmart_new_bg_new.png') }}" alt="Logo PT" class="logo-img" style="height: 70px;">
             </a>
         </div>

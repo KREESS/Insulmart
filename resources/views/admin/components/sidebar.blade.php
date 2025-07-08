@@ -1,9 +1,9 @@
 <aside class="sidebar bg-merah-tua text-white p-3 shadow-sm" id="sidebar">
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h4 class="fw-bold m-0">Admin Panel</h4>
-    <button class="btn btn-sm btn-outline-light d-md-none" id="sidebarToggleClose">
+    {{-- <button class="btn btn-sm btn-outline-light d-md-none" id="sidebarToggleClose">
       <i class="bi bi-x-lg"></i>
-    </button>
+    </button> --}}
   </div>
 
   <ul class="nav flex-column" id="navLinks">

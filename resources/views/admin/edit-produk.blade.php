@@ -7,52 +7,65 @@
     color: #fff;
     border-color: #8B0000;
   }
-
   .btn-merah:hover {
     background-color: #a41515;
     border-color: #a41515;
     color: #fff;
   }
-
   .gambar-wrapper {
     position: relative;
     background-color: #f8f9fa;
     padding: 5px;
     border-radius: 6px;
     border: 1px solid #dee2e6;
-    height: 100%; /* agar tingginya konsisten */
+    height: 100%;
   }
-
   .gambar-wrapper img {
     width: 100%;
     height: 150px;
     object-fit: contain;
     border-radius: 5px;
   }
-
   .btn-hapus-gambar {
     position: absolute;
     top: 6px;
     right: 6px;
     z-index: 10;
   }
-
-  .btn-hapus-gambar button {
-    padding: 3px 7px;
-    font-size: 0.75rem;
-  }
 </style>
-
-
-<div class="main-content p-4">
+<main class="main-content p-4 bg-light" id="mainContent">
   <div class="container">
     <h2 class="mb-4"><i class="bi bi-pencil-square me-2 text-warning"></i>Edit Produk</h2>
+
+    {{-- Notifikasi Sukses --}}
+    @if(session('success'))
+      <div class="alert alert-success d-flex align-items-center alert-dismissible fade show shadow-sm" role="alert">
+        <i class="bi bi-check-circle-fill me-2 fs-5"></i>
+        <div>{{ session('success') }}</div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Tutup"></button>
+      </div>
+    @endif
+
+    {{-- Notifikasi Error --}}
+    @if($errors->any())
+      <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
+        <div class="d-flex align-items-center mb-2">
+          <i class="bi bi-exclamation-triangle-fill me-2 fs-5"></i>
+          <strong>Terjadi kesalahan saat menginput data:</strong>
+        </div>
+        <ul class="mb-0 ps-4">
+          @foreach($errors->all() as $error)
+            <li>{{ $error }}</li>
+          @endforeach
+        </ul>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Tutup"></button>
+      </div>
+    @endif
 
     <form action="{{ route('produk.update', $produk->id) }}" method="POST" enctype="multipart/form-data" class="bg-white p-4 rounded shadow-sm">
       @csrf
       @method('PUT')
 
-      {{-- INFO UTAMA PRODUK --}}
       <div class="row g-3">
         <div class="col-md-6">
           <label for="nama_produk" class="form-label">Nama Produk</label>
@@ -68,7 +81,7 @@
             <option value="aluminium_foil" {{ $produk->jenis_produk == 'aluminium_foil' ? 'selected' : '' }}>Aluminium Foil</option>
             <option value="lainnya">+ Tambah Jenis Produk Baru</option>
           </select>
-          <input type="text" id="inputJenisBaru" name="jenis_produk_baru" class="form-control mt-2 d-none" placeholder="Tulis jenis produk baru...">
+          <input type="text" id="inputJenisBaru" name="jenis_produk_baru" class="form-control mt-2 {{ old('jenis_produk') == 'lainnya' ? '' : 'd-none' }}" placeholder="Tulis jenis produk baru..." value="{{ old('jenis_produk_baru') }}">
         </div>
 
         <div class="col-12">
@@ -76,30 +89,30 @@
           <textarea name="deskripsi" id="deskripsi" rows="3" class="form-control">{{ old('deskripsi', $produk->deskripsi) }}</textarea>
         </div>
 
-        {{-- INPUT GAMBAR BARU --}}
         <div class="col-12">
           <label for="gambar" class="form-label">Upload Gambar Baru (Opsional)</label>
           <input type="file" name="gambar[]" id="gambar" class="form-control" accept="image/*" multiple>
           <small class="text-muted">Biarkan kosong jika tidak ingin mengganti gambar. Minimal 3 gambar jika upload baru.</small>
+
+          <div id="preview-gambar" class="row mt-3"></div>
         </div>
 
-        {{-- GAMBAR SAAT INI --}}
         <div class="col-12 mt-4">
           <label class="form-label fw-semibold">Gambar Saat Ini:</label>
           <div class="row">
             @forelse ($produk->gambars as $gambar)
               <div class="col-md-3 mb-3">
                 <div class="gambar-wrapper">
-                  <img src="{{ asset('storage/' . $gambar->path) }}" alt="Gambar Produk" class="img-fluid rounded" style="max-height: 150px; object-fit: contain;">
-                  <form action="{{ route('produk.gambar.destroy', $gambar->id) }}" method="POST" class="btn-hapus-gambar">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-danger btn-sm rounded-circle" onclick="return confirm('Yakin ingin menghapus gambar ini?')">
-                      <i class="bi bi-trash-fill"></i>
-                    </button>
-                  </form>
+                  <img src="{{ asset('storage/' . $gambar->path) }}" alt="Gambar Produk" class="img-fluid rounded">
+                  <button
+                    type="button"
+                    class="btn btn-danger btn-sm rounded-circle btn-delete-gambar"
+                    data-id="{{ $gambar->id }}"
+                  >
+                    <i class="bi bi-trash-fill"></i>
+                  </button>
                 </div>
-            </div>
+              </div>
             @empty
               <p class="text-muted">Belum ada gambar yang diunggah.</p>
             @endforelse
@@ -109,7 +122,6 @@
 
       <hr class="my-4">
 
-      {{-- VARIAN PRODUK --}}
       <h5>Varian Produk</h5>
       <p class="text-muted">Perbarui kombinasi varian produk seperti ukuran, ketebalan, densitas, harga & stok.</p>
 
@@ -136,9 +148,42 @@
         <button type="submit" class="btn btn-merah"><i class="bi bi-save me-1"></i> Update Produk</button>
       </div>
     </form>
+    <form id="form-delete-gambar" method="POST" style="display: none;">
+      @csrf
+      @method('DELETE')
+    </form>
   </div>
-</div>
+</main>
 <br>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.btn-delete-gambar').forEach(button => {
+      button.addEventListener('click', function () {
+        const id = this.getAttribute('data-id');
+        Swal.fire({
+          title: 'Yakin ingin menghapus gambar ini?',
+          text: "Tindakan ini tidak dapat dibatalkan!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#d33',
+          cancelButtonColor: '#3085d6',
+          confirmButtonText: 'Ya, hapus!',
+          cancelButtonText: 'Batal'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            const form = document.getElementById('form-delete-gambar');
+            form.setAttribute('action', `/admin/produk/gambar/${id}`);
+            form.submit();
+          }
+        });
+      });
+    });
+  });
+</script>
+
+
 
 <script>
 function toggleInputJenis(value) {
@@ -151,9 +196,26 @@ function toggleInputJenis(value) {
     inputBaru.required = false;
   }
 }
-</script>
 
-<script>
+document.getElementById('gambar').addEventListener('change', function (event) {
+  const previewContainer = document.getElementById('preview-gambar');
+  previewContainer.innerHTML = '';
+  Array.from(event.target.files).forEach(file => {
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      const col = document.createElement('div');
+      col.className = 'col-md-3 mb-2';
+      col.innerHTML = `
+        <div class="gambar-wrapper">
+          <img src="${e.target.result}" class="img-fluid" />
+        </div>
+      `;
+      previewContainer.appendChild(col);
+    };
+    reader.readAsDataURL(file);
+  });
+});
+
 document.addEventListener('DOMContentLoaded', function () {
   let varianIndex = {{ count($produk->varians) }};
   const wrapper = document.getElementById('varian-wrapper');
@@ -176,8 +238,10 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   wrapper.addEventListener('click', function (e) {
-    if (e.target.closest('.btn-remove-varian')) {
-      e.target.closest('.varian-row').remove();
+    const button = e.target.closest('button.btn-remove-varian');
+    if (button) {
+      const row = button.closest('.varian-row');
+      if (row) row.remove();
     }
   });
 });

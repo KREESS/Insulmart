@@ -47,11 +47,14 @@
           <textarea name="deskripsi" id="deskripsi" rows="3" class="form-control" placeholder="Tulis deskripsi produk..."></textarea>
         </div>
 
-        <div class="col-12">
+        <div class="col-12 mb-3">
           <label for="gambar" class="form-label">Upload Gambar Produk</label>
           <input type="file" name="gambar[]" id="gambar" class="form-control" accept="image/*" multiple required>
           <small class="text-muted">Minimal 3 gambar. Format: JPG, PNG, JPEG.</small>
         </div>
+
+        {{-- Tempat Preview Gambar --}}
+        <div id="preview" class="d-flex flex-wrap gap-2 mt-3"></div>
       </div>
 
       <hr class="my-4">
@@ -103,6 +106,31 @@
   </div>
 </div>
 <br>
+
+{{-- Script Preview --}}
+<script>
+document.getElementById('gambar').addEventListener('change', function (e) {
+  const preview = document.getElementById('preview');
+  preview.innerHTML = ''; // Reset preview
+  const files = e.target.files;
+
+  Array.from(files).forEach(file => {
+    if (!file.type.match('image.*')) return;
+
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      const img = document.createElement('img');
+      img.src = e.target.result;
+      img.classList.add('img-thumbnail');
+      img.style.maxWidth = '150px';
+      img.style.maxHeight = '150px';
+      img.style.objectFit = 'cover';
+      preview.appendChild(img);
+    };
+    reader.readAsDataURL(file);
+  });
+});
+</script>
 
 <script>
 function toggleInputJenis(value) {

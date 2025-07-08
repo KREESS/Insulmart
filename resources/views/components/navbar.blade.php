@@ -20,8 +20,19 @@
             <a href="{{ url('/keranjang') }}" class="icon-link" title="Keranjang">
                 <i class="bi bi-cart3"></i>
             </a>
-            <a href="{{ route('login') }}" class="btn-auth btn-masuk">Masuk</a>
-            <a href="{{ route('register') }}" class="btn-auth btn-daftar">Daftar</a>
+
+            @auth
+                @if (auth()->user()->hasRole('admin'))
+                    <a href="{{ url('/admin/dashboard') }}" class="btn-auth btn-masuk">Dashboard</a>
+                @elseif (auth()->user()->hasRole('pelanggan'))
+                    <a href="{{ url('/pelanggan/dashboard') }}" class="btn-auth btn-masuk">Dashboard</a>
+                @else
+                    <a href="#" class="btn-auth btn-masuk">Akun</a>
+                @endif
+            @else
+                <a href="{{ route('login') }}" class="btn-auth btn-masuk">Masuk</a>
+                <a href="{{ route('register') }}" class="btn-auth btn-daftar">Daftar</a>
+            @endauth
         </div>
     </div>
 </nav>

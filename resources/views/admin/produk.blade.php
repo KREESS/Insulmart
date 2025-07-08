@@ -87,8 +87,32 @@
       <i class="bi bi-plus-circle"></i> Tambah Produk
     </a>
   </div>
+  {{-- Notifikasi Sukses --}}
+  @if(session('success'))
+    <div class="alert alert-success d-flex align-items-center alert-dismissible fade show shadow-sm" role="alert">
+      <i class="bi bi-check-circle-fill me-2 fs-5"></i>
+      <div>{{ session('success') }}</div>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Tutup"></button>
+    </div>
+  @endif
 
+  {{-- Notifikasi Error --}}
+  @if($errors->any())
+    <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
+      <div class="d-flex align-items-center mb-2">
+        <i class="bi bi-exclamation-triangle-fill me-2 fs-5"></i>
+        <strong>Terjadi kesalahan saat menginput data:</strong>
+      </div>
+      <ul class="mb-0 ps-4">
+        @foreach($errors->all() as $error)
+          <li>{{ $error }}</li>
+        @endforeach
+      </ul>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Tutup"></button>
+    </div>
+  @endif
 
+  {{-- Daftar Produk --}}
   <div class="row row-cols-1 row-cols-md-3 g-4">
     @forelse ($produks as $produk)
     <div class="col">
@@ -150,7 +174,6 @@
     </div>
     @endforelse
   </div>
-
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

@@ -90,32 +90,40 @@ class ProdukController extends Controller
     {
         $request->validate([
             'nama_produk' => 'required|string|max:255',
-            'jenis_produk' => 'required|string|max:255',
-            'deskripsi'    => 'nullable|string',
-            'varian'       => 'nullable|array',
-            'varian.*.tipe'      => 'required_with:varian|string',
-            'varian.*.ukuran'    => 'required_with:varian|string',
+            'jenis_produk' => 'required|string',
+            'jenis_produk_baru' => $request->jenis_produk === 'lainnya' ? 'required|string|max:255' : 'nullable',
+            'deskripsi' => 'nullable|string',
+            'varian' => 'nullable|array',
+            'varian.*.tipe' => 'required_with:varian|string',
+            'varian.*.ukuran' => 'required_with:varian|string',
             'varian.*.ketebalan' => 'required_with:varian|numeric',
-            'varian.*.densitas'  => 'required_with:varian|numeric',
-            'varian.*.harga'     => 'required_with:varian|numeric',
-            'varian.*.stok'      => 'required_with:varian|numeric',
+            'varian.*.densitas' => 'required_with:varian|numeric',
+            'varian.*.harga' => 'required_with:varian|numeric',
+            'varian.*.stok' => 'required_with:varian|numeric',
+            'gambar.*' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
         $produk = Produk::findOrFail($id);
 
-        // Update data utama produk
         $produk->update([
             'nama_produk' => $request->nama_produk,
             'jenis_produk' => $request->jenis_produk === 'lainnya' ? $request->jenis_produk_baru : $request->jenis_produk,
             'deskripsi' => $request->deskripsi,
         ]);
 
-        // (Opsional) Update varian - bisa dihapus semua dulu lalu reinsert
+        // Update varian
         $produk->varians()->delete();
-
         if ($request->has('varian')) {
             foreach ($request->varian as $v) {
                 $produk->varians()->create($v);
+            }
+        }
+
+        // Simpan gambar baru jika diupload
+        if ($request->hasFile('gambar')) {
+            foreach ($request->file('gambar') as $file) {
+                $path = $file->store('produk', 'public');
+                $produk->gambars()->create(['path' => $path]);
             }
         }
 

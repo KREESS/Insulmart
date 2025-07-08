@@ -58,8 +58,8 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/admin/produk/tambah-produk', [ProdukController::class, 'store'])->name('produk.store');
         Route::get('/admin/produk/{produk}', [ProdukController::class, 'show'])->name('produk.show');
 
-        Route::get('/produk/{id}/edit', [ProdukController::class, 'edit'])->name('produk.edit');
-        Route::put('/produk/{id}', [ProdukController::class, 'update'])->name('produk.update');
+        Route::get('/admin/produk/{id}/edit', [ProdukController::class, 'edit'])->name('produk.edit');
+        Route::put('/admin/produk/{id}', [ProdukController::class, 'update'])->name('produk.update');
         Route::delete('/admin/produk/gambar/{id}', [ProdukController::class, 'destroyGambar'])->name('produk.gambar.destroy');
     });
 
