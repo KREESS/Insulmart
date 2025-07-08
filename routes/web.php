@@ -54,6 +54,7 @@ Route::middleware(['auth'])->group(function () {
         })->name('admin.dashboard');
 
         Route::get('/admin/produk', [ProdukController::class, 'index'])->name('produk.index');
+        Route::delete('/admin/produk/{id}', [ProdukController::class, 'destroy'])->name('produk.destroy');
         Route::get('/admin/produk/tambah', [ProdukController::class, 'create'])->name('produk.create');
         Route::post('/admin/produk/tambah-produk', [ProdukController::class, 'store'])->name('produk.store');
         Route::get('/admin/produk/{produk}', [ProdukController::class, 'show'])->name('produk.show');

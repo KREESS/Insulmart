@@ -165,6 +165,11 @@
           <a href="{{ route('produk.edit', $produk->id) }}" class="btn btn-outline-secondary btn-sm px-3">
             <i class="bi bi-pencil-square"></i> Edit
           </a>
+          <button type="button"
+                  class="btn btn-outline-danger btn-sm px-3 btn-delete-produk"
+                  data-id="{{ $produk->id }}">
+            <i class="bi bi-trash3-fill"></i> Hapus
+          </button>
         </div>
       </div>
     </div>
@@ -174,7 +179,42 @@
     </div>
     @endforelse
   </div>
+  <form id="form-delete-produk" method="POST" style="display: none;">
+    @csrf
+    @method('DELETE')
+  </form>
+
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const buttons = document.querySelectorAll('.btn-delete-produk');
+  const formDelete = document.getElementById('form-delete-produk');
+
+  buttons.forEach(button => {
+    button.addEventListener('click', function () {
+      const id = this.getAttribute('data-id');
+      Swal.fire({
+        title: 'Yakin ingin menghapus produk ini?',
+        text: "Data yang dihapus tidak dapat dikembalikan.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Ya, hapus!',
+        cancelButtonText: 'Batal'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          formDelete.setAttribute('action', `/admin/produk/${id}`);
+          formDelete.submit();
+        }
+      });
+    });
+  });
+});
+</script>
+
 @endsection

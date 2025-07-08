@@ -140,4 +140,23 @@ class ProdukController extends Controller
 
         return back()->with('success', 'Gambar berhasil dihapus.');
     }
+
+    public function destroy($id)
+    {
+        $produk = Produk::findOrFail($id);
+
+        // Hapus gambar-gambar terkait (jika ada relasi)
+        foreach ($produk->gambars as $gambar) {
+            Storage::delete($gambar->path);
+            $gambar->delete();
+        }
+
+        // Hapus varian
+        $produk->varians()->delete();
+
+        // Hapus produk
+        $produk->delete();
+
+        return redirect()->route('produk.index')->with('success', 'Produk berhasil dihapus.');
+    }
 }
