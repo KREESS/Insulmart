@@ -4,6 +4,8 @@
 <br>
 <br>
 <br>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
     <header id="beranda" class="snap-section">
         <div class="slider-container">
             <div class="slider-slide slider-active" style="background-image: url('{{ asset('assets/img/landing_page (4)1.png') }}');"></div>
@@ -56,55 +58,57 @@
         </section>
 
         <!-- Produk Unggulan -->
-        <section id="produk" class="snap-section fade-up">
-            <h2 class="section-title">Produk Unggulan</h2>
-            <div class="produk-list">
-                <div class="produk-item">
-                    <img src="assets/img/fire-rock.png" alt="Rockwool Roll">
-                    <h4>Firerock Blanket (Roll)</h4>
-                    <p>Isolasi termal dalam bentuk gulungan, ideal untuk dinding dan atap bangunan industri dan komersial.</p>
+        <section id="produk" class="fade-up bg-light py-5">
+        <h2 class="section-title">Produk Unggulan</h2>
+
+        <div class="produk-scroll-wrapper">
+            @forelse ($produks as $produk)
+            <div class="produk-card">
+                {{-- Carousel Gambar Produk --}}
+                @if ($produk->gambars->count() > 0)
+                <div id="carouselProduk{{ $produk->id }}" class="carousel slide produk-img-wrapper" data-bs-ride="carousel" data-bs-interval="3000">
+                    <div class="carousel-inner">
+                    @foreach ($produk->gambars as $index => $gambar)
+                        <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
+                        <img src="{{ asset('storage/' . $gambar->path) }}" class="d-block w-100 produk-img" alt="Gambar {{ $index + 1 }}">
+                        </div>
+                    @endforeach
+                    </div>
                 </div>
-                <div class="produk-item">
-                    <img src="assets/img/banner-landing-page.png" alt="Rockwool Board">
-                    <h4>Firerock Board/Slab (Lembaran)</h4>
-                    <p>Lembaran isolasi tahan api dan panas untuk aplikasi pada ruang mesin, dinding, dan langit-langit.</p>
+                @else
+                <div class="produk-img-wrapper">
+                    <img src="{{ asset('assets/img/no-image.png') }}" class="produk-img d-block w-100" alt="{{ $produk->nama_produk }}">
                 </div>
-                <div class="produk-item">
-                    <img src="assets/img/banner-landing-page.png" alt="Glasswool">
-                    <h4>Rockwool Board/Slab (Lembaran)</h4>
-                    <p>Papan insulasi berbahan batu mineral, digunakan untuk peredaman suara dan proteksi panas.</p>
-                </div>
-                <div class="produk-item">
-                    <img src="assets/img/banner-landing-page.png" alt="Glasswool">
-                    <h4>Rockwool Blanket (Roll)</h4>
-                    <p>Isolasi fleksibel dalam bentuk gulungan, cocok untuk peredaman suara dan insulasi termal.</p>
-                </div>
-                <div class="produk-item">
-                    <img src="assets/img/banner-landing-page.png" alt="Glasswool">
-                    <h4>Rockwool Wired Blanket (Roll pakai Kawat)</h4>
-                    <p>Rockwool gulung diperkuat kawat galvanis, cocok untuk permukaan pipa, boiler, dan ducting.</p>
-                </div>
-                <div class="produk-item">
-                    <img src="assets/img/banner-landing-page.png" alt="Glasswool">
-                    <h4>Tombo/MG Board (Lembaran)</h4>
-                    <p>Lembaran insulasi ringan dari serat kaca, efektif untuk peredaman panas dan suara dalam ruangan.</p>
-                </div>
-                <div class="produk-item">
-                    <img src="assets/img/banner-landing-page.png" alt="Glasswool">
-                    <h4>Tombo MG Wired Blanket (Roll)</h4>
-                    <p>Isolasi gulungan dari serat kaca dengan kawat penyangga, digunakan untuk industri dan saluran pipa.</p>
-                </div>
-                <div class="produk-item">
-                    <img src="assets/img/banner-landing-page.png" alt="Glasswool">
-                    <h4>Tombo Pipa/MG Mighty Cover</h4>
-                    <p>Selongsong insulasi berbentuk pipa dari serat kaca, dirancang untuk insulasi pipa HVAC dan industri.</p>
-                </div>
-                <div class="produk-item">
-                    <img src="assets/img/banner-landing-page.png" alt="Glasswool">
-                    <h4>Tombo MG Mighty Roll</h4>
-                    <p>Isolasi gulungan ringan dari serat kaca yang fleksibel, digunakan untuk atap, dinding, dan lantai.</p>
+                @endif
+
+
+
+                <div class="produk-body">
+                <h5 class="produk-nama">{{ $produk->nama_produk }}</h5>
+                <p class="text-muted small mb-1">
+                    <i class="bi bi-tag-fill me-1 text-danger"></i>{{ ucfirst($produk->jenis_produk) }}
+                </p>
+
+                @php
+                    $min = $produk->varians->min('harga');
+                    $max = $produk->varians->max('harga');
+                @endphp
+                <strong class="text-danger">
+                <p class="text-success mb-1 fw-bold">
+                    Rp{{ number_format($min, 0, ',', '.') }}
+                    @if ($min != $max)
+                    ~ Rp{{ number_format($max, 0, ',', '.') }}
+                    @endif
+                </p>
+                </strong>
+
+                <p class="produk-deskripsi">{{ \Illuminate\Support\Str::limit($produk->deskripsi, 80) }}</p>
                 </div>
             </div>
+            @empty
+            <p class="text-muted">Belum ada produk tersedia.</p>
+            @endforelse
+        </div>
         </section>
 
         <br>
@@ -317,6 +321,9 @@
             </button>
         </div>
     </div>
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+@endpush
 
 @endsection
 

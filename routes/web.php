@@ -4,13 +4,13 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProdukController;
+use App\Http\Controllers\LandingController;
 use Illuminate\Support\Facades\Auth;
 // ======== BATAS =========
 
 // =========== NO ROLE LANDING PAGE ===========
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [LandingController::class, 'index'])->name('landing');
+
 
 Route::get('/produk', function () {
     return view('produk');
