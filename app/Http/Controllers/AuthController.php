@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Str;
+
 
 class AuthController extends Controller
 {
@@ -76,5 +79,60 @@ class AuthController extends Controller
         auth()->login($user);
 
         return redirect('/pelanggan/dashboard');
+    }
+
+    public function showLinkRequestForm()
+    {
+        return view('auth.lupa-password'); // buatkan view ini
+    }
+
+    public function sendResetLinkEmail(Request $request)
+    {
+        $request->validate(['email' => 'required|email']);
+
+        $status = Password::sendResetLink(
+            $request->only('email')
+        );
+
+        if ($status === Password::RESET_LINK_SENT) {
+            return back()->with('success', 'Link untuk mengatur ulang kata sandi telah dikirim ke email Anda.');
+        } else {
+            return back()->withErrors(['email' => 'Gagal mengirim link reset. Pastikan email yang Anda masukkan benar dan terdaftar.']);
+        }
+    }
+
+    public function showResetForm(Request $request, $token)
+    {
+        return view('auth.reset-password', [
+            'token' => $token,
+            'email' => $request->email
+        ]);
+    }
+
+    public function reset(Request $request)
+    {
+        $request->validate([
+            'token' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|min:8|confirmed',
+        ]);
+
+        $status = Password::reset(
+            $request->only('email', 'password', 'password_confirmation', 'token'),
+            function ($user, $password) {
+                $user->forceFill([
+                    'password' => Hash::make($password),
+                    'remember_token' => Str::random(60),
+                ])->save();
+            }
+        );
+
+        if ($status === Password::PASSWORD_RESET) {
+            return redirect()->route('login')->with('success', 'Kata sandi Anda berhasil direset. Silakan masuk dengan kata sandi baru Anda.');
+        } else {
+            return back()->withErrors([
+                'email' => 'Gagal mereset kata sandi. Token mungkin tidak valid atau sudah kadaluarsa.'
+            ]);
+        }
     }
 }

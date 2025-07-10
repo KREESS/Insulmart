@@ -44,6 +44,15 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
 Route::post('/register', [AuthController::class, 'register']);
 
+// ======== RESET PASSWORD ========
+Route::get('forgot-password', [AuthController::class, 'showLinkRequestForm'])->name('password.request');
+Route::post('forgot-password', [AuthController::class, 'sendResetLinkEmail'])->name('password.email');
+// Menampilkan form reset password (dari email)
+Route::get('/reset-password/{token}', [AuthController::class, 'showResetForm'])->name('password.reset');
+// Mengupdate password baru
+Route::post('/reset-password', [AuthController::class, 'reset'])->name('password.update');
+
+
 // ======== Produk ========
 Route::get('/produk/detail/{slug}', [ProdukPenggunaController::class, 'detail'])->name('produk.detail');
 

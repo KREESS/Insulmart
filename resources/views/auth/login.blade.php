@@ -126,6 +126,31 @@
 
                 <h3 class="login-title">Masuk ke Akun</h3>
 
+                {{-- Notifikasi Sukses --}}
+                @if(session('success'))
+                    <div class="alert alert-success d-flex align-items-center alert-dismissible fade show shadow-sm" role="alert">
+                    <i class="bi bi-check-circle-fill me-2 fs-5"></i>
+                    <div>{{ session('success') }}</div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Tutup"></button>
+                    </div>
+                @endif
+
+                {{-- Notifikasi Error --}}
+                @if($errors->any())
+                    <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="bi bi-exclamation-triangle-fill me-2 fs-5"></i>
+                        <strong>Terjadi kesalahan saat menginput data:</strong>
+                    </div>
+                    <ul class="mb-0 ps-4">
+                        @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Tutup"></button>
+                    </div>
+                @endif
+
                 <form method="POST" action="{{ url('/login') }}">
                     @csrf
 
@@ -135,8 +160,11 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="password" class="form-label">Kata Sandi</label>
-                        <input type="password" name="password" id="password" class="form-control" required>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <label for="password" class="form-label mb-0">Kata Sandi</label>
+                            <a href="{{ route('password.request') }}" class="text-decoration-none small text-danger">Lupa kata sandi?</a>
+                        </div>
+                        <input type="password" name="password" id="password" class="form-control mt-1" required>
                     </div>
 
                     @if ($errors->any())
@@ -164,6 +192,7 @@
         <!-- Gambar Kanan -->
         <div class="image-side"></div>
     </div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>
