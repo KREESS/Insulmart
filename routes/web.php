@@ -12,6 +12,7 @@ use App\Http\Controllers\ProdukPenggunaController;
 use App\Http\Controllers\LiveChatController;
 // ======== BATAS =========
 
+
 // =========== NO ROLE LANDING PAGE ===========
 Route::get('/', [LandingController::class, 'index'])->name('landing');
 
@@ -37,6 +38,7 @@ Route::get('/hubungi-kami', function () {
 });
 // ======== BATAS ===========
 
+
 // ======== LOGIN ========
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
@@ -46,6 +48,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // ======== REGISTER ========
 Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
 Route::post('/register', [AuthController::class, 'register']);
+
 
 // ======== RESET PASSWORD ========
 Route::get('forgot-password', [AuthController::class, 'showLinkRequestForm'])->name('password.request');
@@ -61,7 +64,6 @@ Route::get('/produk/detail/{slug}', [ProdukPenggunaController::class, 'detail'])
 
 
 // ======== LIVE CHAT ========
-
 Route::post('/live-chat/start', [LiveChatController::class, 'startChat']);
 Route::post('/live-chat/send', [LiveChatController::class, 'sendMessage']);
 Route::get('/live-chat/messages/{chat_id}', [LiveChatController::class, 'getMessages']);
