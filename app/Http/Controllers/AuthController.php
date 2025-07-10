@@ -83,7 +83,7 @@ class AuthController extends Controller
 
     public function showLinkRequestForm()
     {
-        return view('auth.lupa-password'); // buatkan view ini
+        return view('auth.lupa-password');
     }
 
     public function sendResetLinkEmail(Request $request)

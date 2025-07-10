@@ -106,7 +106,7 @@
                         {{-- Wrapper untuk animasi slide --}}
                         <div id="deskripsiWrapper" class="deskripsi-wrapper collapsed">
                             <div id="deskripsiFull" class="text-secondary">
-                                {!! nl2br(e($produk->deskripsi)) !!}
+                                {!! $produk->deskripsi !!}
                             </div>
                         </div>
 
@@ -352,6 +352,27 @@
     .navbar {
         padding: 0px 24px;
     }
+
+    .deskripsi-wrapper table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+  table-layout: auto;
+}
+
+.deskripsi-wrapper th,
+.deskripsi-wrapper td {
+  padding: 8px 12px;
+  border: 1px solid #dee2e6;
+  text-align: left;
+  white-space: nowrap; /* agar tidak turun baris */
+}
+
+.deskripsi-wrapper th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
 </style>
 
 <script>

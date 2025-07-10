@@ -99,7 +99,7 @@
                                 @endif
                             </p>
 
-                            <p class="produk-deskripsi">{{ \Illuminate\Support\Str::limit($produk->deskripsi, 80) }}</p>
+                            <p class="produk-deskripsi">{!! \Illuminate\Support\Str::limit($produk->deskripsi, 80) !!}</p>
                         </div>
                     </div>
                 </a>
@@ -108,10 +108,6 @@
                 @endforelse
             </div>
         </section>
-
-        <br>
-        <br>
-        <br>
 
         <!-- Testimoni -->
         <section id="testimoni" class="snap-section fade-up">
@@ -193,141 +189,74 @@
             </div>
         </section>
 
-        <br>
-        <br>
-        <br><br>
-        <br>
-        <br>
-        <br>
-
-        <!-- UNCOMMAND PUNYA DULU -->
         <!-- Proyek Kami -->
-        {{-- <section id="brand" class="snap-section">
-            <h2 class="section-title" id="proyek">Proyek Kami</h2>
-            <div class="galeri-list">
-                <div class="galeri-item">
-                    <img src="https://images.unsplash.com/photo-1615873968403-89e1e38c5693?auto=format&fit=crop&w=400&q=80" alt="Proyek Gedung">
-                    <p>Pemasangan insulasi akustik pada proyek ballroom hotel di Jakarta.</p>
-                </div>
-                <div class="galeri-item">
-                    <img src="https://images.unsplash.com/photo-1600585154340-be6161c458f9?auto=format&fit=crop&w=400&q=80" alt="Proyek Industri">
-                    <p>Instalasi peredam suara untuk ruang karaoke dan studio musik di Surabaya.</p>
-                </div>
-                <div class="galeri-item">
-                    <img src="https://images.unsplash.com/photo-1598300056391-5acb9fc16e25?auto=format&fit=crop&w=400&q=80" alt="Proyek Mall">
-                    <p>Distribusi bahan insulasi untuk proyek renovasi pusat perbelanjaan di Bandung.</p>
-                </div>
+        <section id="brand" class="snap-section proyek-section-unik fade-up">
+        <h2 class="section-title" id="proyek">Proyek Kami</h2>
+
+        <div class="proyek-slider-container">
+            <div class="proyek-slider-track">
+            <div class="proyek-slide active">
+                <img src="{{ asset('assets/img/wikapalu.jpg') }}" alt="Proyek 1">
+                <div class="proyek-caption"><p>Wika Palu PLTU</p></div>
             </div>
+            <div class="proyek-slide">
+                <img src="{{ asset('assets/img/nikomas.jpg') }}" alt="Proyek 2">
+                <div class="proyek-caption"><p>Nikomas Gemilang</p></div>
+            </div>
+            <div class="proyek-slide">
+                <img src="{{ asset('assets/img/dohsung.jpg') }}" alt="Proyek 3">
+                <div class="proyek-caption"><p>PT Dohsung Indonesia</p></div>
+            </div>
+            </div>
+
+            <!-- Tombol Navigasi -->
+            <button class="proyek-nav proyek-prev" onclick="moveProyekSlide(-1)">&#10094;</button>
+            <button class="proyek-nav proyek-next" onclick="moveProyekSlide(1)">&#10095;</button>
+        </div>
+
+        <!-- DOTS pindah ke luar dari .proyek-slider-container -->
+        <div class="proyek-dots">
+            <span class="proyek-dot active" onclick="goToProyekSlide(0)"></span>
+            <span class="proyek-dot" onclick="goToProyekSlide(1)"></span>
+            <span class="proyek-dot" onclick="goToProyekSlide(2)"></span>
+        </div>
         </section>
 
+
         <!-- Our Brand -->
-        <section id="brand" class="snap-section">
-            <h2 class="section-title">Merek Terpercaya</h2>
-            <div class="produk-list">
-                <div class="produk-item brand-logo">
-                <img src="assets/img/brands/rockwool.svg" alt="Rockwool">
-                <h4>ROCKWOOL</h4>
-                <p>Batu mineral untuk isolasi termal dan akustik kelas dunia.</p>
-                </div>
-                <div class="produk-item brand-logo">
-                <img src="assets/img/brands/knauf.svg" alt="Knauf">
-                <h4>KNAUF</h4>
-                <p>Material insulasi premium untuk konstruksi modern dan tahan api.</p>
-                </div>
-                <div class="produk-item brand-logo">
-                <img src="assets/img/brands/glasswool.svg" alt="Glasswool">
-                <h4>GLASSWOOL</h4>
-                <p>Solusi ringan dan ekonomis untuk peredaman suara dan panas.</p>
-                </div>
-            </div>
-        </section> --}}
+        <section id="brand" class="snap-section brand-slider-section fade-up">
+        <h2 class="section-title">Our Brand</h2>
+        <div class="brand-slider-wrapper">
+            <div class="brand-slider-track">
+            <!-- ulang 8 logo -->
+            <div class="brand-logo"><img src="assets/img/Nichias_Tombo.jpg" alt="Nichias Tombo"></div>
+            <div class="brand-logo"><img src="assets/img/Ecowool.jpg" alt="Ecowool"></div>
+            <div class="brand-logo"><img src="assets/img/Tilement_Spindlepin.jpg" alt="Tilement Spindlepin"></div>
+            <div class="brand-logo"><img src="assets/img/Firerock.jpg" alt="Firerock"></div>
+            <div class="brand-logo"><img src="assets/img/Rockwool.jpg" alt="Rockwool"></div>
+            <div class="brand-logo"><img src="assets/img/Polyfoil_Aluminium.jpg" alt="Polyfoil Aluminium"></div>
+            <div class="brand-logo"><img src="assets/img/ABR_Mineral_Wool.jpg" alt="ABR Mineral Wool"></div>
+            <div class="brand-logo"><img src="assets/img/Belver_Spindle_Pin.jpg" alt="Belver Spindle Pin"></div>
 
-    </div>
-
-    <div id="live-chat-toggle" style="
-        position: fixed;
-        bottom: 25px;
-        right: 25px;
-        z-index: 9999;
-        cursor: pointer;
-        background-color: #8B0000;
-        width: 56px;
-        height: 56px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 50%;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-    ">
-        <i class="bi bi-chat-dots-fill" style="font-size: 24px; color: white;"></i>
-    </div>
-
-    <div id="live-chat-widget" style="
-        position: fixed;
-        bottom: 43px;
-        right: 25px;
-        width: 320px;
-        height: 480px; /* Sedikit diperbesar untuk mengakomodasi konten baru */
-        background: #ffffff;
-        border-radius: 16px;
-        box-shadow: 0 6px 24px rgba(0,0,0,0.2);
-        overflow: hidden;
-        display: none;
-        flex-direction: column;
-        z-index: 10000;
-        transition: all 0.3s ease;
-    ">
-        <div style="background: #8B0000; color: white; padding: 16px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0;">
-            <strong>Help</strong> <div>
-                <button id="minimize-chat" style="background: none; border: none; color: white; font-size: 18px; margin-right: 8px; cursor: pointer;">−</button>
-                <button id="close-chat" style="background: none; border: none; color: white; font-size: 18px; cursor: pointer;">×</button>
+            <!-- duplikasi untuk loop mulus -->
+            <div class="brand-logo"><img src="assets/img/Nichias_Tombo.jpg" alt="Nichias Tombo"></div>
+            <div class="brand-logo"><img src="assets/img/Ecowool.jpg" alt="Ecowool"></div>
+            <div class="brand-logo"><img src="assets/img/Tilement_Spindlepin.jpg" alt="Tilement Spindlepin"></div>
+            <div class="brand-logo"><img src="assets/img/Firerock.jpg" alt="Firerock"></div>
+            <div class="brand-logo"><img src="assets/img/Rockwool.jpg" alt="Rockwool"></div>
+            <div class="brand-logo"><img src="assets/img/Polyfoil_Aluminium.jpg" alt="Polyfoil Aluminium"></div>
+            <div class="brand-logo"><img src="assets/img/ABR_Mineral_Wool.jpg" alt="ABR Mineral Wool"></div>
+            <div class="brand-logo"><img src="assets/img/Belver_Spindle_Pin.jpg" alt="Belver Spindle Pin"></div>
             </div>
         </div>
+        </section>
 
-        <div id="widget-content" style="flex: 1; overflow-y: auto; display: flex; flex-direction: column;">
-            
-            <div id="initial-screen" style="padding: 20px; flex: 1; display: flex; flex-direction: column;">
-                <div style="position: relative; margin-bottom: 24px;">
-                    <i class="bi bi-search" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #888;"></i>
-                    <input type="text" placeholder="Cari panduan (cth: deposit)" style="width: 100%; padding: 10px 10px 10px 40px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box;">
-                </div>
 
-                <strong>Top Suggestions</strong>
-                <ul style="list-style: none; padding: 0; margin-top: 16px;">
-                    <li style="margin-bottom: 12px;">❓ Apakah Rockwool tersedia dalam berbagai ukuran dan ketebalan?</li>
-                    <li style="margin-bottom: 12px;">📦 Berapa lama pengiriman untuk wilayah luar pulau Jawa?</li>
-                    <li style="margin-bottom: 12px;">💰 Apakah ada diskon untuk pembelian grosir?</li>
-                    <li style="margin-bottom: 12px;">📋 Bagaimana cara cek stok barang sebelum membeli?</li>
-                    <li style="margin-bottom: 12px;">🛒 Apakah bisa beli satuan atau hanya per dus?</li>
-                    <li style="margin-bottom: 12px;">📍 Apakah bisa dikirim ke lokasi proyek saya?</li>
-                    <li style="margin-bottom: 12px;">💳 Apa saja metode pembayaran yang tersedia?</li>
-                    <li style="margin-bottom: 12px;">🎧 Rockwool tipe apa yang cocok untuk ruang studio?</li>
-                    <li style="margin-bottom: 12px;">📞 Apakah bisa konsultasi sebelum membeli?</li>
-                    <li style="margin-bottom: 12px;">🔄 Apakah bisa retur jika barang tidak sesuai?</li>
-                    <li style="margin-bottom: 12px;">🧾 Apakah ada invoice resmi untuk keperluan proyek?</li>
-                    <li style="margin-bottom: 12px;">🕒 Kapan layanan customer service tersedia?</li>
-                </ul>
 
-                <div style="margin-top: auto;"> <button id="start-chat-btn" style="width: 100%; background: #8B0000; color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-size: 16px;">
-                        Live chat
-                    </button>
-                </div>
-            </div>
-
-            <div id="chat-body" style="flex: 1; padding: 16px; background: #f7f7f7; overflow-y: auto; display: none;">
-                <div style="background: #eeeeee; border-radius: 12px; padding: 10px 14px; max-width: 85%; margin-bottom: 12px;">
-                    👋 Halo! Ada yang bisa kami bantu?
-                </div>
-            </div>
-        </div>
-
-        <div id="chat-footer" style="padding: 12px; background: white; border-top: 1px solid #ddd; display: none; gap: 8px; flex-shrink: 0;">
-            <input type="text" id="chat-input" placeholder="Ketik pesan..." style="flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 8px;">
-            <button id="send-chat" style="background: #8B0000; color: white; border: none; border-radius: 8px; padding: 10px 14px; cursor: pointer;">
-                Kirim
-            </button>
-        </div>
+    @include('live-chat')
     </div>
+
+
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 @endpush
@@ -344,5 +273,51 @@
 }
 </style>
 
+<script>
+  let proyekCurrentIndex = 0;
+  const proyekSlides = document.querySelectorAll('.proyek-slide');
+  const proyekDots = document.querySelectorAll('.proyek-dot');
+  let proyekInterval;
+
+  function showProyekSlide(index) {
+    proyekSlides.forEach((slide, i) => {
+      slide.classList.remove('active');
+      proyekDots[i].classList.remove('active');
+    });
+
+    proyekSlides[index].classList.add('active');
+    proyekDots[index].classList.add('active');
+    proyekCurrentIndex = index;
+  }
+
+  function moveProyekSlide(step) {
+    const nextIndex = (proyekCurrentIndex + step + proyekSlides.length) % proyekSlides.length;
+    showProyekSlide(nextIndex);
+    resetProyekAutoSlide();
+  }
+
+  function goToProyekSlide(index) {
+    if (index !== proyekCurrentIndex) {
+      showProyekSlide(index);
+      resetProyekAutoSlide();
+    }
+  }
+
+  function startProyekAutoSlide() {
+    proyekInterval = setInterval(() => {
+      moveProyekSlide(1);
+    }, 5000);
+  }
+
+  function resetProyekAutoSlide() {
+    clearInterval(proyekInterval);
+    startProyekAutoSlide();
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    showProyekSlide(proyekCurrentIndex);
+    startProyekAutoSlide();
+  });
+</script>
 @endsection
 

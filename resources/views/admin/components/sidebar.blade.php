@@ -25,7 +25,7 @@
       </a>
     </li>
     <li class="nav-item mb-2">
-      <a href="#" class="nav-link text-white">
+      <a href="/admin/chat" class="nav-link text-white">
         <i class="bi-chat-left-text me-2"></i>Layanan Chat
       </a>
     </li>

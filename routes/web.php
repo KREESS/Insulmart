@@ -1,12 +1,15 @@
 <?php
 
 // Laravel Routes for Web Application
+
+use App\Http\Controllers\AdminChatController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\LandingController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\ProdukPenggunaController;
+use App\Http\Controllers\LiveChatController;
 // ======== BATAS =========
 
 // =========== NO ROLE LANDING PAGE ===========
@@ -57,9 +60,24 @@ Route::post('/reset-password', [AuthController::class, 'reset'])->name('password
 Route::get('/produk/detail/{slug}', [ProdukPenggunaController::class, 'detail'])->name('produk.detail');
 
 
+// ======== LIVE CHAT ========
+
+Route::post('/live-chat/start', [LiveChatController::class, 'startChat']);
+Route::post('/live-chat/send', [LiveChatController::class, 'sendMessage']);
+Route::get('/live-chat/messages/{chat_id}', [LiveChatController::class, 'getMessages']);
+
+
 
 // ======== PROTEKSI UMUM UNTUK YANG SUDAH LOGIN ========
 Route::middleware(['auth'])->group(function () {
+
+    // ======== LIVE CHAT ADMIN ========
+    Route::get('/admin/chat', [AdminChatController::class, 'index'])->name('admin.chat');
+    Route::get('/admin/chat/{id}', [AdminChatController::class, 'show'])->name('admin.chat.show');
+    Route::post('/admin/chat/{chat}/reply', [AdminChatController::class, 'reply'])->name('admin.chat.reply');
+    Route::post('/admin/chat/{chat}/typing', [AdminChatController::class, 'setTypingStatus'])->name('admin.chat.typing');
+    Route::get('/admin/chat/{chat}/typing-status', [AdminChatController::class, 'getTypingStatus'])->name('admin.chat.typing_status');
+    Route::get('/admin/live-chat/messages/{chat}', [AdminChatController::class, 'getMessages'])->name('admin.chat.messages');
 
     // ======== DASHBOARD ADMIN ========
     Route::middleware(['role:admin'])->group(function () {

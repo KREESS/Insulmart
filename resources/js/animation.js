@@ -138,97 +138,157 @@
             }
         });
 
-        // === 6. Live Chat Widget ===
-        const toggleBtn = document.getElementById("live-chat-toggle");
-        const chatBox = document.getElementById("live-chat-widget");
-        const closeBtn = document.getElementById("close-chat");
-        const minimizeBtn = document.getElementById("minimize-chat");
+//         // === 6. Live Chat Widget ===
+//         const toggleBtn = document.getElementById("live-chat-toggle");
+//         const chatBox = document.getElementById("live-chat-widget");
+//         const closeBtn = document.getElementById("close-chat");
+//         const minimizeBtn = document.getElementById("minimize-chat");
 
-        const initialScreen = document.getElementById("initial-screen");
-        const chatBody = document.getElementById("chat-body");
-        const chatFooter = document.getElementById("chat-footer");
+//         const initialScreen = document.getElementById("initial-screen");
+//         const chatBody = document.getElementById("chat-body");
+//         const chatFooter = document.getElementById("chat-footer");
 
-        const startChatBtn = document.getElementById("start-chat-btn");
-        const sendBtn = document.getElementById("send-chat");
-        const chatInput = document.getElementById("chat-input");
+//         const startChatBtn = document.getElementById("start-chat-btn");
+//         const sendBtn = document.getElementById("send-chat");
+//         const chatInput = document.getElementById("chat-input");
 
-        let isMinimized = false;
-        let chatHasStarted = false;
+//         let isMinimized = false;
+//         let chatHasStarted = false;
 
-        function switchToChatView() {
-            initialScreen.style.display = "none";
-            chatBody.style.display = "block";
-            chatFooter.style.display = "flex";
-            chatHasStarted = true;
-        }
+//         function switchToChatView() {
+//             initialScreen.style.display = "none";
+//             chatBody.style.display = "block";
+//             chatFooter.style.display = "flex";
+//             chatHasStarted = true;
+//         }
 
-        function resetToInitialView() {
-            chatBody.style.display = "none";
-            chatFooter.style.display = "none";
-            initialScreen.style.display = "flex";
-            chatHasStarted = false;
+//         function resetToInitialView() {
+//             chatBody.style.display = "none";
+//             chatFooter.style.display = "none";
+//             initialScreen.style.display = "flex";
+//             chatHasStarted = false;
 
-            if (isMinimized) {
-                chatBox.style.bottom = "100px";
-                minimizeBtn.textContent = '−';
-                isMinimized = false;
-            }
-        }
+//             if (isMinimized) {
+//                 chatBox.style.bottom = "100px";
+//                 minimizeBtn.textContent = '−';
+//                 isMinimized = false;
+//             }
+//         }
 
-        toggleBtn.addEventListener("click", () => {
-            chatBox.style.display = "flex";
-            toggleBtn.style.opacity = "0";
-            toggleBtn.style.visibility = "hidden";
-        });
+//         toggleBtn.addEventListener("click", () => {
+//             chatBox.style.display = "flex";
+//             toggleBtn.style.opacity = "0";
+//             toggleBtn.style.visibility = "hidden";
+//         });
 
-        closeBtn.addEventListener("click", () => {
-            chatBox.style.display = "none";
-            toggleBtn.style.opacity = "1";
-            toggleBtn.style.visibility = "visible";
-            resetToInitialView();
-        });
+//         closeBtn.addEventListener("click", () => {
+//             chatBox.style.display = "none";
+//             toggleBtn.style.opacity = "1";
+//             toggleBtn.style.visibility = "visible";
+//             resetToInitialView();
+//         });
 
-        startChatBtn.addEventListener("click", switchToChatView);
+//         startChatBtn.addEventListener("click", switchToChatView);
 
-        minimizeBtn.addEventListener("click", () => {
-            if (!isMinimized) {
-                initialScreen.style.display = "none";
-                chatBody.style.display = "none";
-                chatFooter.style.display = "none";
-                chatBox.style.bottom = "25px";
-                chatBox.style.height = "auto";
-                minimizeBtn.textContent = '□';
-                isMinimized = true;
-            } else {
-                chatBox.style.bottom = "100px";
-                chatBox.style.height = "480px";
-                minimizeBtn.textContent = '−';
-                if (chatHasStarted) {
-                    chatBody.style.display = "block";
-                    chatFooter.style.display = "flex";
-                } else {
-                    initialScreen.style.display = "flex";
-                }
-                isMinimized = false;
-            }
-        });
+//         minimizeBtn.addEventListener("click", () => {
+//             if (!isMinimized) {
+//                 initialScreen.style.display = "none";
+//                 chatBody.style.display = "none";
+//                 chatFooter.style.display = "none";
+//                 chatBox.style.bottom = "25px";
+//                 chatBox.style.height = "auto";
+//                 minimizeBtn.textContent = '□';
+//                 isMinimized = true;
+//             } else {
+//                 chatBox.style.bottom = "100px";
+//                 chatBox.style.height = "480px";
+//                 minimizeBtn.textContent = '−';
+//                 if (chatHasStarted) {
+//                     chatBody.style.display = "block";
+//                     chatFooter.style.display = "flex";
+//                 } else {
+//                     initialScreen.style.display = "flex";
+//                 }
+//                 isMinimized = false;
+//             }
+//         });
 
-        sendBtn.addEventListener("click", () => {
-            const message = chatInput.value.trim();
-            if (message !== "") {
-                const userBubble = document.createElement("div");
-                userBubble.textContent = message;
-                userBubble.style.cssText = `background: #8B0000; color: white; border-radius: 12px; padding: 10px 14px; max-width: 85%; margin-left: auto; margin-bottom: 12px;`;
-                chatBody.appendChild(userBubble);
-                chatInput.value = "";
-                chatBody.scrollTop = chatBody.scrollHeight;
-            }
-        });
+//         sendBtn.addEventListener("click", () => {
+//             const message = chatInput.value.trim();
+//             if (message !== "") {
+//                 const userBubble = document.createElement("div");
+//                 userBubble.textContent = message;
+//                 userBubble.style.cssText = `background: #8B0000; color: white; border-radius: 12px; padding: 10px 14px; max-width: 85%; margin-left: auto; margin-bottom: 12px;`;
+//                 chatBody.appendChild(userBubble);
+//                 chatInput.value = "";
+//                 chatBody.scrollTop = chatBody.scrollHeight;
+//             }
+//         });
 
-        chatInput.addEventListener("keypress", function (e) {
-            if (e.key === "Enter") {
-                e.preventDefault();
-                sendBtn.click();
-            }
-        });
+//         chatInput.addEventListener("keypress", function (e) {
+//             if (e.key === "Enter") {
+//                 e.preventDefault();
+//                 sendBtn.click();
+//             }
+//         });
+
+//         let currentChatId = null;
+
+// // Buat sesi chat saat klik "Live Chat"
+// startChatBtn.addEventListener("click", async () => {
+//     switchToChatView();
+
+//     const response = await fetch("/live-chat/start", {
+//         method: "POST",
+//         headers: { "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content") },
+//     });
+
+//     const data = await response.json();
+//     currentChatId = data.chat_id;
+//     loadMessages();
+// });
+
+// async function loadMessages() {
+//     if (!currentChatId) return;
+
+//     const response = await fetch(`/live-chat/messages/${currentChatId}`);
+//     const messages = await response.json();
+
+//     chatBody.innerHTML = '';
+//     messages.forEach(msg => {
+//         const bubble = document.createElement("div");
+//         bubble.textContent = msg.message;
+//         bubble.style.cssText = msg.sender === 'user'
+//             ? `background: #8B0000; color: white; border-radius: 12px; padding: 10px 14px; max-width: 85%; margin-left: auto; margin-bottom: 12px;`
+//             : `background: #eeeeee; border-radius: 12px; padding: 10px 14px; max-width: 85%; margin-bottom: 12px;`;
+
+//         chatBody.appendChild(bubble);
+//     });
+
+//     chatBody.scrollTop = chatBody.scrollHeight;
+// }
+
+// sendBtn.addEventListener("click", async () => {
+//     const message = chatInput.value.trim();
+//     if (message === "" || !currentChatId) return;
+
+//     const response = await fetch("/live-chat/send", {
+//         method: "POST",
+//         headers: {
+//             "Content-Type": "application/json",
+//             "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
+//         },
+//         body: JSON.stringify({
+//             chat_id: currentChatId,
+//             message: message
+//         })
+//     });
+
+//     const data = await response.json();
+//     if (data.success) {
+//         chatInput.value = "";
+//         loadMessages();
+//     }
+// });
+
     });
