@@ -1,6 +1,6 @@
 <nav>
     <div class="navbar">
-        <a href="{{ url('/home') }}" class="navbar-logo">
+        <a href="{{ url('/') }}" class="navbar-logo">
             <img src="{{ asset('assets/img/insulmart_new_bg_new.png') }}" alt="Logo PT" class="logo-img">
         </a>
 
@@ -9,7 +9,7 @@
         </button>
 
         <div class="navbar-menu" id="navbar-menu">
-            <a href="{{ url('/home') }}">Beranda</a>
+            <a href="{{ url('/') }}">Beranda</a>
             <a href="{{ url('/produk') }}">Produk</a>
             <a href="{{ url('/katalog-produk') }}">Katalog</a>
             <a href="{{ url('/galeri') }}">Galeri</a>

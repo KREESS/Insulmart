@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\LandingController;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\ProdukPenggunaController;
 // ======== BATAS =========
 
 // =========== NO ROLE LANDING PAGE ===========
@@ -42,6 +43,10 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // ======== REGISTER ========
 Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
 Route::post('/register', [AuthController::class, 'register']);
+
+// ======== Produk ========
+Route::get('/produk/detail/{slug}', [ProdukPenggunaController::class, 'detail'])->name('produk.detail');
+
 
 
 // ======== PROTEKSI UMUM UNTUK YANG SUDAH LOGIN ========

@@ -79,7 +79,7 @@
 
       <div class="col-md-7 p-4">
         <h4 class="text-merah fw-bold">{{ $produk->nama_produk }}</h4>
-        <p class="mb-3" style="white-space: pre-line;"><strong>Deskripsi:</strong><br>{{ $produk->deskripsi }}</p>
+        <p class="mb-3" style="white-space: pre-line;"><strong>Deskripsi:</strong><br>{!! $produk->deskripsi !!}</p>
 
         @php
           $min = $produk->varians->min('harga');
