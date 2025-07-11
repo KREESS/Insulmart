@@ -125,7 +125,6 @@
                 <a href="{{ url('/') }}" class="btn-back">← Kembali ke Beranda</a>
 
                 <h3 class="login-title">Masuk ke Akun</h3>
-
                 {{-- Notifikasi Sukses --}}
                 @if(session('success'))
                     <div class="alert alert-success d-flex align-items-center alert-dismissible fade show shadow-sm" role="alert">
@@ -153,7 +152,6 @@
 
                 <form method="POST" action="{{ url('/login') }}">
                     @csrf
-
                     <div class="mb-3">
                         <label for="email" class="form-label">Alamat Email</label>
                         <input type="email" name="email" id="email" class="form-control" required autofocus>
