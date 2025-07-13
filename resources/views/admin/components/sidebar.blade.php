@@ -20,12 +20,12 @@
       </a>
     </li>
     <li class="nav-item mb-2">
-      <a href="#" class="nav-link text-white">
+      <a href="/admin/pengguna" class="nav-link text-white {{ request()->is('admin/pengguna*') ? 'active fw-bold' : '' }}">
         <i class="bi bi-people-fill me-2"></i>Kelola Pengguna
       </a>
     </li>
     <li class="nav-item mb-2">
-      <a href="/admin/chat" class="nav-link text-white">
+      <a href="/admin/chat" class="nav-link text-white {{ request()->is('admin/chat*') ? 'active fw-bold' : '' }}">
         <i class="bi-chat-left-text me-2"></i>Layanan Chat
       </a>
     </li>

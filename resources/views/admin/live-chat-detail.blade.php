@@ -3,7 +3,7 @@
 @section('content')
 <main class="main-content p-4 bg-light" id="mainContent">
     <div class="container py-4">
-        <a href="{{ url('/') }}" class="btn btn-outline-secondary mt-4">
+        <a href="{{ url('/admin/chat') }}" class="btn btn-outline-secondary mt-4">
             ← Kembali ke Beranda
         </a>
         <br><br>

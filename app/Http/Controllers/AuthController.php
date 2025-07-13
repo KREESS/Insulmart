@@ -30,7 +30,15 @@ class AuthController extends Controller
 
             $user = Auth::user();
 
-            // Redirect sesuai role
+            // ✅ Cek apakah user aktif
+            if (!$user->is_active) {
+                Auth::logout();
+                return back()->withErrors([
+                    'email' => 'Akun Anda telah dinonaktifkan.',
+                ]);
+            }
+
+            // ✅ Redirect sesuai role
             if ($user->hasRole('admin')) {
                 return redirect('/admin/dashboard');
             } elseif ($user->hasRole('pelanggan')) {
