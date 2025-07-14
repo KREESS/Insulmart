@@ -9,11 +9,11 @@
         </button>
 
         <div class="navbar-menu" id="navbar-menu">
-            <a href="{{ url('/') }}">Beranda</a>
-            <a href="{{ url('/produk') }}">Produk</a>
-            <a href="{{ url('/katalog-produk') }}">Katalog</a>
-            <a href="{{ url('/galeri') }}">Galeri</a>
-            <a href="{{ url('/hubungi-kami') }}">Kontak</a>
+            <a href="{{ url('/') }}" class="{{ request()->is('/') ? 'active' : '' }}">Beranda</a>
+            <a href="{{ url('/produk') }}" class="{{ request()->is('produk') ? 'active' : '' }}">Produk Kami</a>
+            <a href="{{ url('/katalog-produk') }}" class="{{ request()->is('katalog-produk') ? 'active' : '' }}">Katalog</a>
+            <a href="{{ url('/galeri') }}" class="{{ request()->is('galeri') ? 'active' : '' }}">Galeri</a>
+            <a href="{{ url('/hubungi-kami') }}" class="{{ request()->is('hubungi-kami') ? 'active' : '' }}">Kontak</a>
         </div>
 
         <div class="navbar-icons">

@@ -1,4 +1,4 @@
-<footer class="snap-section">
+<footer class="snap-section fade-up">
     <div class="footer-container">
 
         <!-- Kolom: Info Perusahaan -->

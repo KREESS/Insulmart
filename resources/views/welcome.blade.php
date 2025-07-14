@@ -37,10 +37,10 @@
             <h2 class="section-title">Kenapa Harus Belanja di Insulmart?</h2>
             <div class="keunggulan-wrapper">
                 <div class="keunggulan-card fade-up">
-                    <b>Spesialis Rockwool & Insulasi:</b> Insulmart fokus menyediakan berbagai jenis rockwool, glasswool, dan material peredam suara/insulasi terbaik untuk kebutuhan industri dan proyek konstruksi.
+                    <b>Spesialis Rockwool & Insulasi:</b> Insulmart fokus menyediakan berbagai jenis rockwool, dan material peredam suara/insulasi terbaik untuk kebutuhan industri dan proyek konstruksi.
                 </div>
                 <div class="keunggulan-card fade-up">
-                    <b>Belanja Mudah & Aman:</b> Proses pembelian online cepat, aman, dan praktis langsung melalui website. Bisa cek stok dan harga secara real-time.
+                    <b>Belanja Mudah & Aman:</b> Proses pembelian cepat, aman, dan praktis. Bisa cek stok dan harga secara real-time.
                 </div>
                 <div class="keunggulan-card fade-up">
                     <b>Harga Grosir & Diskon Proyek:</b> Dapatkan harga lebih hemat untuk pembelian dalam jumlah besar, cocok untuk kebutuhan proyek dan tender.
@@ -191,37 +191,61 @@
 
         <!-- Proyek Kami -->
         <section id="brand" class="snap-section proyek-section-unik fade-up">
-        <h2 class="section-title" id="proyek">Proyek Kami</h2>
+            <h2 class="section-title" id="proyek">Proyek Kami</h2>
 
-        <div class="proyek-slider-container">
-            <div class="proyek-slider-track">
-            <div class="proyek-slide active">
-                <img src="{{ asset('assets/img/wikapalu.jpg') }}" alt="Proyek 1">
-                <div class="proyek-caption"><p>Wika Palu PLTU</p></div>
-            </div>
-            <div class="proyek-slide">
-                <img src="{{ asset('assets/img/nikomas.jpg') }}" alt="Proyek 2">
-                <div class="proyek-caption"><p>Nikomas Gemilang</p></div>
-            </div>
-            <div class="proyek-slide">
-                <img src="{{ asset('assets/img/dohsung.jpg') }}" alt="Proyek 3">
-                <div class="proyek-caption"><p>PT Dohsung Indonesia</p></div>
-            </div>
-            </div>
+            <div class="proyek-slider-container">
+                <div class="proyek-slider-track">
+                <div class="proyek-slide active">
+                    <img src="{{ asset('assets/img/wikapalu.jpg') }}" alt="Proyek 1">
+                    <div class="proyek-caption"><p>Wika Palu PLTU</p></div>
+                </div>
+                <div class="proyek-slide">
+                    <img src="{{ asset('assets/img/nikomas.jpg') }}" alt="Proyek 2">
+                    <div class="proyek-caption"><p>Nikomas Gemilang</p></div>
+                </div>
+                <div class="proyek-slide">
+                    <img src="{{ asset('assets/img/dohsung.jpg') }}" alt="Proyek 3">
+                    <div class="proyek-caption"><p>PT Dohsung Indonesia</p></div>
+                </div>
+                <div class="proyek-slide">
+                    <img src="{{ asset('assets/img/13.png') }}" alt="Proyek 4">
+                    <div class="proyek-caption"><p>PT DATA CENTRE</p></div>
+                </div>
+                <div class="proyek-slide">
+                    <img src="{{ asset('assets/img/11.png') }}" alt="Proyek 5">
+                    <div class="proyek-caption"><p>PROYEK BAMBULOGY MENSION</p></div>
+                </div>
+                <div class="proyek-slide">
+                    <img src="{{ asset('assets/img/6.png') }}" alt="Proyek 6">
+                    <div class="proyek-caption"><p>PROYEK PEREDAM GENSET</p></div>
+                </div>
+                <div class="proyek-slide">
+                    <img src="{{ asset('assets/img/3.png') }}" alt="Proyek 7">
+                    <div class="proyek-caption"><p>PROYEK AINUL HAYAT SEJAHTERA</p></div>
+                </div>
+                <div class="proyek-slide">
+                    <img src="{{ asset('assets/img/b.jpg') }}" alt="Proyek 8">
+                    <div class="proyek-caption"><p>PROYEK BANDARA DHOHO</p></div>
+                </div>
 
-            <!-- Tombol Navigasi -->
-            <button class="proyek-nav proyek-prev" onclick="moveProyekSlide(-1)">&#10094;</button>
-            <button class="proyek-nav proyek-next" onclick="moveProyekSlide(1)">&#10095;</button>
-        </div>
+                <!-- Tombol Navigasi -->
+                <button class="proyek-nav proyek-prev" onclick="moveProyekSlide(-1)">&#10094;</button>
+                <button class="proyek-nav proyek-next" onclick="moveProyekSlide(1)">&#10095;</button>
+                </div> <!-- penutup .proyek-slider-track -->
+            </div> <!-- penutup .proyek-slider-container -->
 
-        <!-- DOTS pindah ke luar dari .proyek-slider-container -->
-        <div class="proyek-dots">
-            <span class="proyek-dot active" onclick="goToProyekSlide(0)"></span>
-            <span class="proyek-dot" onclick="goToProyekSlide(1)"></span>
-            <span class="proyek-dot" onclick="goToProyekSlide(2)"></span>
-        </div>
+            <!-- DOTS harus DI SINI -->
+            <div class="proyek-dots">
+                <span class="proyek-dot active" onclick="goToProyekSlide(0)"></span>
+                <span class="proyek-dot" onclick="goToProyekSlide(1)"></span>
+                <span class="proyek-dot" onclick="goToProyekSlide(2)"></span>
+                <span class="proyek-dot" onclick="goToProyekSlide(3)"></span>
+                <span class="proyek-dot" onclick="goToProyekSlide(4)"></span>
+                <span class="proyek-dot" onclick="goToProyekSlide(5)"></span>
+                <span class="proyek-dot" onclick="goToProyekSlide(6)"></span>
+                <span class="proyek-dot" onclick="goToProyekSlide(7)"></span>
+            </div>
         </section>
-
 
         <!-- Our Brand -->
         <section id="brand" class="snap-section brand-slider-section fade-up">
@@ -251,11 +275,8 @@
         </div>
         </section>
 
-
-
     @include('live-chat')
     </div>
-
 
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

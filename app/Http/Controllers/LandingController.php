@@ -13,4 +13,20 @@ class LandingController extends Controller
         $produks = Produk::with(['gambars', 'varians'])->get();
         return view('welcome', compact('produks'));
     }
+
+    public function katalog()
+    {
+        $products = Produk::with(['gambars', 'varians'])->get();
+        return view('katalog-produk', compact('products'));
+    }
+
+    public function galeri()
+    {
+        return view('galeri');
+    }
+
+    public function kontak()
+    {
+        return view('hubungi-kami');
+    }
 }

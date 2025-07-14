@@ -17,28 +17,24 @@ use App\Http\Controllers\AdminPesananController;
 
 // =========== NO ROLE LANDING PAGE ===========
 Route::get('/', [LandingController::class, 'index'])->name('landing');
+// =========== BATAS =============
 
 
-Route::get('/produk', function () {
-    return view('produk');
-});
+// =========== KATALOG PRODUK ===========
+Route::get('/katalog-produk', [LandingController::class, 'katalog'])->name('katalog-produk.pengguna');
+// ============ BATAS =============
 
-Route::get('/katalog-produk', function () {
-    return view('katalog_produk');
-});
 
-Route::get('/galeri', function () {
-    return view('galeri');
-});
+// ======== GALERI ===========
+Route::get('/galeri', [LandingController::class, 'galeri'])->name('galeri.pengguna');
+// ======== BATAS =============
 
-Route::get('/hubungi-kami', function () {
-    return view('hubungi_kami');
-});
 
-Route::get('/hubungi-kami', function () {
-    return view('hubungi_kami');
-});
-// ======== BATAS ===========
+// ======== HUBUNGI KAMI ===========
+Route::get('/hubungi-kami', [LandingController::class, 'kontak'])->name('kontak.pengguna');
+// ======== BATAS =============
+
+
 
 
 // ======== LOGIN ========
@@ -65,6 +61,7 @@ Route::post('/reset-password', [AuthController::class, 'reset'])->name('password
 
 
 // ======== Produk ========
+Route::get('/produk', [ProdukPenggunaController::class, 'index'])->name('produk.pengguna.index');
 Route::get('/produk/detail/{slug}', [ProdukPenggunaController::class, 'detail'])->name('produk.detail');
 // ============ BATAS =============
 

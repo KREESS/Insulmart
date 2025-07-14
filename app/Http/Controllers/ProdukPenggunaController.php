@@ -11,6 +11,13 @@ use Illuminate\Support\Str;
 
 class ProdukPenggunaController extends Controller
 {
+    public function index()
+    {
+        $products = Produk::with(['gambars', 'varians'])->get();
+        return view('produk', compact('products'));
+    }
+
+
     public function detail($slug)
     {
         $produk = Produk::with(['gambars', 'varians'])->get()

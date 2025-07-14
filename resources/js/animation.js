@@ -30,16 +30,16 @@
             {
                 title: "",
                 desc: "",
-                position: 'text-center' // Ini untuk slide pertama (tanpa teks)
+                position: 'text-center' // Slide pertama tanpa teks
             },
             {
-                title: "E-COMMERCE MATERIAL INSULASI TERLENGKAP",
-                desc: "Insulmart menyediakan berbagai jenis rockwool, glasswool, dan material insulasi lainnya untuk kebutuhan rumah, industri, dan proyek.",
+                title: "DISTRIBUTOR MATERIAL INSULASI TERPERCAYA",
+                desc: "Insulmart adalah platform distribusi resmi berbagai jenis rockwool, dan material insulasi lainnya untuk kebutuhan rumah, industri, dan proyek.",
                 position: 'text-right'
             },
             {
-                title: "BELANJA MUDAH & CEPAT DI INSULMART",
-                desc: "Cek stok, harga, dan lakukan transaksi langsung melalui website kami dengan pengiriman ke seluruh Indonesia.",
+                title: "BAGIAN DARI PT TALI REJEKI SEJAK 2011",
+                desc: "Insulmart berada di bawah naungan PT Tali Rejeki, yang telah melayani kebutuhan insulasi nasional selama lebih dari satu dekade.",
                 position: 'text-left'
             }
         ];
