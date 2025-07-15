@@ -42,7 +42,7 @@ class AuthController extends Controller
             if ($user->hasRole('admin')) {
                 return redirect('/admin/dashboard');
             } elseif ($user->hasRole('pelanggan')) {
-                return redirect('/pelanggan/dashboard');
+                return redirect('/');
             }
 
             return redirect('/');
@@ -86,7 +86,7 @@ class AuthController extends Controller
 
         auth()->login($user);
 
-        return redirect('/pelanggan/dashboard');
+        return redirect('/');
     }
 
     public function showLinkRequestForm()

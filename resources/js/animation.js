@@ -126,6 +126,7 @@
                 });
             });
         }
+
         // === 5. Scroll to Top Button
         // Scroll listener untuk navbar transparan
         const navbar = document.querySelector('nav');

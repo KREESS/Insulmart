@@ -14,25 +14,70 @@
             <a href="{{ url('/katalog-produk') }}" class="{{ request()->is('katalog-produk') ? 'active' : '' }}">Katalog</a>
             <a href="{{ url('/galeri') }}" class="{{ request()->is('galeri') ? 'active' : '' }}">Galeri</a>
             <a href="{{ url('/hubungi-kami') }}" class="{{ request()->is('hubungi-kami') ? 'active' : '' }}">Kontak</a>
-        </div>
-
-        <div class="navbar-icons">
-            <a href="{{ url('/keranjang') }}" class="icon-link" title="Keranjang">
-                <i class="bi bi-cart3"></i>
-            </a>
 
             @auth
-                @if (auth()->user()->hasRole('admin'))
-                    <a href="{{ url('/admin/dashboard') }}" class="btn-auth btn-masuk">Dashboard</a>
-                @elseif (auth()->user()->hasRole('pelanggan'))
-                    <a href="{{ url('/pelanggan/dashboard') }}" class="btn-auth btn-masuk">Dashboard</a>
-                @else
-                    <a href="#" class="btn-auth btn-masuk">Akun</a>
-                @endif
+                <a href="{{ route('pengguna.quotation') }}" class="{{ request()->is('quotation*') ? 'active' : '' }}">Penawaran Saya</a>
+                <a href="{{ route('pengguna.pemesanan') }}" class="{{ request()->is('pemesanan*') ? 'active' : '' }}">Riwayat Pemesanan</a>
+            @endauth
+
+            @auth
+                <div class="dropdown user-dropdown" id="userDropdown">
+                    <button class="dropdown-toggle-button" type="button"
+                            onclick="toggleDropdown()"
+                            style="background: none; border: none; display: flex; align-items: center; cursor: pointer;">
+                        <img src="{{ auth()->user()->profile_photo_path ? asset('storage/' . auth()->user()->profile_photo_path) : asset('images/default-user.png') }}"
+                            alt="Foto Profil"
+                            class="profile-pic"
+                            style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1px solid #ccc; margin-right: 8px;">
+                        <span style="color: white; font-weight: bold; display: flex; align-items: center; gap: 5px;">
+                            {{ auth()->user()->name }}
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="white" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M1.646 5.646a.5.5 0 0 1 .708 0L8 11.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                            </svg>
+                        </span>
+                    </button>
+
+                    <div class="dropdown-menu" style="display: none; position: absolute; right: 0; background: white; border: 1px solid #ddd; box-shadow: 0 2px 8px rgba(0,0,0,0.1); min-width: 180px; z-index: 999;">
+                        @if (auth()->user()->hasRole('admin'))
+                            <a class="dropdown-item" href="{{ url('/admin/dashboard') }}" style="display:block; padding: 10px 15px; color: #333; text-decoration: none;">Dashboard Admin</a>
+                        @elseif (auth()->user()->hasRole('pelanggan'))
+                        @endif
+                        <a class="dropdown-item" href="{{ route('profile') }}" style="display:block; padding: 10px 15px; color: #333; text-decoration: none;">Profile Saya</a>
+                        <a class="dropdown-item text-danger" href="{{ route('logout') }}"
+                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                            style="display:block; padding: 10px 15px; color: red; text-decoration: none;">
+                            Logout
+                        </a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            @csrf
+                        </form>
+                    </div>
+                </div>
             @else
                 <a href="{{ route('login') }}" class="btn-auth btn-masuk">Masuk</a>
                 <a href="{{ route('register') }}" class="btn-auth btn-daftar">Daftar</a>
             @endauth
         </div>
+
+        {{-- <div class="navbar-icons">
+        </div> --}}
     </div>
 </nav>
+
+<script>
+    function toggleDropdown() {
+        document.getElementById("userDropdown").classList.toggle("show");
+        const dropdownMenu = document.querySelector("#userDropdown .dropdown-menu");
+        dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+    }
+
+    // Klik di luar untuk menutup dropdown
+    window.addEventListener('click', function (e) {
+        const dropdown = document.getElementById('userDropdown');
+        if (dropdown && !dropdown.contains(e.target)) {
+            dropdown.classList.remove('show');
+            const menu = dropdown.querySelector('.dropdown-menu');
+            if (menu) menu.style.display = 'none';
+        }
+    });
+</script>

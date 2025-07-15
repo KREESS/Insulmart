@@ -12,6 +12,8 @@ use App\Http\Controllers\ProdukPenggunaController;
 use App\Http\Controllers\LiveChatController;
 use App\Http\Controllers\AdminKelolaAkunController;
 use App\Http\Controllers\AdminPesananController;
+use App\Http\Controllers\Pengguna\PesananController;
+use App\Http\Controllers\ProfileController;
 // ======== BATAS =========
 
 
@@ -76,6 +78,14 @@ Route::get('/live-chat/messages/{chat_id}', [LiveChatController::class, 'getMess
 
 // ======== PROTEKSI UMUM UNTUK YANG SUDAH LOGIN ========
 Route::middleware(['auth'])->group(function () {
+
+
+    // =========== PROFILE ===========
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
+    Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+    // ============ BATAS =============
+
+
     // =========== ADMIN ===========
     Route::middleware(['role:admin'])->group(function () {
         // ======= DASHBOARD ADMIN ========
@@ -130,5 +140,8 @@ Route::middleware(['auth'])->group(function () {
         })->name('pelanggan.dashboard');
         // ============ BATAS =============
 
+        // ============ PESANAN/ORDER ============
+        Route::get('/quotation', [PesananController::class, 'index'])->name('pengguna.quotation');
+        Route::get('/pemesanan', [PesananController::class, 'index'])->name('pengguna.pemesanan');
     });
 });
