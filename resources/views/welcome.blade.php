@@ -25,9 +25,6 @@
         </div>
 
     </header>
-    {{-- <br>
-    <br>
-    <br> --}}
 
     <!-- Bagian Bawah Edit -->
     <!-- sama -->
