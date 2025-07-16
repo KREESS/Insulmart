@@ -125,14 +125,16 @@ Route::middleware(['auth'])->group(function () {
         Route::patch('/admin/kelola-akun/{id}/toggle-active', [AdminKelolaAkunController::class, 'toggleActive'])->name('admin.kelola-akun.toggle-active');
         // ============ BATAS =============
 
+
         // =========== ADMIN PESANAN ===========
         Route::get('/admin/pesanan', [AdminPesananController::class, 'index'])->name('admin.kelola-akun');
         // ============ BATAS =============
-
     });
+
 
     // ======== DASHBOARD PELANGGAN ========
     Route::middleware(['role:pelanggan'])->group(function () {
+
 
         // ======== DASHBOARD PELANGGAN ========
         Route::get('/pelanggan/dashboard', function () {
@@ -140,8 +142,10 @@ Route::middleware(['auth'])->group(function () {
         })->name('pelanggan.dashboard');
         // ============ BATAS =============
 
+
         // ============ PESANAN/ORDER ============
-        Route::get('/quotation', [PesananController::class, 'index'])->name('pengguna.quotation');
-        Route::get('/pemesanan', [PesananController::class, 'index'])->name('pengguna.pemesanan');
+        Route::get('/penawaran-saya', [PesananController::class, 'penawaran'])->name('pengguna.quotation');
+        Route::get('/riwayat-pemesanan', [PesananController::class, 'riwayat'])->name('pengguna.pemesanan');
+        // ============ BATAS =============
     });
 });

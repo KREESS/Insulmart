@@ -8,9 +8,9 @@
 
     <header id="beranda" class="snap-section">
         <div class="slider-container">
-            <div class="slider-slide slider-active" style="background-image: url('{{ asset('assets/img/landing_page (4)1.png') }}');"></div>
-            <div class="slider-slide" style="background-image: url('{{ asset('assets/img/landing (7)1.png') }}');"></div>
-            <div class="slider-slide" style="background-image: url('{{ asset('assets/img/landing (2)1.png') }}');"></div>
+            <div class="slider-slide slider-active" style="background-image: url('{{ asset('assets/img/landing/7.png') }}');"></div>
+            <div class="slider-slide" style="background-image: url('{{ asset('assets/img/landing/8.png') }}');"></div>
+            <div class="slider-slide" style="background-image: url('{{ asset('assets/img/landing/9.png') }}');"></div>
         </div>
 
         <div class="slider-content text-center">
@@ -20,7 +20,7 @@
                 <p id="slider-desc">
                     BERDIRI SEJAK 2011. PT. TALI REJEKI DIPERCAYA SEBAGAI DISTRIBUTOR & AGEN UNTUK BERBAGAI PROJECT BESAR PEREDAM SUARA UNTUK RUANG KARAOKE, BALLROOM, DAN AKUSTIK DI SELURUH INDONESIA.
                 </p>
-                <a href="produk.html" class="cta-btn" style="color: white;">Lihat Produk Kami</a>
+                <a href="{{ url('/produk') }}" class="cta-btn" style="color: white;">Lihat Produk Kami</a>
             </div>
         </div>
 

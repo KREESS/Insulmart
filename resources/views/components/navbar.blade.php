@@ -16,7 +16,7 @@
             <a href="{{ url('/hubungi-kami') }}" class="{{ request()->is('hubungi-kami') ? 'active' : '' }}">Kontak</a>
 
             @auth
-                <a href="{{ route('pengguna.quotation') }}" class="{{ request()->is('quotation*') ? 'active' : '' }}">Penawaran Saya</a>
+                <a href="{{ route('pengguna.quotation') }}" class="{{ request()->is('quotation*') ? 'active' : '' }}">Penawaran</a>
                 <a href="{{ route('pengguna.pemesanan') }}" class="{{ request()->is('pemesanan*') ? 'active' : '' }}">Riwayat Pemesanan</a>
             @endauth
 

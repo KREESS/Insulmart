@@ -64,7 +64,7 @@
 <section class="position-relative text-center text-white fade-up" style="
   height: 260px;
   background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.6)),
-              url('{{ asset('assets/img/landing_page (4)1.png') }}') center center / cover no-repeat;">  
+              url('{{ asset('assets/img/7.png') }}') center center / cover no-repeat;">  
   <div class="position-relative h-100 d-flex flex-column justify-content-center align-items-center">
     <h2 class="fw-bold mb-1">Katalog Produk Rockwool</h2>
     <p class="text-white-50 small mb-0">Unduh katalog produk sesuai kebutuhan Anda</p>
@@ -79,55 +79,70 @@
       <p class="text-muted">Klik tombol untuk mengunduh katalog produk Rockwool pilihan kami</p>
     </div>
 
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
-      @forelse ($products as $product)
-        @php
-          $gambars = $product->gambars;
-          $nama = $product->nama_produk;
-          $slug = \Illuminate\Support\Str::slug($nama);
-          $katalogFile = "storage/katalog/{$slug}.pdf";
-        @endphp
-        <div class="col fade-up">
-          <div class="card h-100 shadow-sm rounded-4 overflow-hidden">
-            @if ($gambars->count())
-              <div id="carouselKatalog{{ $product->id }}" class="carousel slide produk-img-wrapper" data-bs-ride="carousel" data-bs-interval="3000">
-                <div class="carousel-inner h-100 w-100">
-                  @foreach ($gambars as $index => $gambar)
-                    <div class="carousel-item {{ $index == 0 ? 'active' : '' }} h-100">
-                      <div class="d-flex justify-content-center align-items-center h-100">
-                        <img src="{{ asset('storage/' . $gambar->path) }}"
-                             class="produk-img"
-                             alt="{{ $nama }} {{ $index + 1 }}">
-                      </div>
-                    </div>
-                  @endforeach
-                </div>
-              </div>
-            @else
-              <div class="produk-img-wrapper d-flex justify-content-center align-items-center">
-                <img src="{{ asset('assets/img/no-img-ava.jpg') }}"
-                     class="produk-img"
-                     alt="{{ $nama }}">
-              </div>
-            @endif
+<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+  @forelse ($products as $product)
+    @php
+        $gambars = $product->gambars;
+        $nama = $product->nama_produk;
+        $slug = \Illuminate\Support\Str::slug($nama);
 
-            <div class="card-body d-flex flex-column">
-              <h5 class="card-title text-merah mb-2">{{ strtoupper($nama) }}</h5>
-              <p class="card-text text-muted small flex-grow-1">Klik tombol di bawah untuk mengunduh katalog produk ini.</p>
-              <div class="mt-auto">
-                <a href="{{ asset($katalogFile) }}" target="_blank" class="btn btn-katalog w-100">
-                  <i class="bi bi-download me-1"></i> Download Katalog {{ strtoupper($nama) }}
-                </a>
-              </div>
+        $pdfRelativePath = "assets/img/New folder/{$slug}.pdf"; // relatif ke public
+        $pdfFullPath = public_path($pdfRelativePath);
+        $pdfUrl = asset($pdfRelativePath);
+        $hasPdf = file_exists($pdfFullPath);
+    @endphp
+
+    <div class="col fade-up">
+      <div class="card h-100 shadow-sm rounded-4 overflow-hidden">
+        {{-- Gambar --}}
+        @if ($gambars->count())
+          <div id="carouselKatalog{{ $product->id }}" class="carousel slide produk-img-wrapper" data-bs-ride="carousel" data-bs-interval="3000">
+            <div class="carousel-inner h-100 w-100">
+              @foreach ($gambars as $index => $gambar)
+                <div class="carousel-item {{ $index == 0 ? 'active' : '' }} h-100">
+                  <div class="d-flex justify-content-center align-items-center h-100">
+                    <img src="{{ asset('storage/' . $gambar->path) }}"
+                         class="produk-img"
+                         alt="{{ $nama }} {{ $index + 1 }}">
+                  </div>
+                </div>
+              @endforeach
             </div>
           </div>
+        @else
+          <div class="produk-img-wrapper d-flex justify-content-center align-items-center">
+            <img src="{{ asset('assets/img/no-img-ava.jpg') }}"
+                 class="produk-img"
+                 alt="{{ $nama }}">
+          </div>
+        @endif
+
+        {{-- Info dan tombol --}}
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title text-merah mb-2">{{ strtoupper($nama) }}</h5>
+          <p class="card-text text-muted small flex-grow-1">Klik tombol di bawah untuk mengunduh katalog produk ini.</p>
+          <div class="mt-auto">
+            @if ($hasPdf)
+              <a href="{{ $pdfUrl }}" target="_blank" class="btn btn-katalog w-100">
+                <i class="bi bi-download me-1"></i> Download Katalog {{ strtoupper($nama) }}
+              </a>
+            @else
+              <button class="btn btn-secondary w-100" disabled>
+                <i class="bi bi-file-earmark-x me-1"></i> Katalog Belum Tersedia
+              </button>
+            @endif
+          </div>
         </div>
-      @empty
-        <div class="col-12 text-center">
-          <h5 class="text-muted">Belum ada data produk tersedia.</h5>
-        </div>
-      @endforelse
+      </div>
     </div>
+
+  @empty
+    <div class="col-12 text-center">
+      <h5 class="text-muted">Belum ada data produk tersedia.</h5>
+    </div>
+  @endforelse
+</div>
+
   </div>
 </section>
 

@@ -129,7 +129,7 @@
 <section class="position-relative text-center text-white fade-up" style="
   height: 260px;
   background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.6)),
-              url('{{ asset('assets/img/landing_page (4)1.png') }}') center center / cover no-repeat;
+              url('{{ asset('assets/img/7.png') }}') center center / cover no-repeat;
 ">
   <div class="position-relative h-100 d-flex flex-column justify-content-center align-items-center">
     <h2 class="fw-bold mb-1">Galeri Proyek Kami</h2>

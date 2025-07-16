@@ -1,3 +1,8 @@
+/* Alternatif jika menggunakan scroll snap atau smooth scrolling */
+html {
+    scroll-padding-top: 70px; /* Pastikan scroll anchor tidak tertutup navbar */
+}
+
 body {
     scroll-behavior: smooth;
     height: 100%;
