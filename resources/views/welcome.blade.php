@@ -1,9 +1,9 @@
 @extends('components.layout')
 
 @section('content')
-<br>
-<br>
-<br>
+
+<br><br><br>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
     <header id="beranda" class="snap-section">
@@ -29,7 +29,7 @@
     <!-- Bagian Bawah Edit -->
     <!-- sama -->
     <div class="container">
-    <!-- Kenapa Harus Tali Rejeki -->
+        <!-- Kenapa Harus Tali Rejeki -->
         <section id="profile" class="snap-section fade-up">
             <h2 class="section-title">Kenapa Harus Belanja di Insulmart?</h2>
             <div class="keunggulan-wrapper">
@@ -188,60 +188,15 @@
 
         <!-- Proyek Kami -->
         <section id="brand" class="snap-section proyek-section-unik fade-up">
-            <h2 class="section-title" id="proyek">Proyek Kami</h2>
+            <h2 class="section-title">Proyek Kami</h2>
 
-            <div class="proyek-slider-container">
-                <div class="proyek-slider-track">
-                <div class="proyek-slide active">
-                    <img src="{{ asset('assets/img/wikapalu.jpg') }}" alt="Proyek 1">
-                    <div class="proyek-caption"><p>Wika Palu PLTU</p></div>
+            <div class="slider-wrapper">
+                <div class="slider-track" id="sliderTrack">
+                <!-- JS will render items here -->
                 </div>
-                <div class="proyek-slide">
-                    <img src="{{ asset('assets/img/nikomas.jpg') }}" alt="Proyek 2">
-                    <div class="proyek-caption"><p>Nikomas Gemilang</p></div>
-                </div>
-                <div class="proyek-slide">
-                    <img src="{{ asset('assets/img/dohsung.jpg') }}" alt="Proyek 3">
-                    <div class="proyek-caption"><p>PT Dohsung Indonesia</p></div>
-                </div>
-                <div class="proyek-slide">
-                    <img src="{{ asset('assets/img/13.png') }}" alt="Proyek 4">
-                    <div class="proyek-caption"><p>PT DATA CENTRE</p></div>
-                </div>
-                <div class="proyek-slide">
-                    <img src="{{ asset('assets/img/11.png') }}" alt="Proyek 5">
-                    <div class="proyek-caption"><p>PROYEK BAMBULOGY MENSION</p></div>
-                </div>
-                <div class="proyek-slide">
-                    <img src="{{ asset('assets/img/6.png') }}" alt="Proyek 6">
-                    <div class="proyek-caption"><p>PROYEK PEREDAM GENSET</p></div>
-                </div>
-                <div class="proyek-slide">
-                    <img src="{{ asset('assets/img/3.png') }}" alt="Proyek 7">
-                    <div class="proyek-caption"><p>PROYEK AINUL HAYAT SEJAHTERA</p></div>
-                </div>
-                <div class="proyek-slide">
-                    <img src="{{ asset('assets/img/b.jpg') }}" alt="Proyek 8">
-                    <div class="proyek-caption"><p>PROYEK BANDARA DHOHO</p></div>
-                </div>
-
-                <!-- Tombol Navigasi -->
-                <button class="proyek-nav proyek-prev" onclick="moveProyekSlide(-1)">&#10094;</button>
-                <button class="proyek-nav proyek-next" onclick="moveProyekSlide(1)">&#10095;</button>
-                </div> <!-- penutup .proyek-slider-track -->
-            </div> <!-- penutup .proyek-slider-container -->
-
-            <!-- DOTS harus DI SINI -->
-            <div class="proyek-dots">
-                <span class="proyek-dot active" onclick="goToProyekSlide(0)"></span>
-                <span class="proyek-dot" onclick="goToProyekSlide(1)"></span>
-                <span class="proyek-dot" onclick="goToProyekSlide(2)"></span>
-                <span class="proyek-dot" onclick="goToProyekSlide(3)"></span>
-                <span class="proyek-dot" onclick="goToProyekSlide(4)"></span>
-                <span class="proyek-dot" onclick="goToProyekSlide(5)"></span>
-                <span class="proyek-dot" onclick="goToProyekSlide(6)"></span>
-                <span class="proyek-dot" onclick="goToProyekSlide(7)"></span>
             </div>
+
+            <div class="proyek-indikator" id="proyekDots"></div>
         </section>
 
         <!-- Our Brand -->
@@ -272,23 +227,23 @@
         </div>
         </section>
 
-    @include('live-chat')
+        @include('live-chat')
     </div>
 
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 @endpush
 <style>
-.produk-link {
-  text-decoration: none !important;
-  color: inherit; /* Ikuti warna default anaknya */
-  display: block;
-}
+    .produk-link {
+    text-decoration: none !important;
+    color: inherit; /* Ikuti warna default anaknya */
+    display: block;
+    }
 
-.produk-link:hover {
-  text-decoration: none !important;
-  color: inherit;
-}
+    .produk-link:hover {
+    text-decoration: none !important;
+    color: inherit;
+    }
 </style>
 
 <script>
@@ -337,5 +292,169 @@
     startProyekAutoSlide();
   });
 </script>
+
+<script>
+    const data = [
+    ['done7 (3).png', 'Wika Palu PLTU'],
+    ['done3 (1).png', 'Nikomas Gemilang'],
+    ['done2 (1).png', 'PT Dohsung Indonesia'],
+    ['done4 (1).png', 'PT DATA CENTRE'],
+    ['done1 (1).png', 'PROYEK BAMBULOGY MENSION'],
+    ['done6 (1).png', 'PROYEK PEREDAM GENSET'],
+    ['done5 (1).png', 'PROYEK AINUL HAYAT SEJAHTERA'],
+    ['done7 (1).png', 'PROYEK BANDARA DHOHO'],
+    ];
+
+    const track = document.getElementById('sliderTrack');
+    const dotsContainer = document.getElementById('proyekDots');
+    let currentIndex = 2;
+    let startX = 0;
+    let isDragging = false;
+
+    function createItem([src, caption], isClone = false) {
+    const item = document.createElement('div');
+    item.className = 'slider-item';
+    if (isClone) item.dataset.clone = true;
+
+    const img = document.createElement('img');
+    img.src = `assets/img/galeri/${src}`;
+    img.alt = caption;
+
+    const cap = document.createElement('div');
+    cap.className = 'slider-caption';
+    cap.innerHTML = `<p>${caption}</p>`;
+
+    item.appendChild(img);
+    item.appendChild(cap);
+    return item;
+    }
+
+    function render() {
+    const clonesBefore = data.slice(-2);
+    const clonesAfter = data.slice(0, 2);
+
+    [...clonesBefore, ...data, ...clonesAfter].forEach((item, i) => {
+        const el = createItem(item, i < 2 || i >= data.length + 2);
+        track.appendChild(el);
+    });
+
+    data.forEach((_, i) => {
+        const dot = document.createElement('span');
+        dot.addEventListener('click', () => goTo(i));
+        dotsContainer.appendChild(dot);
+    });
+    }
+
+    function goTo(index) {
+    currentIndex = index + 2; // plus 2 karena ada clone sebelum
+    update();
+    }
+
+    function update() {
+    const items = document.querySelectorAll('.slider-item');
+    const wrapper = document.querySelector('.slider-wrapper');
+    if (!items.length) return;
+
+    const activeItem = items[currentIndex];
+    const wrapperRect = wrapper.getBoundingClientRect();
+    const activeRect = activeItem.getBoundingClientRect();
+    const offset = activeRect.left - wrapperRect.left;
+    const diffToCenter = offset - (wrapperRect.width / 2 - activeRect.width / 2);
+
+    const currentTransform = parseFloat(getComputedStyle(track).transform.split(',')[4]) || 0;
+    const translate = currentTransform - diffToCenter;
+
+    track.style.transform = `translateX(${translate}px)`;
+
+    items.forEach(item => item.classList.remove('active'));
+    if (items[currentIndex]) items[currentIndex].classList.add('active');
+
+    const realIndex = (currentIndex - 2 + data.length) % data.length;
+    dotsContainer.querySelectorAll('span').forEach((dot, i) => {
+        dot.classList.toggle('active', i === realIndex);
+    });
+    }
+
+    function loopFix() {
+    if (currentIndex >= data.length + 2) {
+        currentIndex = 2;
+        track.style.transition = 'none';
+        update();
+        requestAnimationFrame(() => {
+        track.style.transition = 'transform 0.5s ease';
+        });
+    } else if (currentIndex < 2) {
+        currentIndex = data.length + (currentIndex - 2);
+        track.style.transition = 'none';
+        update();
+        requestAnimationFrame(() => {
+        track.style.transition = 'transform 0.5s ease';
+        });
+    }
+    }
+
+    function next() {
+    currentIndex++;
+    update();
+    setTimeout(loopFix, 600);
+    }
+
+    function prev() {
+    currentIndex--;
+    update();
+    setTimeout(loopFix, 600);
+    }
+
+    // Swipe
+    track.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    startX = e.clientX;
+    });
+    track.addEventListener('mouseup', (e) => {
+    if (!isDragging) return;
+    const diff = e.clientX - startX;
+    if (diff > 50) prev();
+    else if (diff < -50) next();
+    isDragging = false;
+    });
+    track.addEventListener('touchstart', (e) => {
+    startX = e.touches[0].clientX;
+    });
+    track.addEventListener('touchend', (e) => {
+    const diff = e.changedTouches[0].clientX - startX;
+    if (diff > 50) prev();
+    else if (diff < -50) next();
+    });
+
+    // Init
+    render();
+    window.addEventListener('load', () => {
+    update();
+    window.addEventListener('resize', update);
+    // Auto Slide setiap 3 detik
+        let autoSlide = setInterval(() => {
+        next();
+        }, 3000);
+
+        // Opsional: Hentikan saat user swipe/interaksi manual (biar ga bentrok)
+        track.addEventListener('mousedown', pauseAutoSlide);
+        track.addEventListener('mouseup', resumeAutoSlide);
+        track.addEventListener('touchstart', pauseAutoSlide);
+        track.addEventListener('touchend', resumeAutoSlide);
+
+        function pauseAutoSlide() {
+        clearInterval(autoSlide);
+        }
+
+        function resumeAutoSlide() {
+        clearInterval(autoSlide);
+        autoSlide = setInterval(() => {
+            next();
+        }, 3000);
+        }
+
+    });
+</script>
+
 @endsection
 

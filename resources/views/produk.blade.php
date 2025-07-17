@@ -56,7 +56,7 @@
 <section class="position-relative text-center text-white fade-up" style="
   height: 260px;
   background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.6)),
-              url('{{ asset('assets/img/7.png') }}') center center / cover no-repeat;">   <div class="position-relative h-100 d-flex flex-column justify-content-center align-items-center">
+              url('{{ asset('assets/img/landing/7.png') }}') center center / cover no-repeat;">   <div class="position-relative h-100 d-flex flex-column justify-content-center align-items-center">
     <h2 class="fw-bold mb-1">Produk Rockwool Kami</h2>
     <p class="text-white-50 small mb-0">Insulasi cerdas untuk kenyamanan rumah & industri</p>
   </div>
