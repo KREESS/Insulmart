@@ -7,13 +7,17 @@ use App\Models\ProdukGambar;
 use App\Models\VarianProduk;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Cart;
+use App\Models\CartItem;
 
 class ProdukController extends Controller
 {
     public function index()
     {
         $produks = Produk::with('varians')->get();
-        return view('admin.produk', compact('produks'));
+        $cart = Auth::user()->cart ?? Cart::create(['user_id' => Auth::id()]);
+        return view('admin.produk', compact('produks', 'cart'));
     }
 
     // Tampilkan form tambah produk

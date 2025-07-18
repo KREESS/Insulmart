@@ -1,5 +1,10 @@
 @extends('components.layout-bootstrap')
 
+<head>
+    <title>@yield('title', 'Katalog Produk Insulasi | Insulmart')</title>
+    <!-- Tag lain seperti meta, link CSS, dll -->
+</head>
+
 @section('content')
   <style>
     :root {
@@ -66,7 +71,7 @@
     background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.6)),
                 url('{{ asset('assets/img/landing/7.png') }}') center center / cover no-repeat;">  
     <div class="position-relative h-100 d-flex flex-column justify-content-center align-items-center">
-      <h2 class="fw-bold mb-1">Katalog Produk Rockwool</h2>
+      <h2 class="fw-bold mb-1">Katalog Produk Insulasi</h2>
       <p class="text-white-50 small mb-0">Unduh katalog produk sesuai kebutuhan Anda</p>
     </div>
   </section>
@@ -80,7 +85,7 @@
       </div>
 
       <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
-        @forelse ($products as $product)
+        @forelse ($produks as $product)
           @php
               $gambars = $product->gambars;
               $nama = $product->nama_produk;

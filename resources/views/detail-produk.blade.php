@@ -1,6 +1,9 @@
 @extends('components.layout-bootstrap')
 
-@section('title', $produk->nama_produk)
+<head>
+    <title>@yield('title', $produk->nama_produk.' Insulasi | Insulmart')</title>
+    <!-- Tag lain seperti meta, link CSS, dll -->
+</head>
 
 @section('content')
     <br><br><br>
@@ -117,15 +120,10 @@
 
                         {{-- Tombol Aksi --}}
                         <div class="d-grid gap-2 d-md-flex">
-                            <button class="btn btn-merah px-4 py-2" data-bs-toggle="modal" data-bs-target="#modalVarian">
-                                <i class="bi bi-cart-plus me-1"></i> Tambah ke Keranjang
-                            </button>
-                            <button class="btn btn-outline-merah px-4 py-2" data-bs-toggle="modal" data-bs-target="#modalVarian">
+                            <!-- Tombol Beli Sekarang -->
+                            <button class="btn btn-outline-merah px-4 py-2" data-bs-toggle="modal" data-bs-target="#modalVarian" name="beli_sekarang" value="1">
                                 <i class="bi bi-bag-check me-1"></i> Beli Sekarang
                             </button>
-                            {{-- <a href="#" class="btn btn-outline-merah px-4 py-2">
-                                <i class="bi bi-bag-check me-1"></i> Beli Sekarang
-                            </a> --}}
                         </div>
                     </div>
                 </div>
@@ -135,56 +133,66 @@
 
     <!-- Modal Pilih Varian Produk -->
     <div class="modal fade" id="modalVarian" tabindex="-1" aria-labelledby="modalVarianLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content rounded shadow">
-        <div class="modal-header bg-merah text-white">
-            <h5 class="modal-title" id="modalVarianLabel"><i class="bi bi-bag-plus me-2"></i> Pilih Varian Produk</h5>
-            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            @if ($produk->varians->count() > 0)
-            <div class="row g-3">
-            @foreach ($produk->varians as $varian)
-            <div class="col-md-6">
-                <label class="border rounded p-3 w-100 h-100 d-flex gap-3 align-items-center varian-card position-relative">
-                {{-- Gambar kecil --}}
-                <img src="{{ $produk->gambars->first() ? asset('storage/' . $produk->gambars->first()->path) : asset('assets/img/no-image.png') }}"
-                    class="rounded" style="width: 60px; height: 60px; object-fit: cover;" alt="Varian">
-
-                {{-- Info varian --}}
-                <div class="flex-grow-1">
-                <div class="fw-semibold text-dark">{{ $varian->tipe }}</div>
-                <div class="text-muted small">
-                    Ukuran: {{ $varian->ukuran }}<br>
-                    Ketebalan: {{ $varian->ketebalan }} mm<br>
-                    Densitas: {{ $varian->densitas }} kg/m³<br>
-                    Stok: <span class="{{ $varian->stok > 0 ? 'text-success' : 'text-danger' }}">{{ $varian->stok }}</span><br>
-                    <strong class="text-dark">Rp{{ number_format($varian->harga, 0, ',', '.') }}</strong>
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content rounded shadow">
+                <div class="modal-header bg-merah text-white">
+                    <h5 class="modal-title" id="modalVarianLabel"><i class="bi bi-bag-plus me-2"></i> Pilih Varian Produk</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+                <div class="modal-body">
+                    @if ($produk->varians->count() > 0)
+                    <form id="formTambahKeranjang" method="POST" action="{{ route('keranjang.tambah') }}">
+                        @csrf
+                        <input type="hidden" name="varian_id" id="selectedVarian">
+                        <input type="hidden" name="jumlah" id="jumlahProdukHidden" value="1">
+                        <input type="hidden" name="beli_sekarang" id="beliSekarangHidden" value="0">
+
+                        <div class="row g-3">
+                            @foreach ($produk->varians as $varian)
+                            <div class="col-md-6">
+                                <label class="border rounded p-3 w-100 h-100 d-flex gap-3 align-items-center varian-card position-relative">
+                                    <img src="{{ $produk->gambars->first() ? asset('storage/' . $produk->gambars->first()->path) : asset('assets/img/no-image.png') }}"
+                                        class="rounded" style="width: 60px; height: 60px; object-fit: cover;" alt="Varian">
+
+                                    <div class="flex-grow-1">
+                                        <div class="fw-semibold text-dark">{{ $varian->tipe }}</div>
+                                        <div class="text-muted small">
+                                            Ukuran: {{ $varian->ukuran }}<br>
+                                            Ketebalan: {{ $varian->ketebalan }} mm<br>
+                                            Densitas: {{ $varian->densitas }} kg/m³<br>
+                                            Stok: <span class="{{ $varian->stok > 0 ? 'text-success' : 'text-danger' }}">{{ $varian->stok }}</span><br>
+                                            <strong class="text-dark">Rp{{ number_format($varian->harga, 0, ',', '.') }}</strong>
+                                        </div>
+                                    </div>
+
+                                    <input type="radio" name="varian_id_radio" value="{{ $varian->id }}"
+                                        class="form-check-input position-absolute top-0 end-0 m-2">
+                                </label>
+                            </div>
+                            @endforeach
+                        </div>
+
+                        <div class="mt-4">
+                            <label for="jumlahProduk" class="form-label fw-semibold">Jumlah</label>
+                            <input type="number" id="jumlahProduk" class="form-control" min="1" value="1" style="max-width: 120px;">
+                        </div>
+
+                        <div class="modal-footer justify-content-between mt-4">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                            <button type="button" class="btn btn-merah px-4 py-2" onclick="submitCart(0)">
+                                <i class="bi bi-cart-plus me-1"></i> Tambah ke Keranjang
+                            </button>
+                            <button type="button" class="btn btn-outline-merah px-4 py-2" onclick="submitCart(1)">
+                                <i class="bi bi-bag-check me-1"></i> Beli Sekarang
+                            </button>
+                        </div>
+                    </form>
+                    @else
+                        <p class="text-muted">Tidak ada varian tersedia untuk produk ini.</p>
+                    @endif
                 </div>
-
-                {{-- Radio --}}
-                <input type="radio" name="varian_id" value="{{ $varian->id }}" class="form-check-input position-absolute top-0 end-0 m-2">
-                </label>
             </div>
-            @endforeach
-            </div>
-
-            {{-- Input jumlah --}}
-            <div class="mt-4">
-            <label for="jumlahProduk" class="form-label fw-semibold">Jumlah</label>
-            <input type="number" id="jumlahProduk" class="form-control" min="1" value="1" style="max-width: 120px;">
-            </div>
-            @else
-            <p class="text-muted">Tidak ada varian tersedia untuk produk ini.</p>
-            @endif
         </div>
-        <div class="modal-footer justify-content-between">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-            <button type="button" id="konfirmasiVarianBtn" class="btn btn-merah">Tambah ke Keranjang</button>
-        </div>
-        </div>
-    </div>
     </div>
 
     <script>
@@ -372,6 +380,28 @@
         background-color: #f2f2f2;
         font-weight: bold;
         }
+
+        /* Animasi untuk pergerakan produk ke keranjang */
+        @keyframes moveToCart {
+            0% {
+                transform: translate(0, 0);
+                opacity: 1;
+            }
+            50% {
+                transform: translate(50px, -50px);
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateX(200px) translateY(-60px); /* Sesuaikan dengan posisi ikon keranjang */
+                opacity: 0;
+            }
+        }
+
+        .cart-animation {
+            animation: moveToCart 1s ease forwards;
+            position: absolute;
+            z-index: 9999;
+        }
     </style>
 
     <script>
@@ -391,7 +421,53 @@
                 }
             });
         });
+
+        document.getElementById('addToCartBtn').addEventListener('click', function() {
+            var productImage = document.querySelector('.product-image'); // Ambil elemen gambar produk
+            var cartIcon = document.querySelector('.cart-icon'); // Ambil elemen ikon keranjang
+
+            var clonedImage = productImage.cloneNode(true); // Membuat salinan gambar produk
+
+            // Tambahkan kelas animasi
+            clonedImage.classList.add('cart-animation');
+
+            // Tempatkan gambar produk di posisi awal
+            clonedImage.style.position = 'absolute';
+            clonedImage.style.top = productImage.offsetTop + 'px';
+            clonedImage.style.left = productImage.offsetLeft + 'px';
+
+            document.body.appendChild(clonedImage); // Tambahkan gambar ke body
+
+            // Animasi bergerak menuju ikon keranjang
+            setTimeout(function() {
+                clonedImage.style.top = cartIcon.offsetTop + 'px'; // Sesuaikan posisi ke ikon keranjang
+                clonedImage.style.left = cartIcon.offsetLeft + 'px';
+            }, 0);
+
+            // Hapus gambar setelah animasi selesai
+            setTimeout(function() {
+                clonedImage.remove();
+            }, 1000);
+        });
+
     </script>
 
+<script>
+function submitCart(beliSekarang) {
+    const selectedRadio = document.querySelector('input[name="varian_id_radio"]:checked');
+    const jumlah = document.getElementById('jumlahProduk').value;
+
+    if (!selectedRadio) {
+        alert("Silakan pilih varian terlebih dahulu.");
+        return;
+    }
+
+    document.getElementById('selectedVarian').value = selectedRadio.value;
+    document.getElementById('jumlahProdukHidden').value = jumlah;
+    document.getElementById('beliSekarangHidden').value = beliSekarang;
+
+    document.getElementById('formTambahKeranjang').submit();
+}
+</script>
 
 @endsection

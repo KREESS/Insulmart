@@ -1,5 +1,10 @@
 @extends('components.layout-bootstrap')
 
+<head>
+    <title>@yield('title', 'Produk Insulasi | Insulmart')</title>
+    <!-- Tag lain seperti meta, link CSS, dll -->
+</head>
+
 @section('content')
   <style>
     :root {
@@ -57,7 +62,7 @@
     height: 260px;
     background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.6)),
                 url('{{ asset('assets/img/landing/7.png') }}') center center / cover no-repeat;">   <div class="position-relative h-100 d-flex flex-column justify-content-center align-items-center">
-      <h2 class="fw-bold mb-1">Produk Rockwool Kami</h2>
+      <h2 class="fw-bold mb-1">Produk Insulasi Kami</h2>
       <p class="text-white-50 small mb-0">Insulasi cerdas untuk kenyamanan rumah & industri</p>
     </div>
   </section>
@@ -71,7 +76,7 @@
       </div>
 
       <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
-        @forelse ($products as $product)
+        @forelse ($produks as $product)
           <div class="col fade-up">
             <a href="{{ route('produk.detail', $product->slugified_nama) }}" class="text-decoration-none text-dark">
               <div class="card h-100 shadow-sm rounded-4 overflow-hidden">

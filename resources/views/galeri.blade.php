@@ -1,5 +1,10 @@
 @extends('components.layout-bootstrap')
 
+<head>
+    <title>@yield('title', 'Galeri Proyek Kami Insulasi | Insulmart')</title>
+    <!-- Tag lain seperti meta, link CSS, dll -->
+</head>
+
 @section('content')
   <style>
     :root {

@@ -13,8 +13,8 @@ class ProdukPenggunaController extends Controller
 {
     public function index()
     {
-        $products = Produk::with(['gambars', 'varians'])->get();
-        return view('produk', compact('products'));
+        $produks = Produk::with(['gambars', 'varians'])->get();
+        return view('produk', compact('produks'));
     }
 
 
@@ -24,11 +24,12 @@ class ProdukPenggunaController extends Controller
             ->first(function ($item) use ($slug) {
                 return Str::slug($item->nama_produk) === $slug;
             });
+        $produks = Produk::with(['gambars', 'varians'])->get();
 
         if (!$produk) {
             abort(404);
         }
 
-        return view('detail-produk', compact('produk'));
+        return view('detail-produk', compact('produk', 'produks'));
     }
 }

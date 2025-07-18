@@ -13,6 +13,7 @@ use App\Http\Controllers\AdminKelolaAkunController;
 use App\Http\Controllers\AdminPesananController;
 use App\Http\Controllers\Pengguna\PesananController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\CartController;
 // ======== BATAS =========
 
 
@@ -145,6 +146,16 @@ Route::middleware(['auth'])->group(function () {
         // ============ PESANAN/ORDER ============
         Route::get('/penawaran-saya', [PesananController::class, 'penawaran'])->name('pengguna.quotation');
         Route::get('/riwayat-pemesanan', [PesananController::class, 'riwayat'])->name('pengguna.pemesanan');
+        Route::post('/store-varian', [PesananController::class, 'storeVarian'])->name('store-varian');
+        // ============ BATAS =============
+
+
+        // ============ Cart =============
+        Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+        Route::post('/cart/add/{varianProduk}', [CartController::class, 'add'])->name('cart.add');
+        Route::delete('/cart/remove/{cartItemId}', [CartController::class, 'remove'])->name('cart.remove');
+        Route::put('/cart/update/{cartItemId}', [CartController::class, 'update'])->name('cart.update');
+        Route::post('/keranjang/tambah', [CartController::class, 'store'])->name('keranjang.tambah');
         // ============ BATAS =============
 
 

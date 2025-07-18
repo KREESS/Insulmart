@@ -10,7 +10,7 @@
 
         <div class="navbar-menu" id="navbar-menu">
             <a href="{{ url('/') }}" class="{{ request()->is('/') ? 'active' : '' }}">Beranda</a>
-            <a href="{{ url('/produk') }}" class="{{ request()->is('produk') ? 'active' : '' }}">Produk Kami</a>
+            <a href="{{ url('/produk') }}" class="{{ Str::startsWith(Route::currentRouteName(), 'produk.') ? 'active' : '' }}">Produk</a>
             <a href="{{ url('/katalog-produk') }}" class="{{ request()->is('katalog-produk') ? 'active' : '' }}">Katalog</a>
             <a href="{{ url('/galeri') }}" class="{{ request()->is('galeri') ? 'active' : '' }}">Galeri</a>
             <a href="{{ url('/hubungi-kami') }}" class="{{ request()->is('hubungi-kami') ? 'active' : '' }}">Kontak</a>
@@ -19,6 +19,14 @@
                 <a href="{{ route('pengguna.quotation') }}" class="{{ request()->is('quotation*') ? 'active' : '' }}">Penawaran</a>
                 <a href="{{ route('pengguna.pemesanan') }}" class="{{ request()->is('pemesanan*') ? 'active' : '' }}">Riwayat Pemesanan</a>
             @endauth
+
+            <!-- Cart Icon -->
+            <a href="{{ route('cart.index') }}" class="cart-icon" style="color: white; display: flex; align-items: center; gap: 5px; position: relative;">
+                <i class="bi bi-cart-fill" style="font-size: 1.2rem;"></i> 
+                <span class="cart-count" style="position: absolute; top: -5px; right: -5px; background-color: red; color: white; border-radius: 50%; padding: 3px 7px; font-size: 0.7rem; font-weight: bold;">
+                    {{ auth()->check() && auth()->user()->cart ? auth()->user()->cart->items->count() : 0 }}
+                </span>
+            </a>
 
             @auth
                 <div class="dropdown user-dropdown" id="userDropdown">
@@ -58,9 +66,6 @@
                 <a href="{{ route('register') }}" class="btn-auth btn-daftar">Daftar</a>
             @endauth
         </div>
-
-        {{-- <div class="navbar-icons">
-        </div> --}}
     </div>
 </nav>
 
