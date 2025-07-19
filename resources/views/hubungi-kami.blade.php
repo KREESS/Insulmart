@@ -82,9 +82,9 @@
         margin-bottom: 1rem;
       }
     }
-        .navbar {
-          padding: 0px 24px;
-      }
+    .navbar {
+      padding: 0px 24px;
+    }
   </style>
   {{-- Hero --}}
   <section class="position-relative text-center text-white fade-up" style="

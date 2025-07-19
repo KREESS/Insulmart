@@ -12,9 +12,10 @@ class Cart extends Model
     protected $fillable = ['user_id'];
 
     // Relasi: Satu cart memiliki banyak cart item
+    // App\Models\Cart.php
     public function items()
     {
-        return $this->hasMany(CartItem::class);
+        return $this->hasMany(CartItem::class, 'cart_id');
     }
 
     // Relasi: Cart dimiliki oleh satu user

@@ -9,6 +9,30 @@
     <br><br><br>
 
     <div class="container py-5">
+        {{-- Notifikasi Sukses --}}
+        @if(session('success'))
+            <div class="alert alert-success d-flex align-items-center alert-dismissible fade show shadow-sm" role="alert">
+            <i class="bi bi-check-circle-fill me-2 fs-5"></i>
+            <div>{{ session('success') }}</div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Tutup"></button>
+            </div>
+        @endif
+
+        {{-- Notifikasi Error --}}
+        @if($errors->any())
+            <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
+            <div class="d-flex align-items-center mb-2">
+                <i class="bi bi-exclamation-triangle-fill me-2 fs-5"></i>
+                <strong>Terjadi kesalahan saat menginput data:</strong>
+            </div>
+            <ul class="mb-0 ps-4">
+                @foreach($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Tutup"></button>
+            </div>
+        @endif
         <div class="row justify-content-center">
             <div class="col-lg-10 bg-white p-4 rounded shadow-sm">
                 {{-- Tombol Kembali --}}
@@ -165,8 +189,12 @@
                                         </div>
                                     </div>
 
-                                    <input type="radio" name="varian_id_radio" value="{{ $varian->id }}"
-                                        class="form-check-input position-absolute top-0 end-0 m-2">
+                                    <input type="radio"
+                                        name="varian_id_radio"
+                                        value="{{ $varian->id }}"
+                                        class="form-check-input position-absolute top-0 end-0 m-2"
+                                        data-stok="{{ $varian->stok }}">
+
                                 </label>
                             </div>
                             @endforeach
@@ -174,7 +202,7 @@
 
                         <div class="mt-4">
                             <label for="jumlahProduk" class="form-label fw-semibold">Jumlah</label>
-                            <input type="number" id="jumlahProduk" class="form-control" min="1" value="1" style="max-width: 120px;">
+                            <input type="number" id="jumlahProduk" class="form-control" min="1" value="1" style="max-width: 120px;" />
                         </div>
 
                         <div class="modal-footer justify-content-between mt-4">
@@ -452,22 +480,155 @@
 
     </script>
 
-<script>
-function submitCart(beliSekarang) {
-    const selectedRadio = document.querySelector('input[name="varian_id_radio"]:checked');
-    const jumlah = document.getElementById('jumlahProduk').value;
+    <script>
+        const radios = document.querySelectorAll('input[name="varian_id_radio"]');
+        const jumlahInput = document.getElementById('jumlahProduk');
 
-    if (!selectedRadio) {
-        alert("Silakan pilih varian terlebih dahulu.");
-        return;
-    }
+        radios.forEach(radio => {
+            radio.addEventListener('change', function () {
+                const stok = parseInt(this.dataset.stok);
+                jumlahInput.max = stok;
 
-    document.getElementById('selectedVarian').value = selectedRadio.value;
-    document.getElementById('jumlahProdukHidden').value = jumlah;
-    document.getElementById('beliSekarangHidden').value = beliSekarang;
+                if (parseInt(jumlahInput.value) > stok) {
+                    jumlahInput.value = stok;
+                }
+            });
+        });
 
-    document.getElementById('formTambahKeranjang').submit();
-}
-</script>
+        function submitCart(beliSekarang) {
+            const selectedRadio = document.querySelector('input[name="varian_id_radio"]:checked');
+            const jumlah = parseInt(jumlahInput.value);
 
+            if (!selectedRadio) {
+                alert("Silakan pilih varian terlebih dahulu.");
+                return;
+            }
+
+            const stokTersedia = parseInt(selectedRadio.dataset.stok);
+            if (jumlah > stok) {
+                alert("Jumlah melebihi stok tersedia (" + stok + ").");
+                jumlahInput.value = stok;
+                return;
+            }
+
+            document.getElementById('selectedVarian').value = selectedRadio.value;
+            document.getElementById('jumlahProdukHidden').value = jumlah;
+            document.getElementById('beliSekarangHidden').value = beliSekarang;
+
+            // Jalankan animasi sebelum submit
+            const imageSrc = selectedRadio.closest('.varian-card').querySelector('img').src;
+            animateToCart(imageSrc);
+
+            document.getElementById('formTambahKeranjang').submit();
+        }
+    </script>
+    <!-- SweetAlert2 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        function submitCart(beliSekarang) {
+            const selectedRadio = document.querySelector('input[name="varian_id_radio"]:checked');
+            const jumlahInput = document.getElementById('jumlahProduk');
+
+            if (!selectedRadio) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Varian Belum Dipilih',
+                    text: 'Silakan pilih salah satu varian produk terlebih dahulu.',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#800000', // warna merah tua
+                    customClass: {
+                        popup: 'swal-custom-popup',
+                        title: 'swal-title-maroon',
+                        confirmButton: 'swal-button-maroon'
+                    }
+                });
+                return;
+            }
+
+            const selectedVarianId = selectedRadio.value;
+            const jumlah = parseInt(jumlahInput.value);
+
+            // Ambil stok dari data attribute (lebih aman)
+            const stokTersedia = parseInt(selectedRadio.getAttribute('data-stok'));
+
+            if (jumlah > stokTersedia) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Jumlah Melebihi Stok',
+                    text: `Stok tersedia hanya ${stokTersedia}. Silakan kurangi jumlah pembelian.`,
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#800000', // warna merah tua
+                    customClass: {
+                        popup: 'swal-custom-popup',
+                        title: 'swal-title-maroon',
+                        confirmButton: 'swal-button-maroon'
+                    }
+                });
+                return;
+            }
+
+            // Set form hidden fields
+            document.getElementById('selectedVarian').value = selectedVarianId;
+            document.getElementById('jumlahProdukHidden').value = jumlah;
+            document.getElementById('beliSekarangHidden').value = beliSekarang;
+
+            // Jalankan animasi sebelum submit
+            const imageSrc = selectedRadio.closest('.varian-card').querySelector('img').src;
+            animateToCart(imageSrc);
+
+            document.getElementById('formTambahKeranjang').submit();
+        }
+    </script>
+
+    <script>
+        function animateToCart(imageUrl) {
+            const cartIcon = document.getElementById('navbarCartIcon');
+            const imgFly = document.createElement('img');
+
+            imgFly.src = imageUrl;
+            imgFly.style.position = 'fixed';
+            imgFly.style.width = '60px';
+            imgFly.style.zIndex = 9999;
+            imgFly.style.transition = 'all 0.8s ease-in-out';
+
+            // Ambil posisi gambar pertama di modal (default)
+            const sourceImage = document.querySelector('.varian-card img');
+            const rect = sourceImage.getBoundingClientRect();
+
+            imgFly.style.left = rect.left + 'px';
+            imgFly.style.top = rect.top + 'px';
+            document.body.appendChild(imgFly);
+
+            // Ambil posisi cart
+            const cartRect = cartIcon.getBoundingClientRect();
+            setTimeout(() => {
+                imgFly.style.left = cartRect.left + 'px';
+                imgFly.style.top = cartRect.top + 'px';
+                imgFly.style.opacity = '0.2';
+                imgFly.style.transform = 'scale(0.5)';
+            }, 10);
+
+            // Hapus gambar setelah animasi selesai
+            setTimeout(() => {
+                imgFly.remove();
+            }, 900);
+        }
+    </script>
+
+    <style>
+        .swal2-container {
+            z-index: 10010 !important;
+        }
+
+        .swal2-popup.swal-custom-popup {
+            border: 2px solid #800000;
+            font-family: 'Poppins', sans-serif;
+            z-index: 1210 !important;
+        }
+
+        .swal2-title {
+            color: #800000;
+        }
+    </style>
 @endsection

@@ -59,8 +59,8 @@ class User extends Authenticatable
         $this->notify(new ResetPasswordNotification($token));
     }
 
-    // public function cart()
-    // {
-    //     return $this->hasOne(Cart::class); // Assuming each user has only one cart
-    // }
+    public function cart()
+    {
+        return $this->hasOne(Cart::class); // Assuming each user has only one cart
+    }
 }

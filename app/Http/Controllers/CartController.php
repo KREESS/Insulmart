@@ -21,6 +21,9 @@ class CartController extends Controller
 
     public function store(Request $request)
     {
+        // Debug sementar
+        // dd($request->all());
+
         $user = Auth::user();
 
         $request->validate([
@@ -30,43 +33,41 @@ class CartController extends Controller
 
         $varian = VarianProduk::findOrFail($request->varian_id);
 
-        if ($varian->stok < $request->jumlah) {
-            return back()->with('error', 'Stok tidak mencukupi.');
-        }
-
-        // Ambil cart user, atau buat baru
+        // Ambil atau buat cart
         $cart = Cart::firstOrCreate(['user_id' => $user->id]);
 
-        // Cek jika varian sudah ada di cart
         $item = CartItem::where('cart_id', $cart->id)
             ->where('varian_produk_id', $varian->id)
             ->first();
 
+        $jumlahBaru = $request->jumlah;
+        $jumlahLama = $item ? $item->quantity : 0;
+        $totalPermintaan = $jumlahLama + $jumlahBaru;
+
+        if ($totalPermintaan > $varian->stok) {
+            return back()->with('error', 'Jumlah total melebihi stok tersedia. Maksimal stok: ' . $varian->stok);
+        }
+
         if ($item) {
-            // Update quantity dan subtotal
-            $item->quantity += $request->jumlah;
+            $item->quantity = $totalPermintaan;
             $item->subtotal = $item->quantity * $varian->harga;
             $item->save();
         } else {
-            // Tambah item baru ke cart
             CartItem::create([
                 'cart_id' => $cart->id,
                 'varian_produk_id' => $varian->id,
-                'quantity' => $request->jumlah,
+                'quantity' => $jumlahBaru,
                 'price' => $varian->harga,
-                'subtotal' => $request->jumlah * $varian->harga,
+                'subtotal' => $jumlahBaru * $varian->harga,
             ]);
         }
 
-        // Cek jika beli_sekarang == 1
         if ($request->beli_sekarang == 1) {
             return redirect()->route('keranjang.checkout')->with('success', 'Lanjut ke checkout.');
         }
 
         return back()->with('success', 'Produk berhasil ditambahkan ke keranjang.');
     }
-
-
 
     // Menghapus item dari keranjang
     public function remove($cartItemId)
@@ -81,24 +82,26 @@ class CartController extends Controller
         return redirect()->route('cart.index')->with('success', 'Produk berhasil dihapus dari keranjang!');
     }
 
-    // Mengupdate jumlah produk dalam keranjang
     public function update(Request $request, $cartItemId)
     {
-        // Validasi input jumlah
         $request->validate([
             'quantity' => 'required|integer|min:1',
         ]);
 
-        // Cari item di dalam keranjang berdasarkan ID
         $cartItem = CartItem::findOrFail($cartItemId);
-
-        // Update jumlah dan subtotal
         $cartItem->update([
             'quantity' => $request->quantity,
             'subtotal' => $cartItem->price * $request->quantity,
         ]);
+        $cartItem->refresh();
 
-        // Redirect kembali ke halaman keranjang dengan pesan sukses
-        return redirect()->route('cart.index')->with('success', 'Jumlah produk berhasil diperbarui!');
+        // Refresh Cart & Items
+        $cart = $cartItem->cart()->with('items')->first();
+
+        return response()->json([
+            'success' => true,
+            'newSubtotal' => number_format($cartItem->subtotal, 0, ',', '.'),
+            'total' => number_format($cart->items->sum('subtotal'), 0, ',', '.')
+        ]);
     }
 }

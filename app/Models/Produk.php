@@ -24,7 +24,7 @@ class Produk extends Model
 
     public function gambars()
     {
-        return $this->hasMany(ProdukGambar::class);
+        return $this->hasMany(ProdukGambar::class, 'produk_id');
     }
 
     public function getSlugifiedNamaAttribute()

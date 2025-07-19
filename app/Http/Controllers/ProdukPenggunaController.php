@@ -25,11 +25,14 @@ class ProdukPenggunaController extends Controller
                 return Str::slug($item->nama_produk) === $slug;
             });
         $produks = Produk::with(['gambars', 'varians'])->get();
+        $cartCount = auth()->check() && auth()->user()->cart
+            ? auth()->user()->cart->items()->sum('quantity')
+            : 0;
 
         if (!$produk) {
             abort(404);
         }
 
-        return view('detail-produk', compact('produk', 'produks'));
+        return view('detail-produk', compact('produk', 'produks', 'cartCount'));
     }
 }

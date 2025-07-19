@@ -75,7 +75,6 @@ Route::get('/live-chat/messages/{chat_id}', [LiveChatController::class, 'getMess
 // ============ BATAS =============
 
 
-
 // ======== PROTEKSI UMUM UNTUK YANG SUDAH LOGIN ========
 Route::middleware(['auth'])->group(function () {
 
@@ -152,10 +151,10 @@ Route::middleware(['auth'])->group(function () {
 
         // ============ Cart =============
         Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
-        Route::post('/cart/add/{varianProduk}', [CartController::class, 'add'])->name('cart.add');
         Route::delete('/cart/remove/{cartItemId}', [CartController::class, 'remove'])->name('cart.remove');
-        Route::put('/cart/update/{cartItemId}', [CartController::class, 'update'])->name('cart.update');
         Route::post('/keranjang/tambah', [CartController::class, 'store'])->name('keranjang.tambah');
+        Route::post('/keranjang/checkout', [CartController::class, 'store'])->name('keranjang.checkout');
+        Route::put('/cart/update/{cartItemId}', [CartController::class, 'update'])->name('cart.update');
         // ============ BATAS =============
 
 

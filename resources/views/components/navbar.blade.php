@@ -21,8 +21,11 @@
             @endauth
 
             <!-- Cart Icon -->
-            <a href="{{ route('cart.index') }}" class="cart-icon" style="color: white; display: flex; align-items: center; gap: 5px; position: relative;">
-                <i class="bi bi-cart-fill" style="font-size: 1.2rem;"></i> 
+            <a href="{{ route('cart.index') }}"
+            id="navbarCartIcon"
+            class="cart-icon {{ request()->routeIs('cart.index') ? 'active' : '' }}"
+            style="color: white; display: flex; align-items: center; gap: 5px; position: relative;">
+                <i class="bi bi-cart-fill" style="font-size: 1.2rem;"></i>
                 <span class="cart-count" style="position: absolute; top: -5px; right: -5px; background-color: red; color: white; border-radius: 50%; padding: 3px 7px; font-size: 0.7rem; font-weight: bold;">
                     {{ auth()->check() && auth()->user()->cart ? auth()->user()->cart->items->count() : 0 }}
                 </span>
