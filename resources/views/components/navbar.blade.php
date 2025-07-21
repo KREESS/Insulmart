@@ -18,18 +18,18 @@
             @auth
                 <a href="{{ route('pengguna.quotation') }}" class="{{ request()->is('quotation*') ? 'active' : '' }}">Penawaran</a>
                 <a href="{{ route('pengguna.pemesanan') }}" class="{{ request()->is('pemesanan*') ? 'active' : '' }}">Riwayat Pemesanan</a>
-            @endauth
 
-            <!-- Cart Icon -->
-            <a href="{{ route('cart.index') }}"
-            id="navbarCartIcon"
-            class="cart-icon {{ request()->routeIs('cart.index') ? 'active' : '' }}"
-            style="color: white; display: flex; align-items: center; gap: 5px; position: relative;">
-                <i class="bi bi-cart-fill" style="font-size: 1.2rem;"></i>
-                <span class="cart-count" style="position: absolute; top: -5px; right: -5px; background-color: red; color: white; border-radius: 50%; padding: 3px 7px; font-size: 0.7rem; font-weight: bold;">
-                    {{ auth()->check() && auth()->user()->cart ? auth()->user()->cart->items->count() : 0 }}
-                </span>
-            </a>
+                <!-- Cart Icon -->
+                <a href="{{ route('cart.index') }}"
+                id="navbarCartIcon"
+                class="cart-icon {{ request()->routeIs('cart.index') ? 'active' : '' }}"
+                style="color: white; display: flex; align-items: center; gap: 5px; position: relative;">
+                    <i class="bi bi-cart-fill" style="font-size: 1.2rem;"></i>
+                    <span class="cart-count" style="position: absolute; top: -5px; right: -5px; background-color: red; color: white; border-radius: 50%; padding: 3px 7px; font-size: 0.7rem; font-weight: bold;">
+                        {{ auth()->check() && auth()->user()->cart ? auth()->user()->cart->items->count() : 0 }}
+                    </span>
+                </a>
+            @endauth
 
             @auth
                 <div class="dropdown user-dropdown" id="userDropdown">

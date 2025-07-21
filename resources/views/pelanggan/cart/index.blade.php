@@ -5,71 +5,111 @@
 @section('content')
 <style>
     :root {
-        --maroon-dark: #8B0000;
-        --maroon-hover: #a40000;
-        --maroon-light: #fcf5f5;
+        --maroon-dark: #800000;
+        --maroon-hover: #660000;
+        --maroon-light: #f8e5e5;
         --border-radius: 12px;
     }
+    body { background: var(--maroon-light); }
     .text-maroon { color: var(--maroon-dark) !important; }
     .btn-maroon {
         background: var(--maroon-dark);
-        color: #fff; border: none; border-radius: var(--border-radius);
-        font-weight: 600; transition: background 0.15s;
-        padding: 8px 20px; font-size: 1rem; letter-spacing: .01em;
+        color: #fff;
+        border-radius: var(--border-radius);
+        font-weight: 600;
+        transition: background 0.15s;
+        padding: 8px 20px;
+        font-size: 1rem;
+        letter-spacing: .01em;
     }
-    .btn-maroon:hover, .btn-maroon:focus {
-        background: var(--maroon-hover); color: #fff;
-    }
+    .btn-maroon:hover { background: var(--maroon-hover); }
     .card-cart {
-        background: #fff; border-radius: var(--border-radius);
-        border: 1px solid #ececec; padding: 1.7rem 1.3rem;
-        margin-bottom: 2rem; max-width: 850px;
-        margin-left: auto; margin-right: auto;
+        background: #fff;
+        border-radius: var(--border-radius);
+        padding: 1.7rem 1.3rem;
+        margin: 0 auto 2rem;
     }
-    .table { border-radius: var(--border-radius); overflow: hidden; margin-bottom: 0;
-        background: #fff; border: 1px solid #ececec; font-size: 1rem; }
-    .table thead th { background: var(--maroon-dark); color: #fff; border: none; font-weight: 700;}
-    .table td, .table th { vertical-align: middle !important; border-top: 1px solid #ececec;}
+    .table {
+        border-radius: var(--border-radius);
+        background: #fff;
+        border: none;
+        font-size: 1rem;
+        margin-bottom: 0;
+    }
+    .table th,
+    .table td {
+        padding: .75rem 2.5rem;
+        vertical-align: middle !important;
+        border: none;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .table thead th {
+        background: var(--maroon-dark);
+        color: #fff;
+        border: none;
+        font-weight: 700;
+    }
     .quantity-input {
-        border-radius: 7px; border: 1px solid #ddd; text-align: center; width: 70px;
-        margin: 0 auto; font-weight: 500; font-size: 1rem; background: #fafafa;
+        width: 50px;
+        padding: 3px;
+        border-radius: 7px;
+        border: 1px solid #ddd;
+        text-align: center;
+        background: #fafafa;
+        font-weight: 500;
     }
-    .quantity-input:focus { border-color: var(--maroon-dark); outline: none; background: #fff; }
-    .alert { border-radius: var(--border-radius); padding: 10px 14px; margin-bottom: 1.3rem; font-size: 1rem; }
-    .btn-danger { border-radius: 7px !important; font-size: .98rem; padding: 4px 14px; }
-    .subtotal-cell, .fw-semibold { font-weight: 600 !important; }
-    h2, h4 { font-weight: 700 !important; letter-spacing: .01em; }
+    .quantity-input:focus { border-color: var(--maroon-dark); background: #fff; }
+    .subtotal-cell { font-weight: 600; }
+    .form-check-input:checked {
+        background-color: var(--maroon-dark);
+        border-color: var(--maroon-dark);
+    }
+    .alert-success,
+    .alert-danger,
+    .alert-warning {
+        background-color: var(--maroon-dark) !important;
+        color: #fff !important;
+        border-color: var(--maroon-dark) !important;
+    }
+    .alert .bi { color: #fff !important; }
+    .btn-remove-icon {
+        background: none;
+        border: none;
+        color: var(--maroon-dark);
+        font-size: 1.2rem;
+        padding: 0;
+        transition: color 0.15s;
+    }
+    .btn-remove-icon:hover { color: var(--maroon-hover); }
     @media (max-width: 576px) {
-        .card-cart { padding: 1rem 0.4rem; }
-        .table-responsive { font-size: 0.96rem; }
-        .btn-maroon { font-size: .97rem; padding: 8px 12px; }
+        .card-cart { padding: 1rem; }
+        .btn-maroon { padding: 8px 12px; font-size: .95rem; }
+        .table th,
+        .table td { padding: .5rem 1rem; }
     }
-    .navbar { padding: 0px 24px; }
 </style>
-<br><br>
-<div class="container py-5">
+<br><br><br>
+<div class="container-fluid px-3 px-md-5 py-5">
     <div class="card-cart">
-        <h2 class="mb-4 text-maroon d-flex align-items-center" style="font-size:1.3rem;">
-            <i class="bi bi-cart4 me-2" style="font-size:1.6rem;"></i>Keranjang Saya
+        <h2 class="mb-4 text-maroon d-flex align-items-center justify-content-center">
+            <i class="bi bi-cart4 me-2"></i>Keranjang Saya
         </h2>
 
-        {{-- Notifikasi Sukses --}}
+        {{-- Notifications --}}
         @if(session('success'))
-            <div class="alert alert-success d-flex align-items-center alert-dismissible fade show" role="alert">
-                <i class="bi bi-check-circle-fill me-2 fs-5"></i>
+            <div class="alert alert-success d-flex align-items-center alert-dismissible fade show shadow-sm">
+                <i class="bi bi-check-circle-fill me-2"></i>
                 <div>{{ session('success') }}</div>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Tutup"></button>
             </div>
         @endif
-
-        {{-- Notifikasi Error --}}
         @if($errors->any())
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <div class="d-flex align-items-center mb-2">
-                    <i class="bi bi-exclamation-triangle-fill me-2 fs-5"></i>
-                    <strong>Terjadi kesalahan saat menginput data:</strong>
-                </div>
-                <ul class="mb-0 ps-4">
+            <div class="alert alert-danger">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                <strong>Terjadi kesalahan:</strong>
+                <ul class="mt-2">
                     @foreach($errors->all() as $error)
                         <li>{{ $error }}</li>
                     @endforeach
@@ -78,15 +118,16 @@
             </div>
         @endif
 
-        @if ($cart->items->isEmpty())
-            <div class="alert alert-warning text-center py-3 mb-0">
-                <i class="bi bi-emoji-frown fs-3 me-1"></i> Keranjang Anda kosong.
+        @if($cart->items->isEmpty())
+            <div class="alert alert-warning text-center">
+                <i class="bi bi-emoji-frown fs-3"></i> Keranjang Anda kosong.
             </div>
         @else
-            <div class="table-responsive mb-0">
-                <table class="table table-bordered align-middle mb-0">
+            <div class="table-responsive">
+                <table class="table align-middle mb-0">
                     <thead>
                         <tr class="text-center">
+                            <th style="width:36px;"><input type="checkbox" id="select-all" class="form-check-input" /></th>
                             <th>Gambar</th>
                             <th>Produk</th>
                             <th>Jumlah</th>
@@ -96,131 +137,193 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($cart->items as $item)
-                            <tr>
-                                <td class="text-center" style="width:80px;">
-                                    @php
-                                        $gambar = $item->varianProduk->produk->gambars->first();
-                                    @endphp
-                                    @if($gambar)
-                                        <img src="{{ asset('storage/' . $gambar->path) }}" alt="Gambar Produk" style="width:56px; height:56px; object-fit:cover; border-radius:9px; border:1px solid #eee;">
-                                    @else
-                                        <span style="font-size:1.5rem; color:#ccc;">—</span>
-                                    @endif
-                                </td>
-                                <td class="fw-semibold text-maroon">{{ $item->varianProduk->tipe }}</td>
-<td class="text-center">
-    <div class="d-inline-flex align-items-center justify-content-center" style="gap:6px;">
-        <button type="button"
-            class="btn btn-light btn-sm btn-qty"
-            data-action="decrease"
-            data-item-id="{{ $item->id }}"
-            style="min-width:28px;font-weight:700;color:#8B0000;border:1px solid #eee;"
-            {{ $item->quantity <= 1 ? 'disabled' : '' }}>–</button>
-        <input type="number"
-            min="1"
-            class="form-control quantity-input text-center"
-            value="{{ $item->quantity }}"
-            data-item-id="{{ $item->id }}"
-            style="width:44px;padding:3px 0;border-radius:7px;border:1px solid #ddd;background:#fafafa;">
-        <button type="button"
-            class="btn btn-light btn-sm btn-qty"
-            data-action="increase"
-            data-item-id="{{ $item->id }}"
-            style="min-width:28px;font-weight:700;color:#8B0000;border:1px solid #eee;">+</button>
-    </div>
-</td>
-
-                                <td class="text-end fw-semibold">Rp{{ number_format($item->price, 0, ',', '.') }}</td>
-                                <td class="text-end subtotal-cell">Rp{{ number_format($item->subtotal, 0, ',', '.') }}</td>
-                                <td class="text-center">
-                                    <form action="{{ route('cart.remove', $item->id) }}" method="POST" onsubmit="return confirm('Hapus item ini dari keranjang?');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-danger">Hapus</button>
-                                    </form>
-                                </td>
-                            </tr>
+                        @foreach($cart->items as $item)
+                        <tr data-item-id="{{ $item->id }}">
+                            <td class="text-center">
+                                <input type="checkbox" class="form-check-input select-item" data-item-id="{{ $item->id }}" />
+                            </td>
+                            <td class="text-center" style="width:80px;">
+                                @php $img = $item->varianProduk->produk->gambars->first(); @endphp
+                                @if($img)
+                                    <img src="{{ asset('storage/'.$img->path) }}" alt="Produk" class="img-thumbnail" style="width:56px; height:56px; object-fit:cover;">
+                                @else
+                                    <span class="text-muted">—</span>
+                                @endif
+                            </td>
+                            <td class="fw-semibold text-maroon text-truncate">{{ $item->varianProduk->tipe }}</td>
+                            <td class="text-center">
+                                <div class="d-flex justify-content-center align-items-center gap-1">
+                                    <button type="button" class="btn btn-light btn-sm btn-qty" data-item-id="{{ $item->id }}" data-action="decrease">–</button>
+                                    <input type="number" min="1" value="{{ $item->quantity }}" class="quantity-input" data-item-id="{{ $item->id }}">
+                                    <button type="button" class="btn btn-light btn-sm btn-qty" data-item-id="{{ $item->id }}" data-action="increase">+</button>
+                                </div>
+                            </td>
+                            <td class="text-end">Rp{{ number_format($item->price, 0, ',', '.') }}</td>
+                            <td class="text-end subtotal-cell">Rp{{ number_format($item->subtotal, 0, ',', '.') }}</td>
+                            <td class="text-center">
+                                <form action="{{ route('cart.remove', $item->id) }}" method="POST" class="form-remove-item">
+                                    @csrf @method('DELETE')
+                                    <button type="submit" class="btn-remove-icon" title="Hapus">
+                                        <i class="bi bi-x-lg"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
                         @endforeach
                     </tbody>
                 </table>
             </div>
 
-            <div class="text-end mt-4">
-                <h4 class="fw-bold text-maroon mb-3" style="font-size:1.2rem;">
-                    Total: <span id="cart-total">Rp{{ number_format($cart->items->sum('subtotal'), 0, ',', '.') }}</span>
-                </h4>
-                <a href="{{ route('keranjang.checkout') }}" class="btn btn-maroon btn-lg" id="checkout-btn">
-                    <i class="bi bi-bag-check-fill me-2"></i> Checkout
-                </a>
+            <div class="d-flex justify-content-between align-items-center mt-4">
+                <div>
+                    <span class="fw-semibold text-maroon">Total Terpilih:</span>
+                    <span id="cart-total" class="fw-bold">Rp0</span>
+                </div>
+                <form id="checkout-form" action="{{ route('keranjang.checkout') }}" method="POST">
+                    @csrf
+                    <div id="selected-inputs"></div>
+                    <button type="submit" class="btn btn-maroon btn-lg" id="btn-checkout" disabled>
+                        <i class="bi bi-bag-check-fill me-2"></i> Checkout
+                    </button>
+                </form>
             </div>
         @endif
     </div>
 </div>
+@endsection
+
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+// Semua script di-wrap ke DOMContentLoaded
+document.addEventListener('DOMContentLoaded', () => {
     axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-    function setMinusState(itemId, qty) {
-        const minusBtn = document.querySelector(".btn-qty[data-action='decrease'][data-item-id='" + itemId + "']");
-        if (minusBtn) minusBtn.disabled = (qty <= 1);
-    }
+    // Utility untuk parse dan format Rupiah
+    const parseRp = text => parseInt(text.replace(/[Rp\.]/g, '')) || 0;
+    const formatRp = num => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 
-    function updateCart(itemId, qty, inputEl) {
-        // Disable input sementara
-        inputEl.disabled = true;
-        axios.put('/cart/update/' + itemId, {quantity: qty})
-            .then(function(resp) {
-                if (resp.data.success) {
-                    let subtotalCell = inputEl.closest('tr').querySelector('.subtotal-cell');
-                    subtotalCell.textContent = 'Rp' + resp.data.newSubtotal;
-                    document.getElementById('cart-total').textContent = 'Rp' + resp.data.total;
-                } else {
-                    inputEl.value = 1;
-                    alert('Update gagal.');
-                }
-            })
-            .catch(function() {
-                inputEl.value = 1;
-                alert('Gagal update quantity!');
-            })
-            .finally(function() {
-                inputEl.disabled = false;
+    // Load/save checkbox state ke localStorage
+    const loadSelections = () => {
+        const stored = JSON.parse(localStorage.getItem('cart_selected'));
+        const checks = Array.from(document.querySelectorAll('.select-item'));
+        if (!stored || stored.length === 0) {
+            checks.forEach(c => c.checked = true);
+        } else {
+            checks.forEach(c => c.checked = stored.includes(c.dataset.itemId));
+        }
+        document.getElementById('select-all').checked = checks.every(c => c.checked);
+    };
+    const saveSelections = () => {
+        const sel = Array.from(document.querySelectorAll('.select-item'))
+            .filter(c => c.checked)
+            .map(c => c.dataset.itemId);
+        localStorage.setItem('cart_selected', JSON.stringify(sel));
+    };
+
+    // Update total dan input tersembunyi
+    const recalcTotal = () => {
+        let total = 0;
+        const selected = [];
+        document.querySelectorAll('.select-item').forEach(chk => {
+            if (chk.checked) {
+                const row = document.querySelector(`tr[data-item-id="${chk.dataset.itemId}"]`);
+                total += parseRp(row.querySelector('.subtotal-cell').textContent);
+                selected.push(chk.dataset.itemId);
+            }
+        });
+        document.getElementById('cart-total').textContent = `Rp${formatRp(total)}`;
+        const container = document.getElementById('selected-inputs');
+        container.innerHTML = '';
+        selected.forEach(id => {
+            const inp = document.createElement('input');
+            inp.type = 'hidden'; inp.name = 'selected_items[]'; inp.value = id;
+            container.appendChild(inp);
+        });
+        document.getElementById('btn-checkout').disabled = selected.length === 0;
+        saveSelections();
+    };
+
+    // Update cart via AJAX
+    const updateCart = async (id, qty, input) => {
+        try {
+            input.disabled = true;
+            const { data } = await axios.put(`/cart/update/${id}`, { quantity: qty });
+            if (data.success) {
+                const row = document.querySelector(`tr[data-item-id="${id}"]`);
+                row.querySelector('.subtotal-cell').textContent = `Rp${data.newSubtotal}`;
+                recalcTotal();
+            } else throw new Error('Update gagal');
+        } catch (err) {
+            Swal.fire({
+                title: 'Error',
+                text: err.message || 'Gagal update quantity',
+                icon: 'error',
+                confirmButtonColor: '#800000'
             });
-    }
+        } finally {
+            input.disabled = false;
+        }
+    };
 
-    document.querySelectorAll('.btn-qty').forEach(function(btn) {
-        btn.addEventListener('click', function() {
-            const itemId = this.dataset.itemId;
-            const action = this.dataset.action;
-            const input = document.querySelector(".quantity-input[data-item-id='" + itemId + "']");
+    // Disable tombol minus jika qty <= 1
+    const setMinusState = (id, qty) => {
+        const btn = document.querySelector(`.btn-qty[data-item-id="${id}"][data-action="decrease"]`);
+        if (btn) btn.disabled = qty <= 1;
+    };
+
+    // Event quantity
+    document.querySelectorAll('.btn-qty').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const id = btn.dataset.itemId;
+            const action = btn.dataset.action;
+            const input = document.querySelector(`.quantity-input[data-item-id="${id}"]`);
             let qty = parseInt(input.value) || 1;
-
-            if (action === 'increase') qty++;
-            if (action === 'decrease') qty = Math.max(1, qty - 1);
-
+            qty = action === 'increase' ? qty + 1 : Math.max(1, qty - 1);
             input.value = qty;
-            setMinusState(itemId, qty);
-            updateCart(itemId, qty, input);
+            setMinusState(id, qty);
+            updateCart(id, qty, input);
         });
     });
-
-    document.querySelectorAll('.quantity-input').forEach(function(input) {
-        input.addEventListener('input', function() {
-            let qty = parseInt(this.value);
-            if (isNaN(qty) || qty < 1) qty = 1;
-            this.value = qty;
-
-            const itemId = this.dataset.itemId;
-            setMinusState(itemId, qty);
-            updateCart(itemId, qty, this);
+    document.querySelectorAll('.quantity-input').forEach(input => {
+        input.addEventListener('change', () => {
+            const id = input.dataset.itemId;
+            let qty = parseInt(input.value) || 1;
+            input.value = qty;
+            setMinusState(id, qty);
+            updateCart(id, qty, input);
         });
         setMinusState(input.dataset.itemId, parseInt(input.value));
     });
+
+    // Select all
+    document.getElementById('select-all').addEventListener('change', e => {
+        document.querySelectorAll('.select-item').forEach(c => c.checked = e.target.checked);
+        recalcTotal();
+    });
+    document.querySelectorAll('.select-item').forEach(c => c.addEventListener('change', recalcTotal));
+
+    // Konfirmasi hapus item
+    document.querySelectorAll('.form-remove-item').forEach(form => {
+        form.addEventListener('submit', e => {
+            e.preventDefault();
+            Swal.fire({
+                title: 'Konfirmasi Hapus',
+                text: 'Apakah Anda yakin ingin menghapus item ini?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, hapus',
+                cancelButtonText: 'Batal',
+                confirmButtonColor: '#800000',
+                cancelButtonColor: '#6c757d'
+            }).then(res => res.isConfirmed && form.submit());
+        });
+    });
+
+    // Inisialisasi
+    loadSelections();
+    recalcTotal();
 });
 </script>
 @endpush
-
-@endsection

@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\LandingController;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\ProdukPenggunaController;
 use App\Http\Controllers\LiveChatController;
 use App\Http\Controllers\AdminKelolaAkunController;
@@ -14,6 +13,7 @@ use App\Http\Controllers\AdminPesananController;
 use App\Http\Controllers\Pengguna\PesananController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CartController;
+use Illuminate\Support\Facades\Auth;
 // ======== BATAS =========
 
 

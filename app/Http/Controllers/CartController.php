@@ -69,18 +69,19 @@ class CartController extends Controller
         return back()->with('success', 'Produk berhasil ditambahkan ke keranjang.');
     }
 
-    // Menghapus item dari keranjang
     public function remove($cartItemId)
     {
-        // Cari item di dalam keranjang berdasarkan ID
         $cartItem = CartItem::findOrFail($cartItemId);
-
-        // Hapus item dari keranjang
         $cartItem->delete();
 
-        // Redirect kembali ke halaman keranjang dengan pesan sukses
+        if (request()->ajax()) {
+            return response()->json(['success' => true]);
+        }
         return redirect()->route('cart.index')->with('success', 'Produk berhasil dihapus dari keranjang!');
     }
+
+
+
 
     public function update(Request $request, $cartItemId)
     {
