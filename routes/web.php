@@ -13,6 +13,7 @@ use App\Http\Controllers\AdminPesananController;
 use App\Http\Controllers\Pengguna\PesananController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\AlamatController;
 use Illuminate\Support\Facades\Auth;
 // ======== BATAS =========
 
@@ -157,6 +158,16 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/cart/update/{cartItemId}', [CartController::class, 'update'])->name('cart.update');
         // ============ BATAS =============
 
+
+        // ============ Cart =============
+        Route::get('/alamat', [AlamatController::class, 'index'])->name('alamat.index');
+        Route::get('/alamat/create', [AlamatController::class, 'create'])->name('alamat.create');
+        Route::post('/alamat/store', [AlamatController::class, 'store'])->name('alamat.store');
+        Route::get('/alamat/{alamat}/edit', [AlamatController::class, 'edit'])->name('alamat.edit');
+        Route::put('/alamat/{alamat}', [AlamatController::class, 'update'])->name('alamat.update');
+        Route::delete('/alamat/{alamat}', [AlamatController::class, 'destroy'])->name('alamat.destroy');
+        Route::post('/alamat/{id}/default', [AlamatController::class, 'setDefault'])->name('alamat.default');
+        // ============ BATAS =============
 
     });
 });

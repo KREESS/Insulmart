@@ -12,7 +12,6 @@ class Quotation extends Model
     protected $fillable = [
         'user_id',
         'kode_quotation',
-        'alamat_pengiriman',
         'catatan_tambahan',
         'total_harga',
         'status',
@@ -22,5 +21,9 @@ class Quotation extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+    public function alamat()
+    {
+        return $this->hasOne(AlamatQuotation::class);
     }
 }

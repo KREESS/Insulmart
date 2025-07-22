@@ -1,6 +1,9 @@
 @extends('components.layout-bootstrap')
 
-@section('title', 'Keranjang Produk Insulasi | Insulmart')
+<head>
+    <title>@yield('title', 'Keranjang Produk Insulasi | Insulmart')</title>
+    <!-- Tag lain seperti meta, link CSS, dll -->
+</head>
 
 @section('content')
 <style>
@@ -10,7 +13,10 @@
         --maroon-light: #f8e5e5;
         --border-radius: 12px;
     }
-    body { background: var(--maroon-light); }
+    body {
+        background: var(--maroon-light);
+        padding-top: 5rem; /* <-- tambahkan ini sesuai tinggi navbar */
+    }
     .text-maroon { color: var(--maroon-dark) !important; }
     .btn-maroon {
         background: var(--maroon-dark);
@@ -90,10 +96,9 @@
         .table td { padding: .5rem 1rem; }
     }
 </style>
-<br><br><br>
-<div class="container-fluid px-3 px-md-5 py-5">
+<div class="container-fluid px-3 px-md-5 py-5 fade-up">
     <div class="card-cart">
-        <h2 class="mb-4 text-maroon d-flex align-items-center justify-content-center">
+        <h2 class="mb-4 text-maroon d-flex align-items-center justify-content-center fade-up">
             <i class="bi bi-cart4 me-2"></i>Keranjang Saya
         </h2>
 
@@ -119,11 +124,11 @@
         @endif
 
         @if($cart->items->isEmpty())
-            <div class="alert alert-warning text-center">
+            <div class="alert alert-warning text-center fade-up">
                 <i class="bi bi-emoji-frown fs-3"></i> Keranjang Anda kosong.
             </div>
         @else
-            <div class="table-responsive">
+            <div class="table-responsive fade-up">
                 <table class="table align-middle mb-0">
                     <thead>
                         <tr class="text-center">
@@ -133,7 +138,7 @@
                             <th>Jumlah</th>
                             <th>Harga</th>
                             <th>Subtotal</th>
-                            <th>Aksi</th>
+                            <th>Remove</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -176,8 +181,9 @@
 
             <div class="d-flex justify-content-between align-items-center mt-4">
                 <div>
-                    <span class="fw-semibold text-maroon">Total Terpilih:</span>
+                    <span class="fw-semibold text-maroon">Total Harga Terpilih:</span>
                     <span id="cart-total" class="fw-bold">Rp0</span>
+                    <small class="text-muted d-block mt-1">*Belum termasuk ongkos kirim</small>
                 </div>
                 <form id="checkout-form" action="{{ route('keranjang.checkout') }}" method="POST">
                     @csrf
@@ -196,134 +202,134 @@
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-// Semua script di-wrap ke DOMContentLoaded
-document.addEventListener('DOMContentLoaded', () => {
-    axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    // Semua script di-wrap ke DOMContentLoaded
+    document.addEventListener('DOMContentLoaded', () => {
+        axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-    // Utility untuk parse dan format Rupiah
-    const parseRp = text => parseInt(text.replace(/[Rp\.]/g, '')) || 0;
-    const formatRp = num => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        // Utility untuk parse dan format Rupiah
+        const parseRp = text => parseInt(text.replace(/[Rp\.]/g, '')) || 0;
+        const formatRp = num => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 
-    // Load/save checkbox state ke localStorage
-    const loadSelections = () => {
-        const stored = JSON.parse(localStorage.getItem('cart_selected'));
-        const checks = Array.from(document.querySelectorAll('.select-item'));
-        if (!stored || stored.length === 0) {
-            checks.forEach(c => c.checked = true);
-        } else {
-            checks.forEach(c => c.checked = stored.includes(c.dataset.itemId));
-        }
-        document.getElementById('select-all').checked = checks.every(c => c.checked);
-    };
-    const saveSelections = () => {
-        const sel = Array.from(document.querySelectorAll('.select-item'))
-            .filter(c => c.checked)
-            .map(c => c.dataset.itemId);
-        localStorage.setItem('cart_selected', JSON.stringify(sel));
-    };
-
-    // Update total dan input tersembunyi
-    const recalcTotal = () => {
-        let total = 0;
-        const selected = [];
-        document.querySelectorAll('.select-item').forEach(chk => {
-            if (chk.checked) {
-                const row = document.querySelector(`tr[data-item-id="${chk.dataset.itemId}"]`);
-                total += parseRp(row.querySelector('.subtotal-cell').textContent);
-                selected.push(chk.dataset.itemId);
+        // Load/save checkbox state ke localStorage
+        const loadSelections = () => {
+            const stored = JSON.parse(localStorage.getItem('cart_selected'));
+            const checks = Array.from(document.querySelectorAll('.select-item'));
+            if (!stored || stored.length === 0) {
+                checks.forEach(c => c.checked = true);
+            } else {
+                checks.forEach(c => c.checked = stored.includes(c.dataset.itemId));
             }
-        });
-        document.getElementById('cart-total').textContent = `Rp${formatRp(total)}`;
-        const container = document.getElementById('selected-inputs');
-        container.innerHTML = '';
-        selected.forEach(id => {
-            const inp = document.createElement('input');
-            inp.type = 'hidden'; inp.name = 'selected_items[]'; inp.value = id;
-            container.appendChild(inp);
-        });
-        document.getElementById('btn-checkout').disabled = selected.length === 0;
-        saveSelections();
-    };
+            document.getElementById('select-all').checked = checks.every(c => c.checked);
+        };
+        const saveSelections = () => {
+            const sel = Array.from(document.querySelectorAll('.select-item'))
+                .filter(c => c.checked)
+                .map(c => c.dataset.itemId);
+            localStorage.setItem('cart_selected', JSON.stringify(sel));
+        };
 
-    // Update cart via AJAX
-    const updateCart = async (id, qty, input) => {
-        try {
-            input.disabled = true;
-            const { data } = await axios.put(`/cart/update/${id}`, { quantity: qty });
-            if (data.success) {
-                const row = document.querySelector(`tr[data-item-id="${id}"]`);
-                row.querySelector('.subtotal-cell').textContent = `Rp${data.newSubtotal}`;
-                recalcTotal();
-            } else throw new Error('Update gagal');
-        } catch (err) {
-            Swal.fire({
-                title: 'Error',
-                text: err.message || 'Gagal update quantity',
-                icon: 'error',
-                confirmButtonColor: '#800000'
+        // Update total dan input tersembunyi
+        const recalcTotal = () => {
+            let total = 0;
+            const selected = [];
+            document.querySelectorAll('.select-item').forEach(chk => {
+                if (chk.checked) {
+                    const row = document.querySelector(`tr[data-item-id="${chk.dataset.itemId}"]`);
+                    total += parseRp(row.querySelector('.subtotal-cell').textContent);
+                    selected.push(chk.dataset.itemId);
+                }
             });
-        } finally {
-            input.disabled = false;
-        }
-    };
+            document.getElementById('cart-total').textContent = `Rp${formatRp(total)}`;
+            const container = document.getElementById('selected-inputs');
+            container.innerHTML = '';
+            selected.forEach(id => {
+                const inp = document.createElement('input');
+                inp.type = 'hidden'; inp.name = 'selected_items[]'; inp.value = id;
+                container.appendChild(inp);
+            });
+            document.getElementById('btn-checkout').disabled = selected.length === 0;
+            saveSelections();
+        };
 
-    // Disable tombol minus jika qty <= 1
-    const setMinusState = (id, qty) => {
-        const btn = document.querySelector(`.btn-qty[data-item-id="${id}"][data-action="decrease"]`);
-        if (btn) btn.disabled = qty <= 1;
-    };
+        // Update cart via AJAX
+        const updateCart = async (id, qty, input) => {
+            try {
+                input.disabled = true;
+                const { data } = await axios.put(`/cart/update/${id}`, { quantity: qty });
+                if (data.success) {
+                    const row = document.querySelector(`tr[data-item-id="${id}"]`);
+                    row.querySelector('.subtotal-cell').textContent = `Rp${data.newSubtotal}`;
+                    recalcTotal();
+                } else throw new Error('Update gagal');
+            } catch (err) {
+                Swal.fire({
+                    title: 'Error',
+                    text: err.message || 'Gagal update quantity',
+                    icon: 'error',
+                    confirmButtonColor: '#800000'
+                });
+            } finally {
+                input.disabled = false;
+            }
+        };
 
-    // Event quantity
-    document.querySelectorAll('.btn-qty').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const id = btn.dataset.itemId;
-            const action = btn.dataset.action;
-            const input = document.querySelector(`.quantity-input[data-item-id="${id}"]`);
-            let qty = parseInt(input.value) || 1;
-            qty = action === 'increase' ? qty + 1 : Math.max(1, qty - 1);
-            input.value = qty;
-            setMinusState(id, qty);
-            updateCart(id, qty, input);
+        // Disable tombol minus jika qty <= 1
+        const setMinusState = (id, qty) => {
+            const btn = document.querySelector(`.btn-qty[data-item-id="${id}"][data-action="decrease"]`);
+            if (btn) btn.disabled = qty <= 1;
+        };
+
+        // Event quantity
+        document.querySelectorAll('.btn-qty').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const id = btn.dataset.itemId;
+                const action = btn.dataset.action;
+                const input = document.querySelector(`.quantity-input[data-item-id="${id}"]`);
+                let qty = parseInt(input.value) || 1;
+                qty = action === 'increase' ? qty + 1 : Math.max(1, qty - 1);
+                input.value = qty;
+                setMinusState(id, qty);
+                updateCart(id, qty, input);
+            });
         });
-    });
-    document.querySelectorAll('.quantity-input').forEach(input => {
-        input.addEventListener('change', () => {
-            const id = input.dataset.itemId;
-            let qty = parseInt(input.value) || 1;
-            input.value = qty;
-            setMinusState(id, qty);
-            updateCart(id, qty, input);
+        document.querySelectorAll('.quantity-input').forEach(input => {
+            input.addEventListener('change', () => {
+                const id = input.dataset.itemId;
+                let qty = parseInt(input.value) || 1;
+                input.value = qty;
+                setMinusState(id, qty);
+                updateCart(id, qty, input);
+            });
+            setMinusState(input.dataset.itemId, parseInt(input.value));
         });
-        setMinusState(input.dataset.itemId, parseInt(input.value));
-    });
 
-    // Select all
-    document.getElementById('select-all').addEventListener('change', e => {
-        document.querySelectorAll('.select-item').forEach(c => c.checked = e.target.checked);
+        // Select all
+        document.getElementById('select-all').addEventListener('change', e => {
+            document.querySelectorAll('.select-item').forEach(c => c.checked = e.target.checked);
+            recalcTotal();
+        });
+        document.querySelectorAll('.select-item').forEach(c => c.addEventListener('change', recalcTotal));
+
+        // Konfirmasi hapus item
+        document.querySelectorAll('.form-remove-item').forEach(form => {
+            form.addEventListener('submit', e => {
+                e.preventDefault();
+                Swal.fire({
+                    title: 'Konfirmasi Hapus',
+                    text: 'Apakah Anda yakin ingin menghapus item ini?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Ya, hapus',
+                    cancelButtonText: 'Batal',
+                    confirmButtonColor: '#800000',
+                    cancelButtonColor: '#6c757d'
+                }).then(res => res.isConfirmed && form.submit());
+            });
+        });
+
+        // Inisialisasi
+        loadSelections();
         recalcTotal();
     });
-    document.querySelectorAll('.select-item').forEach(c => c.addEventListener('change', recalcTotal));
-
-    // Konfirmasi hapus item
-    document.querySelectorAll('.form-remove-item').forEach(form => {
-        form.addEventListener('submit', e => {
-            e.preventDefault();
-            Swal.fire({
-                title: 'Konfirmasi Hapus',
-                text: 'Apakah Anda yakin ingin menghapus item ini?',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Ya, hapus',
-                cancelButtonText: 'Batal',
-                confirmButtonColor: '#800000',
-                cancelButtonColor: '#6c757d'
-            }).then(res => res.isConfirmed && form.submit());
-        });
-    });
-
-    // Inisialisasi
-    loadSelections();
-    recalcTotal();
-});
 </script>
 @endpush

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cart;
 use App\Models\CartItem;
+use App\Models\Produk;
 use App\Models\VarianProduk;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,8 +16,8 @@ class CartController extends Controller
     {
         // Ambil cart milik user yang sedang login
         $cart = Auth::user()->cart;
-
-        return view('pelanggan.cart.index', compact('cart')); // Tampilkan halaman cart
+        $produks = Produk::with(['gambars', 'varians'])->get();
+        return view('pelanggan.cart.index', compact('cart', 'produks')); // Tampilkan halaman cart
     }
 
     public function store(Request $request)

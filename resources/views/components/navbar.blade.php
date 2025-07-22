@@ -54,6 +54,7 @@
                         @elseif (auth()->user()->hasRole('pelanggan'))
                         @endif
                         <a class="dropdown-item" href="{{ route('profile') }}" style="display:block; padding: 10px 15px; color: #333; text-decoration: none;">Profile Saya</a>
+                        <a class="dropdown-item" href="{{ route('alamat.index') }}" style="display:block; padding: 10px 15px; color: #333; text-decoration: none;">Alamat</a>
                         <a class="dropdown-item text-danger" href="{{ route('logout') }}"
                             onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
                             style="display:block; padding: 10px 15px; color: red; text-decoration: none;">
