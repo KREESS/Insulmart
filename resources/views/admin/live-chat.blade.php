@@ -1,5 +1,8 @@
 @extends('admin.components.app')
-
+    <head>
+        <title>@yield('title', 'Live Chat Admin | Insulmart')</title>
+        <!-- Tag lain seperti meta, link CSS, dll -->
+    </head>
 @section('content')
 <main class="main-content p-4 bg-light" id="mainContent">
     <div class="container py-4">

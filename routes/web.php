@@ -9,13 +9,14 @@ use App\Http\Controllers\LandingController;
 use App\Http\Controllers\ProdukPenggunaController;
 use App\Http\Controllers\LiveChatController;
 use App\Http\Controllers\AdminKelolaAkunController;
-use App\Http\Controllers\AdminPesananController;
 use App\Http\Controllers\Pengguna\PesananController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\AlamatController;
 use App\Models\Pemesanan;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\AdminPesananController;
 // ======== BATAS =========
 
 
@@ -90,9 +91,7 @@ Route::middleware(['auth'])->group(function () {
     // =========== ADMIN ===========
     Route::middleware(['role:admin'])->group(function () {
         // ======= DASHBOARD ADMIN ========
-        Route::get('/admin/dashboard', function () {
-            return view('admin.dashboard');
-        })->name('admin.dashboard');
+        Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
         // ============ BATAS =============
 
 

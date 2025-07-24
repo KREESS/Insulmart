@@ -1,7 +1,9 @@
 @extends('components.layout-bootstrap')
 
-@section('title', 'Detail Pesanan')
-
+    <head>
+        <title>@yield('title', 'Detail Pesanan | Insulmart')</title>
+        <!-- Tag lain seperti meta, link CSS, dll -->
+    </head>
 @section('content')
 
 <style>

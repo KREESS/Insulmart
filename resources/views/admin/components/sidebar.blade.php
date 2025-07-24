@@ -15,7 +15,7 @@
       </a>
     </li>
     <li class="nav-item mb-2">
-      <a href="#" class="nav-link text-white">
+      <a href="/admin/pesanan" class="nav-link text-white">
         <i class="bi bi-cart-fill me-2"></i>Pesanan
       </a>
     </li>

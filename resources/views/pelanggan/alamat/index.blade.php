@@ -1,6 +1,10 @@
 @extends('components.layout-bootstrap')
 
 @section('title', 'Alamat Pengiriman Saya | Insulmart')
+    <head>
+        <title>@yield('title', 'Alamat Pengiriman Saya | Insulmart')</title>
+        <!-- Tag lain seperti meta, link CSS, dll -->
+    </head>
 
 @section('content')
 <style>

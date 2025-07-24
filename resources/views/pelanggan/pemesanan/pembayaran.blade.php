@@ -1,7 +1,9 @@
 @extends('components.layout-bootstrap')
 
-@section('title', 'Pembayaran Pesanan')
-
+    <head>
+        <title>@yield('title', 'Pembayaran Pesanan | Insulmart')</title>
+        <!-- Tag lain seperti meta, link CSS, dll -->
+    </head>
 @section('content')
         @php use Illuminate\Support\Str; @endphp
 

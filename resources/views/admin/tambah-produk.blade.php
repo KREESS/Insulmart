@@ -1,5 +1,8 @@
 @extends('admin.components.app')
-
+    <head>
+        <title>@yield('title', 'Tambah Produk Admin | Insulmart')</title>
+        <!-- Tag lain seperti meta, link CSS, dll -->
+    </head>
 @section('content')
 <style>
   .btn-merah {
