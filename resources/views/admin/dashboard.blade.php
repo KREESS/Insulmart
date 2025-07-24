@@ -363,7 +363,7 @@
                                 <div class="card-body d-flex align-items-center justify-content-between">
                                     <div>
                                         <div class="stat-title">Pendapatan Hari Ini</div>
-                                        <div class="stat-value">Rp {{ number_format($pendapatanHarian, 0, ',', '.') }}</div>
+                                        <div class="stat-value" style="font-size: 2em;">Rp {{ number_format($pendapatanHarian, 0, ',', '.') }}</div>
                                         <div class="stat-foot">
                                             <span class="badge bg-info text-dark" style="font-size:.96em;">
                                                 {{ \Carbon\Carbon::today()->translatedFormat('l, d M Y') }}
@@ -379,7 +379,7 @@
                                 <div class="card-body d-flex align-items-center justify-content-between">
                                     <div>
                                         <div class="stat-title">Pendapatan Minggu Ini</div>
-                                        <div class="stat-value">Rp {{ number_format($pendapatanMingguan, 0, ',', '.') }}</div>
+                                        <div class="stat-value" style="font-size: 2em;">Rp {{ number_format($pendapatanMingguan, 0, ',', '.') }}</div>
                                         <div class="stat-foot">
                                             <span class="badge bg-info text-dark" style="font-size:.96em;">
                                                 Minggu ke-{{ \Carbon\Carbon::now()->weekOfYear }}
@@ -395,7 +395,7 @@
                                 <div class="card-body d-flex align-items-center justify-content-between">
                                     <div>
                                         <div class="stat-title">Pendapatan Bulan Ini</div>
-                                        <div class="stat-value">Rp {{ number_format($pendapatanBulanan, 0, ',', '.') }}</div>
+                                        <div class="stat-value" style="font-size: 2em;">Rp {{ number_format($pendapatanBulanan, 0, ',', '.') }}</div>
                                         <div class="stat-foot">
                                             <span class="badge bg-info text-dark" style="font-size:.96em;">
                                                 {{ \Carbon\Carbon::now()->translatedFormat('F Y') }}
