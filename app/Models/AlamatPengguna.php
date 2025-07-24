@@ -24,4 +24,9 @@ class AlamatPengguna extends Model
     protected $casts = [
         'is_default' => 'boolean',
     ];
+
+    public function pemesanan()
+    {
+        return $this->hasMany(Pemesanan::class, 'alamat_pengiriman_id');
+    }
 }

@@ -14,6 +14,7 @@ use App\Http\Controllers\Pengguna\PesananController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\AlamatController;
+use App\Models\Pemesanan;
 use Illuminate\Support\Facades\Auth;
 // ======== BATAS =========
 
@@ -154,7 +155,6 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
         Route::delete('/cart/remove/{cartItemId}', [CartController::class, 'remove'])->name('cart.remove');
         Route::post('/keranjang/tambah', [CartController::class, 'store'])->name('keranjang.tambah');
-        Route::post('/keranjang/checkout', [CartController::class, 'store'])->name('keranjang.checkout');
         Route::put('/cart/update/{cartItemId}', [CartController::class, 'update'])->name('cart.update');
         // ============ BATAS =============
 
@@ -169,5 +169,17 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/alamat/{id}/default', [AlamatController::class, 'setDefault'])->name('alamat.default');
         // ============ BATAS =============
 
+
+        // ============ Checkout/Pemesanan =============
+        Route::post('/checkout', [PesananController::class, 'store'])->name('keranjang.checkout');
+        Route::get('/pesanan/{pemesanan_id}', [PesananController::class, 'pembayaran'])->name('pemesanan.pembayaran');
+        Route::post('/pemesanan/{id}/upload-po', [PesananController::class, 'uploadPO'])->name('pemesanan.upload_po');
+        Route::post('/pembayaran/{id}/upload-bukti', [PesananController::class, 'uploadBukti'])->name('pemesanan.upload_bukti');
+        Route::delete('/pembayaran/{id}/hapus-bukti', [PesananController::class, 'hapusBukti'])->name('pemesanan.hapus_bukti');
+        Route::delete('/pemesanan/{id}/hapus-po', [PesananController::class, 'hapusPO'])->name('pemesanan.hapus_po');
+        Route::get('/pesanan-saya', [PesananController::class, 'index'])->name('pemesanan.index');
+        Route::get('/pesanan/update/{pemesanan_id}', [PesananController::class, 'detail'])->name('pemesanan.detail');
+        Route::get('/pemesanan/{id}/invoice', [PesananController::class, 'invoice'])->name('pemesanan.invoice');
+        // ============ BATAS =============
     });
 });

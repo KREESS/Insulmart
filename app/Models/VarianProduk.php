@@ -23,4 +23,9 @@ class VarianProduk extends Model
     {
         return $this->belongsTo(Produk::class, 'produk_id');
     }
+
+    public function detailPemesanan()
+    {
+        return $this->hasMany(DetailPemesanan::class);
+    }
 }

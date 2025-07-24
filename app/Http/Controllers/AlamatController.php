@@ -48,17 +48,9 @@ class AlamatController extends Controller
             'rw'             => 'required|digits_between:1,5',
             'kode_pos'       => 'required|string|max:10',
             'alamat_lengkap' => 'required|string|max:500',
-            'is_default'     => 'sometimes|accepted',
         ]);
 
-        // reset default lama
-        if (!empty($data['is_default'])) {
-            AlamatPengguna::where('user_id', Auth::id())->update(['is_default' => false]);
-            $data['is_default'] = true;
-        } else {
-            $data['is_default'] = false;
-        }
-
+        $data['is_default'] = false;
         $data['user_id'] = Auth::id();
         AlamatPengguna::create($data);
 

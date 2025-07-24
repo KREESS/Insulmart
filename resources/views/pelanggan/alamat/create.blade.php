@@ -139,14 +139,6 @@
         <textarea name="alamat_lengkap" class="form-control" rows="3" required></textarea>
       </div>
 
-      {{-- Default --}}
-      {{-- <div class="form-check mb-4">
-        <input type="checkbox" name="is_default" value="1" class="form-check-input" id="is_default">
-        <label class="form-check-label text-maroon" for="is_default">
-          Jadikan Alamat Default
-        </label>
-      </div> --}}
-
       <div class="d-flex justify-content-between fade-up">
         <a href="{{ route('alamat.index') }}" class="btn btn-cancel">Batal</a>
         <button type="submit" class="btn btn-maroon">Simpan Alamat</button>

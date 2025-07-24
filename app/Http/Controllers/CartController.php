@@ -14,17 +14,21 @@ class CartController extends Controller
     // Menampilkan keranjang belanja pengguna
     public function index()
     {
-        // Ambil cart milik user yang sedang login
-        $cart = Auth::user()->cart;
+        $user = Auth::user();
+        $cart = $user->cart;
         $produks = Produk::with(['gambars', 'varians'])->get();
-        return view('pelanggan.cart.index', compact('cart', 'produks')); // Tampilkan halaman cart
+
+        // ambil alamat default lewat relasi
+        $defaultAddress = $user
+            ->alamatPenggunas()
+            ->where('is_default', true)
+            ->first();
+
+        return view('pelanggan.cart.index', compact('cart', 'produks', 'defaultAddress'));
     }
 
     public function store(Request $request)
     {
-        // Debug sementar
-        // dd($request->all());
-
         $user = Auth::user();
 
         $request->validate([
@@ -64,7 +68,7 @@ class CartController extends Controller
         }
 
         if ($request->beli_sekarang == 1) {
-            return redirect()->route('keranjang.checkout')->with('success', 'Lanjut ke checkout.');
+            return redirect()->route('cart.index')->with('success', 'Lanjut ke checkout.');
         }
 
         return back()->with('success', 'Produk berhasil ditambahkan ke keranjang.');
@@ -80,9 +84,6 @@ class CartController extends Controller
         }
         return redirect()->route('cart.index')->with('success', 'Produk berhasil dihapus dari keranjang!');
     }
-
-
-
 
     public function update(Request $request, $cartItemId)
     {

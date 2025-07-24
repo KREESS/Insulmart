@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
+use App\Models\AlamatPengguna;
 use App\Notifications\ResetPasswordNotification;
 
 
@@ -62,5 +62,15 @@ class User extends Authenticatable
     public function cart()
     {
         return $this->hasOne(Cart::class); // Assuming each user has only one cart
+    }
+
+    public function alamatPenggunas()
+    {
+        return $this->hasMany(AlamatPengguna::class, 'user_id');
+    }
+
+    public function pemesanan()
+    {
+        return $this->hasMany(Pemesanan::class, 'pengguna_id');
     }
 }
