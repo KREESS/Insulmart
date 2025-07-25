@@ -123,11 +123,19 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/admin/pengguna/{id}/edit', [AdminKelolaAkunController::class, 'update'])->name('admin.kelola-akun.update');
         Route::delete('/admin/pengguna/{id}', [AdminKelolaAkunController::class, 'destroy'])->name('admin.kelola-akun.destroy');
         Route::patch('/admin/kelola-akun/{id}/toggle-active', [AdminKelolaAkunController::class, 'toggleActive'])->name('admin.kelola-akun.toggle-active');
+        Route::get('/admin/kelola-akun-ajax', [AdminKelolaAkunController::class, 'ajax'])->name('admin.kelola-akun.ajax');
         // ============ BATAS =============
 
 
         // =========== ADMIN PESANAN ===========
-        Route::get('/admin/pesanan', [AdminPesananController::class, 'index'])->name('admin.kelola-akun');
+        Route::get('/admin/pesanan', [AdminPesananController::class, 'index'])->name('admin.pesanan');
+        Route::get('/admin/pesanan1', [AdminPesananController::class, 'index'])->name('admin.pesanan.index');
+        Route::get('/admin/pesanan11', [AdminPesananController::class, 'index'])->name('admin.pesanan.edit');
+        Route::patch('/admin/pesanan/{id}/update-status', [AdminPesananController::class, 'updateStatus'])->name('admin.pesanan.updateStatus');
+        Route::patch('/admin/pesanan/{id}/update-status-po', [AdminPesananController::class, 'updateStatusPo'])->name('admin.pesanan.updateStatusPo');
+        Route::patch('/admin/pembayaran/{id}/update-status-verif', [AdminPesananController::class, 'updateStatusVerif'])->name('admin.pembayaran.updateStatusVerif');
+        Route::patch('/admin/pembayaran/{id}/update-catatan', [AdminPesananController::class, 'updateCatatan'])->name('admin.pembayaran.updateCatatan');
+        Route::get('/admin/pesanan/export', [AdminPesananController::class, 'export'])->name('admin.pesanan.export');
         // ============ BATAS =============
     });
 

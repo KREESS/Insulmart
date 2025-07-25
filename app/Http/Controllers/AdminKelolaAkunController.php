@@ -12,14 +12,43 @@ class AdminKelolaAkunController extends Controller
     {
         $roleFilter = $request->input('role');
 
-        $users = \App\Models\User::when($roleFilter, function ($query) use ($roleFilter) {
+        $users = User::when($roleFilter, function ($query) use ($roleFilter) {
             $query->whereHas('roles', function ($q) use ($roleFilter) {
                 $q->where('name', $roleFilter);
             });
-        })->with('roles')->get(); // bisa ditambahkan paginate() jika perlu
+        })
+            ->with(['roles', 'alamatPenggunas']) // Tambahkan eager load alamatUtama
+            ->get();
+
 
         return view('admin.pengguna.kelola-akun', compact('users', 'roleFilter'));
     }
+
+    // AdminKelolaAkunController.php
+
+    public function ajax(Request $request)
+    {
+        $roleFilter = $request->input('role');
+        $search = $request->input('search');
+
+        $users = User::when($roleFilter, function ($query) use ($roleFilter) {
+            $query->whereHas('roles', function ($q) use ($roleFilter) {
+                $q->where('name', $roleFilter);
+            });
+        })
+            ->when($search, function ($query) use ($search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('name', 'LIKE', '%' . $search . '%')
+                        ->orWhere('email', 'LIKE', '%' . $search . '%');
+                });
+            })
+            ->with(['roles', 'alamatPenggunas'])
+            ->get();
+
+        // Return only the table body
+        return view('admin.pengguna._table_body', compact('users'))->render();
+    }
+
 
 
     public function edit($id)

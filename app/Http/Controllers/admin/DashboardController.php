@@ -42,17 +42,17 @@ class DashboardController extends Controller
         $now        = Carbon::now();
 
         // Pendapatan hari ini
-        $pendapatanHarian = \App\Models\Pemesanan::where('status_pemesanan', 'selesai')
+        $pendapatanHarian = Pemesanan::where('status_pemesanan', 'selesai')
             ->whereDate('updated_at', $today)
             ->sum('total_harga');
 
         // Pendapatan minggu ini
-        $pendapatanMingguan = \App\Models\Pemesanan::where('status_pemesanan', 'selesai')
+        $pendapatanMingguan = Pemesanan::where('status_pemesanan', 'selesai')
             ->whereBetween('updated_at', [$startOfWeek, $now])
             ->sum('total_harga');
 
         // Pendapatan bulan ini
-        $pendapatanBulanan = \App\Models\Pemesanan::where('status_pemesanan', 'selesai')
+        $pendapatanBulanan = Pemesanan::where('status_pemesanan', 'selesai')
             ->whereMonth('updated_at', $now->month)
             ->whereYear('updated_at', $now->year)
             ->sum('total_harga');
@@ -73,7 +73,7 @@ class DashboardController extends Controller
             $start = $temp->copy()->startOfWeek();
             $end = $temp->copy()->endOfWeek();
 
-            $count = \App\Models\Pemesanan::where('status_pemesanan', 'selesai')
+            $count = Pemesanan::where('status_pemesanan', 'selesai')
                 ->whereBetween('created_at', [$start, $end])
                 ->count();
 
@@ -95,11 +95,11 @@ class DashboardController extends Controller
 
             $labels[] = 'Minggu ' . $i;
             // Jumlah pesanan selesai
-            $orderCounts[] = \App\Models\Pemesanan::where('status_pemesanan', 'selesai')
+            $orderCounts[] = Pemesanan::where('status_pemesanan', 'selesai')
                 ->whereBetween('created_at', [$startWeek, $endWeek])
                 ->count();
             // Total pendapatan (sum total_harga pesanan selesai)
-            $incomes[] = \App\Models\Pemesanan::where('status_pemesanan', 'selesai')
+            $incomes[] = Pemesanan::where('status_pemesanan', 'selesai')
                 ->whereBetween('created_at', [$startWeek, $endWeek])
                 ->sum('total_harga');
         }

@@ -78,7 +78,7 @@
                     </div>
 
                     <div class="mt-4 d-flex justify-content-end gap-2">
-                        <a href="{{ route('admin.kelola-akun') }}" class="btn btn-secondary">Batal</a>
+                        <a href="/admin/pengguna" class="btn btn-secondary">Batal</a>
                         <button type="submit" class="btn text-white" style="background-color: #8B0000;">
                             💾 Simpan Perubahan
                         </button>

@@ -66,7 +66,7 @@ class User extends Authenticatable
 
     public function alamatPenggunas()
     {
-        return $this->hasMany(AlamatPengguna::class, 'user_id');
+        return $this->hasMany(AlamatPengguna::class, 'user_id')->where('is_default', true);
     }
 
     public function pemesanan()
