@@ -98,6 +98,29 @@
             .navbar {
                 padding: 0px 24px;
             }
+
+            .btn-outline-maroon {
+                border: 1px solid #800000;
+                color: #800000;
+                background-color: transparent;
+                transition: background-color 0.2s ease, color 0.2s ease;
+                }
+
+                .btn-outline-maroon:hover {
+                background-color: #800000;
+                color: white;
+                }
+
+                /* Optional padding tuning if terlalu tinggi */
+                .btn-outline-maroon.btn-sm {
+                padding: 3px 16px;
+                font-size: 0.85rem;
+                line-height: 1.2;
+                border-radius: 999px;
+                display: inline-flex;
+                align-items: center;
+                gap: 4px;
+                }
         </style>
         <div class="container-fluid px-3 px-md-5 py-5 fade-up">
             <div class="address-section mb-4 fade-up">
@@ -116,8 +139,25 @@
                                             <p class="small text-muted mb-0">
                                                 {{ $defaultAddress->alamat_lengkap }}, {{ $defaultAddress->district }},<br>
                                                 {{ $defaultAddress->regency }}, {{ $defaultAddress->province }}<br>
-                                                {{ $defaultAddress->kode_pos }}
+                                                {{ $defaultAddress->kode_pos }}, <br> {{ $defaultAddress->koordinat }}
                                             </p>
+                                            @php
+                                                $jarakLurus = $defaultAddress->jarakDariGudang();
+
+                                                if ($jarakLurus) {
+                                                    $koreksi = $jarakLurus < 25 ? 1.405 : 1.7;
+                                                    $jarakKoreksi = $jarakLurus * $koreksi;
+                                                } else {
+                                                    $jarakKoreksi = null;
+                                                }
+                                            @endphp
+
+                                            @if($jarakKoreksi)
+                                                <p class="small text-muted mt-1">
+                                                    Perkiraan jarak ke gudang: <strong>± {{ number_format($jarakKoreksi, 2) }} km</strong>
+                                                </p>
+                                            @endif
+
                                         </div>
                                     </div>
                                     <div class="mt-3 text-end">
@@ -261,6 +301,8 @@
                         <div>
                             <span class="fw-semibold text-maroon">Total Harga Terpilih:</span>
                             <span id="cart-total" class="fw-bold">Rp0</span>
+                            
+                            <small class="text-success d-block">*Harga sudah termasuk PPN 11%</small>
                             <small class="text-muted d-block mt-1">*Belum termasuk ongkos kirim</small>
                         </div>
                         <form id="checkout-form" action="{{ route('keranjang.checkout') }}" method="POST">

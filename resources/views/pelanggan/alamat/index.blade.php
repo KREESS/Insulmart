@@ -95,7 +95,27 @@
     display: flex; gap: .5rem; justify-content: flex-end;
   }
   .card-footer .btn { flex:1; font-size:.85rem; border-radius: var(--round); transition: background .2s, color .2s; }
-  .btn-edit { border: 1px solid var(--accent-start); color: var(--accent-start); }
+
+  .btn-edit {
+    border: 1px solid var(--accent-start);
+    color: var(--accent-start);
+    padding: 2px 20px !important;
+    font-size: 0.85rem !important;
+    line-height: 1 !important;
+    height: auto !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    border-radius: 999px;
+  }
+
+  .btn-edit i {
+    font-size: 0.9em;
+    line-height: 1;
+    margin-right: 4px;
+  }
+
   .btn-edit:hover { background: var(--accent-start); color: #fff; }
   .btn-delete { border: 1px solid #dc3545; color: #dc3545; }
   .btn-delete:hover { background: #dc3545; color:#fff; }
@@ -166,7 +186,7 @@
                 <i class="bi bi-clipboard"></i>
               </button>
               <button class="btn btn-sm btn-light" data-bs-toggle="tooltip" title="Lihat Peta"
-                      onclick="window.open('https://www.google.com/maps/search/'+encodeURIComponent('{{ $a->alamat_lengkap }}'), '_blank')">
+                      onclick="window.open('https://www.google.com/maps/search/'+encodeURIComponent('{{ $a->koordinat }}'), '_blank')">
                 <i class="bi bi-map"></i>
               </button>
             </div>
@@ -180,6 +200,7 @@
             <div class="detail-line"><span><strong>RT/RW</strong></span><span>{{ $a->rt }}/{{ $a->rw }}</span></div>
             <div class="detail-line"><span><strong>Kode Pos</strong></span><span>{{ $a->kode_pos }}</span></div>
             <div class="detail-line"><span><strong>Detail</strong></span><span>{{ Str::limit($a->alamat_lengkap, 50) }}</span></div>
+            <div class="detail-line"><span><strong>Koordinat</strong></span><span>{{ $a->koordinat }}</span></div>
           </div>
 
           <div class="card-footer">

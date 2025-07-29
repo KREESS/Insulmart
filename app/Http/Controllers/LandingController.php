@@ -10,7 +10,10 @@ class LandingController extends Controller
 {
     public function index()
     {
-        $produks = Produk::with(['gambars', 'varians'])->get();
+        $produks = Produk::with(['gambars', 'varians'])
+            ->orderBy('created_at', 'asc')
+            ->take(9)
+            ->get();
         return view('welcome', compact('produks'));
     }
 

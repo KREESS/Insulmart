@@ -139,6 +139,12 @@
         <textarea name="alamat_lengkap" class="form-control" rows="3" required></textarea>
       </div>
 
+      {{-- Koordinat --}}
+      <div class="mb-4 fade-up">
+        <label class="form-label text-maroon">Koordinat (Latitude,Longitude) *</label>
+        <input type="text" name="koordinat" class="form-control" placeholder="-6.2,106.8" required>
+      </div>
+
       <div class="d-flex justify-content-between fade-up">
         <a href="{{ route('alamat.index') }}" class="btn btn-cancel">Batal</a>
         <button type="submit" class="btn btn-maroon">Simpan Alamat</button>

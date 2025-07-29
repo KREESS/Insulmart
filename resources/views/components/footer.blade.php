@@ -5,7 +5,7 @@
         <div class="footer-column fade-up">
             <h3 class="footer-title">Insulmart</h3>
             <p>
-                JL. RAYA TARUMAJAYA NO. 11 RT 001 RW 029 DUSUN III DESA SETIA ASIH<br>
+                JL. RAYA TARUMAJAYA NO. 13 RT 001 RW 029 DUSUN III DESA SETIA ASIH<br>
                 Kec. Tarumajaya, Kab. Bekasi 17215
             </p>
             <h4>Jam Operasional</h4>

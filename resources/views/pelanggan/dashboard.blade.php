@@ -297,7 +297,7 @@ nav.scrolled {
   });
 </script>
 
+    @include('components.back-to-top')
     @include('components.footer')
-
 </body>
 </html>

@@ -48,10 +48,12 @@ class AlamatController extends Controller
             'rw'             => 'required|digits_between:1,5',
             'kode_pos'       => 'required|string|max:10',
             'alamat_lengkap' => 'required|string|max:500',
+            'koordinat'      => ['required', 'regex:/^-?\d{1,3}(\.\d+)?,\s*-?\d{1,3}(\.\d+)?$/'],
         ]);
 
         $data['is_default'] = false;
         $data['user_id'] = Auth::id();
+
         AlamatPengguna::create($data);
 
         return redirect()->route('alamat.index')
@@ -102,15 +104,15 @@ class AlamatController extends Controller
             abort(403, 'Anda tidak memiliki izin untuk memperbarui alamat ini.');
         }
 
-        // Validasi hanya field yang boleh diubah
+        // Validasi
         $data = $request->validate([
             'rt'             => 'required|digits_between:1,5',
             'rw'             => 'required|digits_between:1,5',
             'kode_pos'       => 'required|string|max:10',
             'alamat_lengkap' => 'required|string|max:500',
+            'koordinat'      => ['required', 'regex:/^-?\d{1,3}(\.\d+)?,\s*-?\d{1,3}(\.\d+)?$/'],
         ]);
 
-        // Update hanya field di $data
         $alamat->update($data);
 
         return redirect()

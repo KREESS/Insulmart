@@ -227,6 +227,7 @@
             </section>
 
             @include('live-chat')
+            @include('components.back-to-top')
         </div>
 
     @push('scripts')
@@ -454,5 +455,9 @@
 
         });
     </script>
+
+
+
+
 
 @endsection

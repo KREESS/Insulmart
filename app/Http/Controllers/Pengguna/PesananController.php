@@ -91,13 +91,17 @@ class PesananController extends Controller
 
     public function store(Request $request)
     {
+        $user = Auth::user();
+        // ❗ Cek nomor telepon dulu
+        if (empty($user->nomor_telepon)) {
+            return back()->withErrors(['Sebelum melanjutkan checkout, silakan lengkapi nomor telepon Anda di profil.']);
+        }
         $request->validate([
             'selected_items'     => 'required|array',
             'metode_pembayaran'  => 'required|in:termin_1x_lunas,termin_2x,termin_3x',
             'catatan'            => 'nullable|string|max:500',
         ]);
 
-        $user = Auth::user();
         // 1) Ambil alamat default
         $alamat = $user->alamatPenggunas()->where('is_default', true)->first();
         if (! $alamat) {
