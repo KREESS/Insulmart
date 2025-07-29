@@ -81,7 +81,11 @@ class ProdukController extends Controller
 
     public function show(Produk $produk)
     {
-        return view('admin.detail-produk', compact('produk'));
+        $varians = \App\Models\VarianProduk::where('produk_id', $produk->id)
+            ->orderBy('tipe')
+            ->paginate(10);
+
+        return view('admin.detail-produk', compact('produk', 'varians'));
     }
 
     public function edit($id)

@@ -492,8 +492,7 @@
           <span class="info-icon icon-maroon"><i class="bi bi-table"></i></span>
           <div>
             <div class="info-stat-title">Total Pesanan</div>
-            <div class="info-stat-value">{{ \App\Models\Pemesanan::count() }}</div>
-            <div class="mini-chart"></div>
+            <div class="info-stat-value">{{ \App\Models\Pemesanan::where('status_pemesanan', '!=', 'selesai')->count() }}</div>
           </div>
         </div>
       </div>
@@ -508,7 +507,6 @@
                   ->sum('total_harga'), 0,',','.'
               ) }}
             </div>
-            <div class="mini-chart"></div>
           </div>
         </div>
       </div>

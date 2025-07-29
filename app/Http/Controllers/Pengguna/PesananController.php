@@ -146,6 +146,13 @@ class PesananController extends Controller
                     'harga_satuan'     => $it->price,
                     'subtotal'         => $it->quantity * $it->price,
                 ]);
+                // 2. Kurangi stok varian_produk (auto locking row for safety)
+                $varian = $it->varianProduk()->lockForUpdate()->first(); // lock row untuk concurrency
+                if ($varian->stok < $it->quantity) {
+                    // Batalin transaksi jika stok kurang (should never happen, tapi safety)
+                    throw new \Exception("Stok produk {$varian->tipe} tidak cukup.");
+                }
+                $varian->decrement('stok', $it->quantity);
             }
 
             // 7) Siapkan termin berdasarkan metode

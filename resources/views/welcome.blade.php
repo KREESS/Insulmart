@@ -182,7 +182,6 @@
                     </div>
                     <p>"Kebutuhan insulasi buat event hall selalu saya percayakan ke Insulmart. Servisnya cepat, barangnya top!"</p>
                     </div>
-
                 </div>
             </section>
 

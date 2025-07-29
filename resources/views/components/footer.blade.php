@@ -57,9 +57,12 @@
             <div class="social-icons">
                 <a href="https://facebook.com/PTTaliRejeki" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Facebook"></a>
                 <a href="https://instagram.com/PTTaliRejeki" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram"></a>
-                <a href="https://wa.me/6281382523722" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp"></a>
-                <a href="mailto:insulmart@gmail.com"><img src="https://cdn-icons-png.flaticon.com/512/561/561127.png" alt="Email"></a>
-                <a href="https://youtube.com/@PTTaliRejeki" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" alt="YouTube"></a>
+                <a href="https://wa.me/6281382523722" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/3670/3670051.png" alt="WhatsApp"></a>
+                <a href="mailto:insulmartindonesia@gmail.com"><img src="https://cdn-icons-png.flaticon.com/512/732/732200.png" alt="Email"></a>
+                <a href="https://www.youtube.com/@pttalirejeki1408" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" alt="YouTube"></a>
+                <a href="https://www.tiktok.com/@pt.tali.rejeki" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/4782/4782345.png" alt="Tiktok"></a>
+                <a href="https://www.tokopedia.com/talirejeki" target="_blank"><img src="https://cdn.brandfetch.io/idoruRsDhk/theme/dark/symbol.svg?c=1bxid64Mup7aczewSAYMX&t=1668515567929" alt="Tokopedia"></a>
+                <a href="https://shopee.co.id/pttalirejeki" target="_blank"><img src="https://img.icons8.com/color/48/shopee.png" alt="Shopee"></a>
             </div>
 
             <h4 style="margin-top: 20px;">Lokasi Kami</h4>

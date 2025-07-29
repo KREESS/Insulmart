@@ -416,7 +416,7 @@
                     <a href="/admin/produk/tambah" class="quick-link"><span class="emoji">➕</span> Tambah Produk</a>
                     <a href="#" class="quick-link"><span class="emoji">📑</span> Lihat Semua Pesanan</a>
                     <a href="/admin/pengguna" class="quick-link"><span class="emoji">👤</span> Data Pelanggan</a>
-                    <a href="#" class="quick-link"><span class="emoji">⚙️</span> Pengaturan</a>
+                    {{-- <a href="#" class="quick-link"><span class="emoji">⚙️</span> Pengaturan</a> --}}
                 </div>
 
                 {{-- DUMMY CHART --}}

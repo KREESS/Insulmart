@@ -104,6 +104,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/admin/produk/{id}/edit', [ProdukController::class, 'edit'])->name('produk.edit');
         Route::put('/admin/produk/{id}', [ProdukController::class, 'update'])->name('produk.update');
         Route::delete('/admin/produk/gambar/{id}', [ProdukController::class, 'destroyGambar'])->name('produk.gambar.destroy');
+        Route::get('/admin/produk/{produk}/ajax-varians', [ProdukController::class, 'ajaxVarians'])->name('produk.ajax-varians');
+
         // ============ BATAS =============
 
 

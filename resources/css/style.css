@@ -578,6 +578,64 @@ nav.scrolled {
   }
 }
 
+@media (max-width: 768px) {
+    .section-title {
+        font-size: 1.15rem;
+        margin-bottom: 1.2rem;
+        margin-left: 6px;
+    }
+    .produk-scroll-wrapper {
+        gap: 0.7rem;
+        padding-left: 2px;
+        padding-right: 2px;
+    }
+    .produk-card {
+        min-width: 162px;
+        max-width: 164px;
+        padding: 0.5rem 0.55rem;
+        border-radius: 10px;
+    }
+    .produk-nama {
+        font-size: 0.93rem;
+        margin-bottom: 0.35rem;
+    }
+    .produk-deskripsi {
+        font-size: 0.84rem;
+        min-height: 18px;
+    }
+    .produk-img-wrapper {
+        aspect-ratio: 1/1;
+        border-radius: 7px;
+        margin-bottom: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .produk-scroll-wrapper {
+        gap: 0.5rem;
+        padding-left: 0;
+        padding-right: 0;
+    }
+    .produk-card {
+        min-width: 127px;
+        max-width: 128px;
+        padding: 0.33rem 0.33rem;
+        border-radius: 7px;
+    }
+    .produk-nama {
+        font-size: 0.82rem;
+        margin-bottom: 0.23rem;
+    }
+    .produk-deskripsi {
+        font-size: 0.73rem;
+        min-height: 7px;
+    }
+    .section-title {
+        font-size: 1rem;
+        margin-left: 3px;
+    }
+}
+
 /* === Form Kontak === */
 .contact-section form {
     display: flex;
@@ -1017,6 +1075,9 @@ footer ul {
         gap: 15px;
     }
 }
+
+
+
 
 /* Animasi muncul dari bawah */
 .fade-up {

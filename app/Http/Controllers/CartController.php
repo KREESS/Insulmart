@@ -92,6 +92,20 @@ class CartController extends Controller
         ]);
 
         $cartItem = CartItem::findOrFail($cartItemId);
+
+        // Ambil stok varian terkait
+        $varian = \App\Models\VarianProduk::find($cartItem->varian_produk_id);
+        if (!$varian) {
+            return response()->json(['success' => false, 'message' => 'Varian produk tidak ditemukan.'], 404);
+        }
+
+        if ($request->quantity > $varian->stok) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Stok tidak mencukupi! Stok tersedia hanya ' . $varian->stok . ' pcs.'
+            ], 422);
+        }
+
         $cartItem->update([
             'quantity' => $request->quantity,
             'subtotal' => $cartItem->price * $request->quantity,

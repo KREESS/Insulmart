@@ -47,34 +47,31 @@
     box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
   }
 
-.produk-img-wrapper {
-  background-color: #fff;
-  height: 200px;
-  border-bottom: 1px solid #eee;
-  overflow: hidden;
-  position: relative;
-}
+  .produk-img-wrapper {
+    background-color: #fff;
+    height: 200px;
+    border-bottom: 1px solid #eee;
+    overflow: hidden;
+    position: relative;
+  }
 
-.carousel-inner,
-.carousel-item {
-  height: 100%;
-  width: 100%;
-}
+  .carousel-inner,
+  .carousel-item {
+    height: 100%;
+    width: 100%;
+  }
 
-.carousel-item > div {
-  height: 100%;
-  width: 100%;
-}
+  .carousel-item > div {
+    height: 100%;
+    width: 100%;
+  }
 
-.produk-img {
-  max-height: 100%;
-  max-width: 100%;
-  object-fit: contain;
-  display: block;
-}
-
-
-
+  .produk-img {
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+    display: block;
+  }
 </style>
 
 <main class="main-content p-4 bg-light" id="mainContent">
@@ -144,7 +141,7 @@
         <div class="card-body">
           <h5 class="card-title text-merah">{{ $produk->nama_produk }}</h5>
           <p class="text-muted mb-1"><i class="bi bi-tag me-1"></i>{{ ucfirst($produk->jenis_produk) }}</p>
-          <p class="small text-secondary">{{ \Illuminate\Support\Str::limit($produk->deskripsi, 80) }}</p>
+          <p class="small text-secondary">{{ Str::limit(strip_tags($produk->deskripsi), 80) }}</p>
 
           @php
               $hargaMin = $produk->varians->min('harga');
@@ -193,31 +190,31 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-  const buttons = document.querySelectorAll('.btn-delete-produk');
-  const formDelete = document.getElementById('form-delete-produk');
+  document.addEventListener('DOMContentLoaded', function () {
+    const buttons = document.querySelectorAll('.btn-delete-produk');
+    const formDelete = document.getElementById('form-delete-produk');
 
-  buttons.forEach(button => {
-    button.addEventListener('click', function () {
-      const id = this.getAttribute('data-id');
-      Swal.fire({
-        title: 'Yakin ingin menghapus produk ini?',
-        text: "Data yang dihapus tidak dapat dikembalikan.",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#6c757d',
-        confirmButtonText: 'Ya, hapus!',
-        cancelButtonText: 'Batal'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          formDelete.setAttribute('action', `/admin/produk/${id}`);
-          formDelete.submit();
-        }
+    buttons.forEach(button => {
+      button.addEventListener('click', function () {
+        const id = this.getAttribute('data-id');
+        Swal.fire({
+          title: 'Yakin ingin menghapus produk ini?',
+          text: "Data yang dihapus tidak dapat dikembalikan.",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#d33',
+          cancelButtonColor: '#6c757d',
+          confirmButtonText: 'Ya, hapus!',
+          cancelButtonText: 'Batal'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            formDelete.setAttribute('action', `/admin/produk/${id}`);
+            formDelete.submit();
+          }
+        });
       });
     });
   });
-});
 </script>
 
 @endsection

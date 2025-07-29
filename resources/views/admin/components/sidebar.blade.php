@@ -29,11 +29,11 @@
         <i class="bi-chat-left-text me-2"></i>Layanan Chat
       </a>
     </li>
-    <li class="nav-item mb-2">
+    {{-- <li class="nav-item mb-2">
       <a href="#" class="nav-link text-white">
         <i class="bi bi-gear-fill me-2"></i>Pengaturan
       </a>
-    </li>
+    </li> --}}
     <li class="nav-item mt-3">
       <form method="POST" action="{{ route('logout') }}">
         @csrf

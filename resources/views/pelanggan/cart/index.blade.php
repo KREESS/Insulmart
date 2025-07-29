@@ -230,9 +230,15 @@
                                     <td class="fw-semibold text-maroon text-truncate">{{ $item->varianProduk->tipe }}</td>
                                     <td class="text-center">
                                         <div class="d-flex justify-content-center align-items-center gap-1">
-                                            <button type="button" class="btn btn-light btn-sm btn-qty" data-item-id="{{ $item->id }}" data-action="decrease">–</button>
-                                            <input type="number" min="1" value="{{ $item->quantity }}" class="quantity-input" data-item-id="{{ $item->id }}">
-                                            <button type="button" class="btn btn-light btn-sm btn-qty" data-item-id="{{ $item->id }}" data-action="increase">+</button>
+                                            <button type="button" class="btn btn-light btn-sm btn-qty"
+                                                data-item-id="{{ $item->id }}" data-action="decrease"
+                                                data-stok="{{ $item->varianProduk->stok }}">–</button>
+                                            <input type="number" min="1" max="{{ $item->varianProduk->stok }}"
+                                                value="{{ $item->quantity }}" class="quantity-input"
+                                                data-item-id="{{ $item->id }}" data-stok="{{ $item->varianProduk->stok }}">
+                                            <button type="button" class="btn btn-light btn-sm btn-qty"
+                                                data-item-id="{{ $item->id }}" data-action="increase"
+                                                data-stok="{{ $item->varianProduk->stok }}">+</button>
                                         </div>
                                     </td>
                                     <td class="text-end">Rp{{ number_format($item->price, 0, ',', '.') }}</td>
@@ -274,37 +280,41 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        // Semua script di-wrap ke DOMContentLoaded
         document.addEventListener('DOMContentLoaded', () => {
             axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-            // Utility untuk parse dan format Rupiah
+            // Util Rupiah
             const parseRp = text => parseInt(text.replace(/[Rp\.]/g, '')) || 0;
             const formatRp = num => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+            // Helper ambil semua checkbox .select-item
+            const getItemCheckboxes = () => document.querySelectorAll('.select-item');
+            const selectAllBox = document.getElementById('select-all');
 
             // Load/save checkbox state ke localStorage
             const loadSelections = () => {
                 const stored = JSON.parse(localStorage.getItem('cart_selected'));
-                const checks = Array.from(document.querySelectorAll('.select-item'));
+                const checks = Array.from(getItemCheckboxes());
                 if (!stored || stored.length === 0) {
                     checks.forEach(c => c.checked = true);
                 } else {
                     checks.forEach(c => c.checked = stored.includes(c.dataset.itemId));
                 }
-                document.getElementById('select-all').checked = checks.every(c => c.checked);
+                // select-all juga ikut
+                selectAllBox.checked = checks.length && checks.every(c => c.checked);
             };
             const saveSelections = () => {
-                const sel = Array.from(document.querySelectorAll('.select-item'))
+                const sel = Array.from(getItemCheckboxes())
                     .filter(c => c.checked)
                     .map(c => c.dataset.itemId);
                 localStorage.setItem('cart_selected', JSON.stringify(sel));
             };
 
-            // Update total dan input tersembunyi
+            // Update total dan hidden input
             const recalcTotal = () => {
                 let total = 0;
                 const selected = [];
-                document.querySelectorAll('.select-item').forEach(chk => {
+                getItemCheckboxes().forEach(chk => {
                     if (chk.checked) {
                         const row = document.querySelector(`tr[data-item-id="${chk.dataset.itemId}"]`);
                         total += parseRp(row.querySelector('.subtotal-cell').textContent);
@@ -321,9 +331,12 @@
                 });
                 document.getElementById('btn-checkout').disabled = selected.length === 0;
                 saveSelections();
+                // update select-all state juga!
+                const all = getItemCheckboxes();
+                selectAllBox.checked = all.length && Array.from(all).every(cb => cb.checked);
             };
 
-            // Update cart via AJAX
+            // Update cart via AJAX + update subtotal/total
             const updateCart = async (id, qty, input) => {
                 try {
                     input.disabled = true;
@@ -332,7 +345,14 @@
                         const row = document.querySelector(`tr[data-item-id="${id}"]`);
                         row.querySelector('.subtotal-cell').textContent = `Rp${data.newSubtotal}`;
                         recalcTotal();
-                    } else throw new Error('Update gagal');
+                    } else {
+                        Swal.fire({
+                            title: 'Error',
+                            text: data.message || 'Gagal update quantity',
+                            icon: 'error',
+                            confirmButtonColor: '#800000'
+                        });
+                    }
                 } catch (err) {
                     Swal.fire({
                         title: 'Error',
@@ -345,42 +365,82 @@
                 }
             };
 
-            // Disable tombol minus jika qty <= 1
-            const setMinusState = (id, qty) => {
-                const btn = document.querySelector(`.btn-qty[data-item-id="${id}"][data-action="decrease"]`);
-                if (btn) btn.disabled = qty <= 1;
+            // Disable tombol minus jika qty <= 1, plus jika qty >= stok
+            const setMinusState = (id, qty, stok) => {
+                const btnMin = document.querySelector(`.btn-qty[data-item-id="${id}"][data-action="decrease"]`);
+                const btnPlus = document.querySelector(`.btn-qty[data-item-id="${id}"][data-action="increase"]`);
+                if (btnMin) btnMin.disabled = qty <= 1;
+                if (btnPlus) btnPlus.disabled = qty >= stok;
             };
 
-            // Event quantity
+            // BTN QTY click (plus/minus)
             document.querySelectorAll('.btn-qty').forEach(btn => {
                 btn.addEventListener('click', () => {
                     const id = btn.dataset.itemId;
                     const action = btn.dataset.action;
                     const input = document.querySelector(`.quantity-input[data-item-id="${id}"]`);
+                    const stok = parseInt(input.dataset.stok);
                     let qty = parseInt(input.value) || 1;
-                    qty = action === 'increase' ? qty + 1 : Math.max(1, qty - 1);
+
+                    if (action === 'increase') {
+                        if (qty < stok) {
+                            qty += 1;
+                        } else {
+                            qty = stok;
+                            Swal.fire({
+                                title: 'Maksimum Stok!',
+                                text: 'Jumlah tidak boleh melebihi stok tersedia (' + stok + ' pcs).',
+                                icon: 'warning',
+                                confirmButtonColor: '#800000'
+                            });
+                        }
+                    } else {
+                        qty = Math.max(1, qty - 1);
+                    }
+
                     input.value = qty;
-                    setMinusState(id, qty);
+                    setMinusState(id, qty, stok);
                     updateCart(id, qty, input);
                 });
             });
+
+            // INPUT QTY manual
             document.querySelectorAll('.quantity-input').forEach(input => {
                 input.addEventListener('change', () => {
                     const id = input.dataset.itemId;
+                    const stok = parseInt(input.dataset.stok);
                     let qty = parseInt(input.value) || 1;
-                    input.value = qty;
-                    setMinusState(id, qty);
+
+                    if (qty > stok) {
+                        qty = stok;
+                        input.value = qty;
+                        Swal.fire({
+                            title: 'Maksimum Stok!',
+                            text: 'Jumlah tidak boleh melebihi stok tersedia (' + stok + ' pcs).',
+                            icon: 'warning',
+                            confirmButtonColor: '#800000'
+                        });
+                    } else if (qty < 1) {
+                        qty = 1;
+                        input.value = qty;
+                    }
+
+                    setMinusState(id, qty, stok);
                     updateCart(id, qty, input);
                 });
-                setMinusState(input.dataset.itemId, parseInt(input.value));
+                setMinusState(input.dataset.itemId, parseInt(input.value), parseInt(input.dataset.stok));
             });
 
-            // Select all
-            document.getElementById('select-all').addEventListener('change', e => {
-                document.querySelectorAll('.select-item').forEach(c => c.checked = e.target.checked);
+            // SELECT ALL
+            selectAllBox.addEventListener('change', function() {
+                getItemCheckboxes().forEach(cb => cb.checked = this.checked);
                 recalcTotal();
             });
-            document.querySelectorAll('.select-item').forEach(c => c.addEventListener('change', recalcTotal));
+
+            // Per item select/unselect
+            getItemCheckboxes().forEach(cb => cb.addEventListener('change', function() {
+                recalcTotal();
+            }));
 
             // Konfirmasi hapus item
             document.querySelectorAll('.form-remove-item').forEach(form => {
@@ -399,7 +459,7 @@
                 });
             });
 
-            // Inisialisasi
+            // INIT on page load
             loadSelections();
             recalcTotal();
         });
