@@ -8,6 +8,7 @@ use App\Models\Produk;
 use App\Models\VarianProduk;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\ArmadaPengiriman;
 
 class CartController extends Controller
 {
@@ -17,6 +18,7 @@ class CartController extends Controller
         $user = Auth::user();
         $cart = $user->cart;
         $produks = Produk::with(['gambars', 'varians'])->get();
+        $armadas = ArmadaPengiriman::orderBy('kapasitas_pack')->get();
 
         // ambil alamat default lewat relasi
         $defaultAddress = $user
@@ -24,7 +26,7 @@ class CartController extends Controller
             ->where('is_default', true)
             ->first();
 
-        return view('pelanggan.cart.index', compact('cart', 'produks', 'defaultAddress'));
+        return view('pelanggan.cart.index', compact('cart', 'produks', 'defaultAddress', 'armadas'));
     }
 
     public function store(Request $request)

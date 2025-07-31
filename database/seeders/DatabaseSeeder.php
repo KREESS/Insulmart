@@ -13,6 +13,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call([]);
+        // Jalankan seeder armada pengiriman
+        $this->call([
+            ArmadaPengirimanSeeder::class,
+        ]);
     }
 }

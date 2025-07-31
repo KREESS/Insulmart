@@ -82,6 +82,7 @@
         font-size: .96em;
         letter-spacing: .5px;
     }
+
     .badge-light-maroon {
         background: var(--maroon-light);
         color: var(--maroon-dark);
@@ -91,6 +92,7 @@
         padding: 0.45em 1.05em;
         font-size: .96em;
     }
+
     .badge-danger {
         background: #e74c3c;
         color: #fff;
@@ -195,23 +197,25 @@
     .navbar { padding: 0 24px; }
 
     @media (max-width: 991.98px) { /* tablet ke bawah */
-    .main-content {
-        margin-top: 3rem !important;
-        padding-top: 1.1rem !important;
+        .main-content {
+            margin-top: 3rem !important;
+            padding-top: 1.1rem !important;
+        }
     }
-}
-@media (max-width: 767.98px) { /* HP */
-    .main-content {
-        margin-top: 7rem !important;
-        padding-top: 0.85rem !important;
+
+    @media (max-width: 767.98px) { /* HP */
+        .main-content {
+            margin-top: 7rem !important;
+            padding-top: 0.85rem !important;
+        }
     }
-}
-@media (max-width: 575.98px) { /* HP kecil */
-    .main-content {
-        margin-top: 8rem !important;
-        padding-top: 0.5rem !important;
+
+    @media (max-width: 575.98px) { /* HP kecil */
+        .main-content {
+            margin-top: 8rem !important;
+            padding-top: 0.5rem !important;
+        }
     }
-}
 </style>
 
 <div class="container-fluid content-wrapper main-content">
@@ -266,7 +270,6 @@
             <div class="card card-accent shadow-sm h-100">
                 <div class="card-body">
                     <h6 class="text-uppercase text-muted mb-2" style="font-weight: 600;">Alamat Pengiriman</h6>
-                    <h5 class="mb-2">{{ $pesanan->alamatPengiriman->label ?? '–' }}</h5>
                     <div class="mb-1 small">
                         {{ $pesanan->alamatPengiriman->alamat_lengkap }}
                     </div>
@@ -275,6 +278,9 @@
                     </div>
                     <div class="small">
                         {{ $pesanan->alamatPengiriman->province }} {{ $pesanan->alamatPengiriman->kode_pos }}
+                    </div>
+                    <div class="mb-1 small">
+                        {{ $pesanan->alamatPengiriman->koordinat }}
                     </div>
                 </div>
             </div>
@@ -352,7 +358,6 @@
                                 <td style="width:64px;">
                                     @php
                                         $produk = $item->varianProduk->produk ?? null;
-                                        // ambil gambar pertama dari relasi gambars
                                         $gambar = ($produk && $produk->gambars && $produk->gambars->count())
                                             ? $produk->gambars->first()
                                             : null;
@@ -378,6 +383,84 @@
                         </tr>
                     </tfoot>
                 </table>
+            </div>
+        </div>
+    </div>
+
+    {{-- Rincian Pengiriman --}}
+    <div class="card shadow-sm mb-4 animate-up">
+        <div class="card-body pb-3">
+            <h5 class="section-title">
+                <i class="bi bi-truck me-2 text-maroon"></i>Rincian Pengiriman
+            </h5>
+            <div class="mb-2">
+                <span class="fw-semibold text-maroon">Alamat Tujuan:</span><br>
+                <span class="text-muted">
+                    {{ $pesanan->alamatPengiriman->alamat_lengkap ?? '-' }},
+                    {{ $pesanan->alamatPengiriman->district ?? '' }},
+                    {{ $pesanan->alamatPengiriman->regency ?? '' }},
+                    {{ $pesanan->alamatPengiriman->province ?? '' }}
+                    ({{ $pesanan->alamatPengiriman->kode_pos ?? '' }})
+                    {{ $pesanan->alamatPengiriman->koordinat ?? '' }}
+                </span>
+            </div>
+            <div class="table-responsive table-wrapper mb-2">
+                <table class="table align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th>Armada</th>
+                            <th>Kapasitas</th>
+                            <th>Jumlah Mobil</th>
+                            <th>Tarif per km</th>
+                            <th>Jarak (km)</th>
+                            <th>Subtotal Ongkir</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @php $totalOngkir = 0; @endphp
+                        @foreach($pesanan->armadaPemesanan as $armada)
+                            @php $totalOngkir += $armada->subtotal_ongkir; @endphp
+                            <tr>
+                                <td>{{ $armada->armada->nama ?? '-' }}</td>
+                                <td>{{ $armada->armada->kapasitas_pack ?? '-' }} bal</td>
+                                <td>{{ $armada->jumlah_mobil }}</td>
+                                <td>Rp{{ number_format($armada->armada->tarif_per_km ?? 0, 0, ',', '.') }}/km</td>
+                                <td>{{ number_format($armada->jarak_km, 2) }}</td>
+                                <td>Rp{{ number_format($armada->subtotal_ongkir, 0, ',', '.') }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="5" class="text-end fw-bold">Total Ongkir</td>
+                            <td class="text-end fw-bold">Rp{{ number_format($totalOngkir, 0, ',', '.') }}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            @if($totalOngkir == 0)
+                <div class="alert alert-success p-2 mb-0 d-inline-block">
+                    <i class="bi bi-truck"></i> <b>Gratis Ongkir</b> (jarak ≤ 25 km)
+                </div>
+            @endif
+        </div>
+    </div>
+
+    {{-- Total Biaya Keseluruhan --}}
+    <div class="card shadow-sm mb-5 animate-up">
+        <div class="card-body py-3">
+            <div class="d-flex justify-content-between align-items-center">
+                <h5 class="mb-0 fw-bold text-maroon">
+                    <i class="bi bi-receipt-cutoff me-2"></i>
+                    Total Biaya Keseluruhan
+                </h5>
+                @php $totalKeseluruhan = $subtotal + $totalOngkir; @endphp
+                <span class="fs-4 fw-bold text-dark">Rp {{ number_format($totalKeseluruhan, 0, ',', '.') }}</span>
+            </div>
+            <div class="mt-2 text-end">
+                <span class="text-muted small">
+                    (Total produk: Rp {{ number_format($subtotal,0,',','.') }} + Ongkir: Rp {{ number_format($totalOngkir,0,',','.') }})
+                </span>
             </div>
         </div>
     </div>

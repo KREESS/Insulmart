@@ -13,6 +13,7 @@ use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Pemesanan;
 use App\Models\DetailPemesanan;
+use App\Models\ArmadaPemesanan;
 use App\Models\PembayaranPemesanan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -100,6 +101,8 @@ class PesananController extends Controller
             'selected_items'     => 'required|array',
             'metode_pembayaran'  => 'required|in:termin_1x_lunas,termin_2x,termin_3x',
             'catatan'            => 'nullable|string|max:500',
+            'armada_list'        => 'required|string',
+            'jarak_km'           => 'required|numeric'
         ]);
 
         // 1) Ambil alamat default
@@ -114,34 +117,71 @@ class PesananController extends Controller
             ->firstOrFail();
 
         $items = $cart->items->whereIn('id', $request->selected_items);
+
         if ($items->isEmpty()) {
             return back()->withErrors(['Tidak ada item yang dipilih.']);
         }
 
-        // 3) Hitung total
-        $total = $items->sum(fn($it) => $it->quantity * $it->price);
+        // 3) Hitung total produk
+        $totalProduk = $items->sum(fn($it) => $it->quantity * $it->price);
+
+        // 4) Ambil armada breakdown dan hitung total ongkir
+        $armadaList = json_decode($request->armada_list, true);
+        if (!is_array($armadaList)) {
+            return back()->withErrors(['armada_list' => 'Perhitungan armada tidak ditemukan. Silakan ulangi proses.']);
+        }
+
+        $jarakKm = floatval($request->jarak_km);
+
+        // LOGIC ONGKIR: Jika <= 25 km maka gratis, else hitung total ongkir
+        if ($jarakKm <= 25) {
+            $totalOngkir = 0;
+            // pastikan semua subtotal_ongkir juga 0 di DB untuk konsistensi report
+            foreach ($armadaList as &$armada) {
+                $armada['subtotal'] = 0;
+            }
+            unset($armada); // break reference
+        } else {
+            $totalOngkir = collect($armadaList)->sum('subtotal');
+        }
+
+        // 5) Total grand = produk + ongkir
+        $grandTotal = $totalProduk + $totalOngkir;
 
         DB::beginTransaction();
         try {
-            // 4) Generate kode unik
+            // 6) Generate kode unik
             do {
                 $kode = 'INS' . now()->format('YmdHis') . Str::upper(Str::random(4));
             } while (Pemesanan::where('kode_pemesanan', $kode)->exists());
 
-            // 5) Simpan header pemesanan
+            // 7) Simpan header pemesanan (rekomendasi tambah kolom total_produk & total_ongkir di db)
             $pemesanan = Pemesanan::create([
                 'kode_pemesanan'        => $kode,
                 'pengguna_id'           => $user->id,
                 'alamat_pengiriman_id'  => $alamat->id,
                 'tanggal_pemesanan'     => now(),
-                'total_harga'           => $total,
+                'total_harga'           => $grandTotal,      // ← PAKAI GRAND TOTAL
+                'total_produk'          => $totalProduk,     // ← Optional, untuk pelaporan detail
+                'total_ongkir'          => $totalOngkir,     // ← Optional, untuk pelaporan detail
                 'metode_pembayaran'     => $request->metode_pembayaran,
                 'catatan_pelanggan'     => $request->catatan,
                 'status_po'             => 'menunggu',
                 'status_pemesanan'      => 'menunggu',
             ]);
 
-            // 6) Simpan detail baris
+            // 8) Armada breakdown
+            foreach ($armadaList as $armada) {
+                ArmadaPemesanan::create([
+                    'pemesanan_id' => $pemesanan->id,
+                    'armada_id' => $armada['armada_id'],
+                    'jumlah_mobil' => $armada['jumlah'],
+                    'jarak_km' => $jarakKm,
+                    'subtotal_ongkir' => $armada['subtotal'], // Sudah dipastikan 0 jika <=25km
+                ]);
+            }
+
+            // 9) Simpan detail baris
             foreach ($items as $it) {
                 DetailPemesanan::create([
                     'pemesanan_id'     => $pemesanan->id,
@@ -159,21 +199,20 @@ class PesananController extends Controller
                 $varian->decrement('stok', $it->quantity);
             }
 
-            // 7) Siapkan termin berdasarkan metode
+            // 10) Siapkan termin berdasarkan metode
             $terms = match ($request->metode_pembayaran) {
                 'termin_2x' => 2,
                 'termin_3x' => 3,
                 default     => 1,
             };
 
-            // Hitung besar termin 1 => 50% total. Sisanya dibagi rata ke termin lain.
+            // 11) Hitung besar termin dari grandTotal
             if ($terms > 1) {
-                $firstAmount = round($total * 0.5, 2);
-                $remaining   = $total - $firstAmount;
+                $firstAmount = round($grandTotal * 0.5, 2);
+                $remaining   = $grandTotal - $firstAmount;
                 $restAmount  = round($remaining / ($terms - 1), 2);
             } else {
-                // Untuk termin tunggal: penuh
-                $firstAmount = $total;
+                $firstAmount = $grandTotal;
             }
 
             for ($i = 1; $i <= $terms; $i++) {
@@ -184,7 +223,7 @@ class PesananController extends Controller
                 } else {
                     // Pastikan jumlahnya tepat dengan memperhitungkan pembulatan
                     $sumPrev = $firstAmount + ($restAmount * ($terms - 2));
-                    $amount  = $total - $sumPrev;
+                    $amount  = $grandTotal - $sumPrev;
                 }
 
                 PembayaranPemesanan::create([
@@ -196,7 +235,7 @@ class PesananController extends Controller
                 ]);
             }
 
-            // 8) Hapus cart items
+            // 12) Hapus cart items
             CartItem::whereIn('id', $request->selected_items)->delete();
 
             DB::commit();
@@ -319,7 +358,9 @@ class PesananController extends Controller
         // Ownership check!
         $pesanan = Pemesanan::with([
             'detailPemesanan.varianProduk.produk.gambars',
-            'pembayaran'
+            'pembayaran',
+            'armadaPemesanan.armada',
+            'alamatPengiriman'
         ])
             ->where('id', $pemesanan_id)
             ->where('pengguna_id', $user->id)
@@ -329,7 +370,6 @@ class PesananController extends Controller
 
         return view('pelanggan.pemesanan.detail', compact('pesanan', 'produks'));
     }
-
 
     public function invoice(Request $request, $id)
     {

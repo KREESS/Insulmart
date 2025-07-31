@@ -109,7 +109,7 @@
                     </span>
                 </div>
                 <div style="margin-top:7px; font-size:15px; color:#800000; font-weight:700;">
-                    PT. TALI REJEKI
+                    CV. INSULMART INDONESIA
                 </div>
                 <div style="font-size:12px; color:#a12c2c;">
                     JL. RAYA TARUMAJAYA NO. 11 RT 001 RW 029 DUSUN III DESA SETIA ASIH<br>
@@ -173,6 +173,42 @@
             <tr>
                 <td colspan="4" class="right total">TOTAL</td>
                 <td class="right total">Rp{{ number_format($total,0,',','.') }}</td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <!-- ... (table produk di atas) -->
+
+    <div class="section-title">Rincian Ongkos Kirim</div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Armada</th>
+                <th>Kapasitas</th>
+                <th class="right">Jumlah Mobil</th>
+                <th class="right">Tarif per km</th>
+                <th class="right">Jarak (km)</th>
+                <th class="right">Subtotal Ongkir</th>
+            </tr>
+        </thead>
+        <tbody>
+            @php $totalOngkir = 0; @endphp
+            @foreach($pemesanan->armadaPemesanan as $armada)
+                @php $totalOngkir += $armada->subtotal_ongkir; @endphp
+                <tr>
+                    <td>{{ $armada->armada->nama ?? '-' }}</td>
+                    <td>{{ $armada->armada->kapasitas_pack ?? '-' }} bal</td>
+                    <td class="right">{{ $armada->jumlah_mobil }}</td>
+                    <td class="right">Rp{{ number_format($armada->armada->tarif_per_km ?? 0, 0, ',', '.') }}/km</td>
+                    <td class="right">{{ number_format($armada->jarak_km, 2) }}</td>
+                    <td class="right">Rp{{ number_format($armada->subtotal_ongkir, 0, ',', '.') }}</td>
+                </tr>
+            @endforeach
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="5" class="right total">Total Ongkir</td>
+                <td class="right total">Rp{{ number_format($totalOngkir, 0, ',', '.') }}</td>
             </tr>
         </tfoot>
     </table>
