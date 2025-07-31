@@ -17,6 +17,7 @@ use App\Models\Pemesanan;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\AdminPesananController;
+use App\Http\Controllers\Admin\AdminArmadaController;
 // ======== BATAS =========
 
 
@@ -138,6 +139,16 @@ Route::middleware(['auth'])->group(function () {
         Route::patch('/admin/pembayaran/{id}/update-status-verif', [AdminPesananController::class, 'updateStatusVerif'])->name('admin.pembayaran.updateStatusVerif');
         Route::patch('/admin/pembayaran/{id}/update-catatan', [AdminPesananController::class, 'updateCatatan'])->name('admin.pembayaran.updateCatatan');
         Route::get('/admin/pesanan/export', [AdminPesananController::class, 'export'])->name('admin.pesanan.export');
+        // ============ BATAS =============
+
+
+        // =========== Armada Pengiriman ===========
+        Route::get('/admin/armada', [AdminArmadaController::class, 'index'])->name('admin.armada-pengiriman');
+        Route::get('/admin/armada/create', [AdminArmadaController::class, 'create'])->name('admin.armada-create');
+        Route::post('/admin/armada/store', [AdminArmadaController::class, 'store'])->name('admin.armada-store');
+        Route::get('/admin/armada/{id}/edit', [AdminArmadaController::class, 'edit'])->name('admin.armada-edit');
+        Route::put('/admin/armada/{id}/update', [AdminArmadaController::class, 'update'])->name('admin.armada-update');
+        Route::delete('/admin/armada/{id}/delete', [AdminArmadaController::class, 'destroy'])->name('admin.armada-delete');
         // ============ BATAS =============
     });
 

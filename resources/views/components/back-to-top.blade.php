@@ -20,30 +20,38 @@
   box-shadow: 0 8px 20px rgba(0,0,0,0.2);
   cursor: pointer;
   transition: all 0.3s ease;
-  display: flex;
   align-items: center;
   gap: 6px;
 }
-
 #backToTop:hover {
   background: var(--maroon-hover, #660000);
   transform: translateY(-3px);
 }
 </style>
 
-@push('scripts')
-<script>
-  window.onscroll = function () {
-    const btn = document.getElementById("backToTop");
-    if (window.scrollY > 300) {
-      btn.style.display = "flex";
-    } else {
-      btn.style.display = "none";
-    }
-  };
+  @push('scripts')
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const backToTopBtn = document.getElementById("backToTop");
 
-  function scrollToTop() {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-</script>
+      const toggleBackToTop = () => {
+        if (window.scrollY > 300) {
+          backToTopBtn.style.display = "flex";
+        } else {
+          backToTopBtn.style.display = "none";
+        }
+      };
+
+      // Check saat pertama kali halaman diload
+      toggleBackToTop();
+
+      // Check saat scroll
+      window.addEventListener("scroll", toggleBackToTop);
+
+      // Scroll smooth ke atas saat tombol diklik
+      window.scrollToTop = function () {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      };
+    });
+  </script>
 @endpush

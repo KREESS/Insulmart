@@ -14,9 +14,22 @@
         <i class="bi bi-box-fill me-2"></i>Produk
       </a>
     </li>
+<li class="nav-item mb-2">
+  <a href="/admin/pesanan" class="nav-link text-white d-flex justify-content-between align-items-center {{ request()->is('admin/pesanan*') ? 'active fw-bold' : '' }}">
+    <div>
+      <i class="bi bi-cart-fill me-2"></i>Pesanan
+    </div>
+    @if(isset($waitingOrdersCount) && $waitingOrdersCount > 0)
+      <span class="badge bg-warning text-dark fw-bold rounded-pill px-2 py-1 small">
+        {{ $waitingOrdersCount }}
+      </span>
+    @endif
+  </a>
+</li>
+
     <li class="nav-item mb-2">
-      <a href="/admin/pesanan" class="nav-link text-white {{ request()->is('admin/pesanan*') ? 'active fw-bold' : '' }}"">
-        <i class="bi bi-cart-fill me-2"></i>Pesanan
+      <a href="/admin/armada" class="nav-link text-white {{ request()->is('admin/armada*') ? 'active fw-bold' : '' }}">
+        <i class="bi bi-truck me-2"></i>Armada Pengiriman
       </a>
     </li>
     <li class="nav-item mb-2">
@@ -25,8 +38,15 @@
       </a>
     </li>
     <li class="nav-item mb-2">
-      <a href="/admin/chat" class="nav-link text-white {{ request()->is('admin/chat*') ? 'active fw-bold' : '' }}">
-        <i class="bi-chat-left-text me-2"></i>Layanan Chat
+      <a href="/admin/chat" class="nav-link text-white d-flex justify-content-between align-items-center {{ request()->is('admin/chat*') ? 'active fw-bold' : '' }}">
+        <div>
+          <i class="bi bi-chat-left-text me-2"></i>Layanan Chat
+        </div>
+        @if(isset($unreadCount) && $unreadCount > 0)
+          <span class="badge bg-warning text-dark fw-bold rounded-pill px-2 py-1 small">
+            {{ $unreadCount }}
+          </span>
+        @endif
       </a>
     </li>
     {{-- <li class="nav-item mb-2">

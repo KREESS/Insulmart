@@ -569,17 +569,66 @@
         const armadas = @json($armadas);
         const jarakKoreksi = {{ $jarakKoreksi ?? 'null' }};
 
+        // Format dan parsing Rupiah
         function parseRp(txt) {
             return parseInt((txt || '').replace(/[^0-9]/g, '')) || 0;
         }
 
         function updateGrandTotalFromDom() {
-            var ongkir = parseRp(document.getElementById('ongkir-display').textContent);
-            var totalProduk = parseRp(document.getElementById('cart-total').textContent);
-            var grandTotal = ongkir + totalProduk;
+            const ongkir = parseRp(document.getElementById('ongkir-display').textContent);
+            const totalProduk = parseRp(document.getElementById('cart-total').textContent);
+            const grandTotal = ongkir + totalProduk;
             document.getElementById('grand-total').textContent = 'Rp' + grandTotal.toLocaleString('id-ID');
         }
 
+        // Generate semua kombinasi yang mungkin untuk mencukupi total bal
+        function generateAllValidCombos(armadas, totalBal, maxUnit = 6) {
+            let results = [];
+
+            function backtrack(index, currentCombo) {
+                if (index === armadas.length) {
+                    const totalMuatan = currentCombo.reduce((sum, a, i) => sum + (a * armadas[i].kapasitas_pack), 0);
+                    if (totalMuatan >= totalBal) {
+                        const combo = currentCombo.map((jumlah, i) => ({
+                            ...armadas[i],
+                            jumlah
+                        })).filter(a => a.jumlah > 0);
+                        results.push(combo);
+                    }
+                    return;
+                }
+
+                for (let j = 0; j <= maxUnit; j++) {
+                    currentCombo.push(j);
+                    backtrack(index + 1, currentCombo);
+                    currentCombo.pop();
+                }
+            }
+
+            backtrack(0, []);
+            return results;
+        }
+
+        // Dapatkan kombinasi ongkir termurah
+        function getTermurahCombo(totalBal) {
+            const allCombos = generateAllValidCombos(armadas, totalBal, 5);
+            let minHarga = Infinity;
+            let bestCombo = null;
+
+            for (const combo of allCombos) {
+                const ongkir = combo.reduce((sum, a) =>
+                    sum + (a.tarif_per_km * a.jumlah * jarakKoreksi), 0);
+
+                if (ongkir < minHarga) {
+                    minHarga = ongkir;
+                    bestCombo = combo;
+                }
+            }
+
+            return bestCombo;
+        }
+
+        // Hitung pengiriman
         function calculateShipping() {
             const checkboxes = document.querySelectorAll('.select-item:checked');
             let totalBal = 0;
@@ -589,55 +638,20 @@
                 totalBal += qty;
             });
 
-            // Urutkan armada dari kapasitas terbesar ke terkecil
-            const sortedArmadas = [...armadas].sort((a, b) => b.kapasitas_pack - a.kapasitas_pack);
-
-            let armadaUsed = [];
-            let sisaBal = totalBal;
-            let tidakCukup = false;
-
-            if (totalBal > 0 && jarakKoreksi !== null) {
-                for (let i = 0; i < sortedArmadas.length; i++) {
-                    const armada = sortedArmadas[i];
-                    // Jika ini armada terakhir (terkecil), dan masih ada sisa, pake semua sisa
-                    if (i === sortedArmadas.length - 1 && sisaBal > 0) {
-                        let count = Math.ceil(sisaBal / armada.kapasitas_pack);
-                        if (count > 0) {
-                            armadaUsed.push({
-                                id: armada.id,
-                                nama: armada.nama,
-                                kapasitas: armada.kapasitas_pack,
-                                jumlah: count,
-                                tarif: armada.tarif_per_km
-                            });
-                            sisaBal -= count * armada.kapasitas_pack;
-                        }
-                        break;
-                    }
-                    // Kalau masih sisa >= kapasitas armada sekarang, pakai sebanyak mungkin armada ini
-                    let count = Math.floor(sisaBal / armada.kapasitas_pack);
-                    if (count > 0) {
-                        armadaUsed.push({
-                            id: armada.id,
-                            nama: armada.nama,
-                            kapasitas: armada.kapasitas_pack,
-                            jumlah: count,
-                            tarif: armada.tarif_per_km
-                        });
-                        sisaBal -= count * armada.kapasitas_pack;
-                    }
-                }
-                // Jika masih sisa di luar logika (gak ada armada sama sekali), berarti gak cukup
-                tidakCukup = (sisaBal > 0);
-            }
-
-            // Prepare DOM refs
             const ongkirDisplay = document.getElementById('ongkir-display');
             const ongkirDetail = document.getElementById('ongkir-detail');
             const inputOngkir = document.getElementById('input-ongkir');
             const inputArmada = document.getElementById('input-armada');
 
-            if (tidakCukup || totalBal === 0 || armadaUsed.length === 0) {
+            let armadaUsed = [];
+
+            if (jarakKoreksi !== null && totalBal > 0) {
+                armadaUsed = getTermurahCombo(totalBal) || [];
+            }
+
+            const tidakCukup = (armadaUsed.length === 0);
+
+            if (tidakCukup || totalBal === 0) {
                 ongkirDisplay.textContent = 'Rp0';
                 ongkirDetail.innerHTML = totalBal === 0
                     ? ''
@@ -648,13 +662,13 @@
                 }
             } else {
                 if (jarakKoreksi <= 25) {
-                    ongkirDisplay.textContent = `Rp0`;
+                    ongkirDisplay.textContent = 'Rp0';
                     ongkirDetail.innerHTML = `
                         <span class="text-success fw-semibold">Gratis Ongkir</span>
                         <div class="small text-muted mb-2">(Jarak ${jarakKoreksi.toFixed(2)} km ≤ 25 km)</div>
                         <div><strong>Armada:</strong></div>
                         <ul style="padding-left:18px; margin-bottom:4px">
-                            ${armadaUsed.map(a => `<li>${a.jumlah} × ${a.nama} <span class="text-muted">(kapasitas ${a.kapasitas} bal)</span></li>`).join('')}
+                            ${armadaUsed.map(a => `<li>${a.jumlah} × ${a.nama} <span class="text-muted">(kapasitas ${a.kapasitas_pack} bal)</span></li>`).join('')}
                         </ul>
                         <div class="mt-1">Estimasi muatan: <strong>${totalBal} bal</strong></div>
                     `;
@@ -663,21 +677,22 @@
                         inputArmada.value = armadaUsed.map(a => `${a.jumlah}×${a.nama}`).join(', ');
                     }
                 } else {
-                    let ongkir = Math.ceil(armadaUsed.reduce((sum, a) => sum + (a.tarif * jarakKoreksi * a.jumlah), 0));
-                    let armadaTableRows = armadaUsed.map(a => `
-                        <tr>
-                            <td>${a.jumlah} × ${a.nama} <span class="text-muted">(kapasitas ${a.kapasitas} bal)</span></td>
-                            <td>Rp${a.tarif.toLocaleString('id-ID')}/km</td>
-                            <td>Subtotal: <strong>Rp${Math.ceil(a.tarif * jarakKoreksi * a.jumlah).toLocaleString('id-ID')}</strong></td>
-                        </tr>
-                    `).join('');
-                    ongkirDisplay.textContent = `Rp${ongkir.toLocaleString('id-ID')}`;
+                    const ongkir = Math.ceil(armadaUsed.reduce((sum, a) =>
+                        sum + (a.tarif_per_km * jarakKoreksi * a.jumlah), 0));
+
+                    const armadaTableRows = armadaUsed.map(a =>
+                        `<tr>
+                            <td>${a.jumlah} × ${a.nama} <span class="text-muted">(kapasitas ${a.kapasitas_pack} bal)</span></td>
+                            <td>Rp${a.tarif_per_km.toLocaleString('id-ID')}/km</td>
+                            <td>Subtotal: <strong>Rp${Math.ceil(a.tarif_per_km * jarakKoreksi * a.jumlah).toLocaleString('id-ID')}</strong></td>
+                        </tr>`
+                    ).join('');
+
+                    ongkirDisplay.textContent = 'Rp' + ongkir.toLocaleString('id-ID');
                     ongkirDetail.innerHTML = `
                         <div><strong>Armada:</strong></div>
                         <table style="width:100%; font-size:0.96em; margin-bottom:4px;">
-                            <tbody>
-                                ${armadaTableRows}
-                            </tbody>
+                            <tbody>${armadaTableRows}</tbody>
                         </table>
                         <div class="mt-1">Total muatan: <strong>${totalBal} bal</strong></div>
                         <div class="mt-1">Total ongkir: <strong>Rp${ongkir.toLocaleString('id-ID')}</strong> <span class="text-muted">±(${jarakKoreksi.toFixed(2)} km)</span></div>
@@ -689,44 +704,39 @@
                 }
             }
 
-            // Update armada_list (hidden input), format: [{armada_id, nama, kapasitas, jumlah, tarif, subtotal}]
-            if (document.getElementById('armada_list')) {
-                const arr = armadaUsed.map(a => ({
-                    armada_id: a.id,
-                    nama: a.nama,
-                    kapasitas: a.kapasitas,
-                    jumlah: a.jumlah,
-                    tarif: a.tarif,
-                    subtotal: Math.ceil(a.tarif * jarakKoreksi * a.jumlah)
-                }));
-                document.getElementById('armada_list').value = JSON.stringify(arr);
-            }
-
-            // Estimasi muatan di luar ongkir-detail juga (kalau mau)
             const estMuatan = document.getElementById('est-muatan');
             if (estMuatan) {
                 estMuatan.textContent = `${totalBal} bal`;
             }
 
+            if (document.getElementById('armada_list')) {
+                const arr = armadaUsed.map(a => ({
+                    armada_id: a.id,
+                    nama: a.nama,
+                    kapasitas: a.kapasitas_pack,
+                    jumlah: a.jumlah,
+                    tarif: a.tarif_per_km,
+                    subtotal: Math.ceil(a.tarif_per_km * jarakKoreksi * a.jumlah)
+                }));
+                document.getElementById('armada_list').value = JSON.stringify(arr);
+            }
+
             updateGrandTotalFromDom();
         }
 
-        // Untuk select all box biar semua trigger change (jika ada)
-        const selectAllBox = document.getElementById('select-all');
-        if (selectAllBox) {
-            selectAllBox.addEventListener('change', function() {
-                document.querySelectorAll('.select-item').forEach(cb => {
-                    cb.checked = selectAllBox.checked;
-                });
-                calculateShipping();
+        // Event listeners
+        document.getElementById('select-all')?.addEventListener('change', function () {
+            document.querySelectorAll('.select-item').forEach(cb => {
+                cb.checked = this.checked;
             });
-        }
+            calculateShipping();
+        });
 
         document.querySelectorAll('.select-item, .quantity-input').forEach(el => {
             el.addEventListener('change', calculateShipping);
         });
 
-        window.addEventListener('DOMContentLoaded', function() {
+        window.addEventListener('DOMContentLoaded', () => {
             calculateShipping();
             updateGrandTotalFromDom();
         });

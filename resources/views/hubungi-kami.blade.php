@@ -166,7 +166,7 @@
               </div>
             </div>
 
-            <form class="mt-2">
+            {{-- <form class="mt-2">
               <div class="mb-3">
                 <input type="text" class="form-control" placeholder="Nama Anda" required>
               </div>
@@ -179,7 +179,7 @@
               <button type="submit" class="btn btn-merah w-100 fw-semibold">
                 <i class="bi bi-send-fill me-2"></i> Kirim Pesan
               </button>
-            </form>
+            </form> --}}
           </div>
         </div>
 

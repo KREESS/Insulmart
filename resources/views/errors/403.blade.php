@@ -4,6 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <title>403 - Tidak Memiliki Akses</title>
+    <!-- ✅ Favicon (Logo Tab Browser) -->
+    <link rel="icon" href="{{ asset('assets/img/insulmart_new1.png') }}" type="image/png">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
         :root {
