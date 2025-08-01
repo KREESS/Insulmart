@@ -1,9 +1,9 @@
 @extends('components.layout-bootstrap')
 
-<head>
-    <title>@yield('title', 'Produk Insulasi | Insulmart')</title>
-    <!-- Tag lain seperti meta, link CSS, dll -->
-</head>
+  <head>
+      <title>@yield('title', 'Produk Insulasi | Insulmart')</title>
+      <!-- Tag lain seperti meta, link CSS, dll -->
+  </head>
 
 @section('content')
   <style>
@@ -109,7 +109,7 @@
                   <h5 class="card-title text-merah mb-2">{{ $product->nama_produk }}</h5>
 
                   <p class="card-text text-muted small flex-grow-1">
-                      {{ \Illuminate\Support\Str::limit($product->deskripsi, 80) }}
+                      {!! \Illuminate\Support\Str::limit(strip_tags($product->deskripsi), 80) !!}
                   </p>
 
                   @php
