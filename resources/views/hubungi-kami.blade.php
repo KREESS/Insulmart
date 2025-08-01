@@ -144,7 +144,7 @@
                 <div>
                   <div class="fw-semibold">Alamat</div>
                   <div class="text-muted small">
-                    Jl. Raya Tarumajaya No. 11, RT 001 RW 029, Dusun III, Desa Setia Asih, Kec. Tarumajaya, Kab. Bekasi 17215
+                    Jl. Raya Tarumajaya No. 13, RT 001 RW 029, Dusun III, Desa Setia Asih, Kec. Tarumajaya, Kab. Bekasi 17215
                   </div>
                 </div>
               </div>
@@ -161,7 +161,7 @@
                 <div class="info-icon"><i class="bi bi-envelope-fill fs-5"></i></div>
                 <div>
                   <div class="fw-semibold">Email</div>
-                  <div class="text-muted small">talirejeki@gmail.com</div>
+                  <div class="text-muted small">insulmartindonesia@gmail.com</div>
                 </div>
               </div>
             </div>

@@ -266,4 +266,6 @@
     document.getElementById('searchOrder').addEventListener('input', applyFilters);
     applyFilters();
     </script>
+
+    @include('components.back-to-top')
 @endsection
