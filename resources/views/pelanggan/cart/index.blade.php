@@ -373,6 +373,7 @@
                 @endif
             </div>
         </div>
+        @include('components.back-to-top')
     @endsection
 
     @push('scripts')

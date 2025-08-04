@@ -39,6 +39,9 @@
                 <li><strong>Edy Purwanto:</strong>
                     <a href="https://wa.me/6281514515990" target="_blank">0815 1451 5990</a>
                 </li>
+                <li><strong>Yoviena:</strong>
+                    <a href="https://wa.me/6281385231149" target="_blank">0813 8523 1149</a>
+                </li>
             </ul>
         </div>
 
