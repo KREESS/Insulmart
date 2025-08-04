@@ -790,7 +790,7 @@
               <dl class="row mb-0">
                 <dt class="col-sm-4">Pelanggan</dt>
                 <dd class="col-sm-8 d-flex align-items-center">
-                  <img src="{{ $o->pengguna->avatar_url ?? asset('images/default-avatar.png') }}" class="avatar-cust me-2" alt="user" width="38" height="38">
+                  <img src="{{ $o->pengguna->profile_photo_path ? asset('storage/'.$o->pengguna->profile_photo_path) : asset('images/default-avatar.png') }}" class="avatar-cust me-2" alt="user" width="38" height="38">
                   <span class="fw-bold">{{ $o->pengguna->name }}</span>
                 </dd>
                 <dt class="col-sm-4">Email</dt>
@@ -820,7 +820,7 @@
                 <dd class="col-sm-8">{{ $o->metode_pembayaran }}</dd>
                 <dt class="col-sm-4">Catatan Pel.</dt>
                 <dd class="col-sm-8 text-break">{{ $o->catatan_pelanggan ?: '-' }}</dd>
-                <dt class="col-sm-4">Status</dt>
+                <dt class="col-sm-4">Status Pemesanan</dt>
                 <dd class="col-sm-8">
                   <span id="detail-status-{{ $o->id }}" class="badge-status status-{{ $o->status_pemesanan }}">
                     {{ ucfirst($o->status_pemesanan) }}
@@ -887,14 +887,23 @@
                 <table class="table table-sm mb-0">
                   <thead>
                     <tr>
-                      <th>Produk</th><th>Varian</th><th>Qty</th>
+                      <th>Gambar Produk</th><th>Produk</th><th>Varian</th><th>Qty</th>
                       <th>Harga</th><th>Subtotal</th>
                     </tr>
                   </thead>
                   <tbody>
                   @foreach($o->detailPemesanan as $d)
                     <tr>
-                      <td>{{ $d->varianProduk->produk->nama }}</td>
+                      <td>
+                        @php
+                          $gambar = $d->varianProduk->produk->gambars->first();
+                        @endphp
+                        @if($gambar)
+                          <img src="{{ asset('storage/'.$gambar->path) }}" alt="Gambar {{ $d->varianProduk->produk->nama_produk }}" style="width:48px; height:48px; object-fit:cover; border-radius:7px;">
+                        @else
+                          <span style="color:#999; font-size:13px;">Tidak ada gambar</span>
+                        @endif
+                      </td>                      <td>{{ $d->varianProduk->produk->nama_produk }}</td>
                       <td>{{ $d->varianProduk->tipe }}</td>
                       <td>{{ $d->kuantitas }}</td>
                       <td>Rp {{ number_format($d->harga_satuan,0,',','.') }}</td>
@@ -930,27 +939,27 @@
                       <td>Rp {{ number_format($p->jumlah_dibayar,0,',','.') }}</td>
                       <td>{{ optional(\Carbon\Carbon::parse($p->tanggal_pembayaran))->format('d/m/Y H.i') }}</td>
                       <td>
-                        @if($p->bukti_transfer)
-                          <form class="form-inline update-status-verif-form" method="POST"
-                                action="{{ route('admin.pembayaran.updateStatusVerif', $p->id) }}">
-                            @csrf
-                            @method('PATCH')
-                            <select name="status_verifikasi"
-                              class="form-select form-select-sm status-verif-select fw-bold status-verif-{{ $p->status_verifikasi }}"
-                              style="min-width:110px; font-size:.96em; padding: 0.25em 0.75em;">
-                              @foreach(['diterima','menunggu','ditolak'] as $verif)
-                                <option value="{{ $verif }}" {{ $p->status_verifikasi == $verif ? 'selected' : '' }}>
-                                  {{ ucfirst($verif) }}
-                                </option>
-                              @endforeach
-                            </select>
-                          </form>
-                        @else
-                          <span class="badge status-verif-{{ $p->status_verifikasi }}"
-                              style="font-size:.93em; padding:.32em 1em; border-radius:1.1em; font-weight:700;">
-                            {{ ucfirst($p->status_verifikasi) }}
-                          </span>
-                        @endif
+                          @if($p->bukti_transfer)
+                            <form class="form-inline update-status-verif-form" method="POST"
+                                  action="{{ route('admin.pembayaran.updateStatusVerif', $p->id) }}">
+                              @csrf
+                              @method('PATCH')
+                              <select name="status_verifikasi"
+                                class="form-select form-select-sm status-verif-select fw-bold status-verif-{{ $p->status_verifikasi }}"
+                                style="min-width:110px; font-size:.96em; padding: 0.25em 0.75em;">
+                                @foreach(['diterima','menunggu','ditolak'] as $verif)
+                                  <option value="{{ $verif }}" {{ $p->status_verifikasi == $verif ? 'selected' : '' }}>
+                                    {{ ucfirst($verif) }}
+                                  </option>
+                                @endforeach
+                              </select>
+                            </form>
+                          @else
+                            <span class="badge bg-secondary"
+                                  style="font-size:.93em; padding:.32em 1em; border-radius:1.1em; font-weight:700;">
+                              Belum Bayar
+                            </span>
+                          @endif
                       </td>
                       <td>
                         @if($p->bukti_transfer)

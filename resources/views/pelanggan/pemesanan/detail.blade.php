@@ -262,6 +262,14 @@
                         <i class="bi bi-telephone-fill me-2"></i>
                         <span class="small">{{ $pesanan->pengguna->nomor_telepon ?? '-' }}</span>
                     </div>
+                    <div class="d-flex align-items-center mb-1">
+                        <i class="bi bi-building me-2"></i>
+                        <span class="small">{{ $pesanan->pengguna->perusahaan ?? '-' }}</span>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-credit-card-2-front-fill me-2"></i>
+                        <span class="small">{{ $pesanan->pengguna->npwp ?? '-' }}</span>
+                    </div>
                 </div>
             </div>
         </div>

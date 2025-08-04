@@ -11,8 +11,11 @@
             <h4>Jam Operasional</h4>
             <p>Senin - Jumat<br>Pukul 08.00 - 17.00 WIB</p>
             <p>
-                <strong>Telp:</strong><br>021-29470622<br>021-22889956<br>
-                <strong>Fax:</strong><br>021-29470622<br>
+                <strong>Telp:</strong><br>
+                <a href="tel:02129470622">021-29470622</a><br>
+                <a href="tel:02122889956">021-22889956</a><br>
+                <strong>Fax:</strong><br>
+                <a href="tel:02129470622">021-29470622</a><br>
                 <strong>Email:</strong><br>
                 <a href="mailto:insulmartindonesia@gmail.com">insulmartindonesia@gmail.com</a>
             </p>
