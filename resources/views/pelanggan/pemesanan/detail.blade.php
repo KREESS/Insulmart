@@ -325,7 +325,7 @@
                     </p>
                     <div class="mt-auto">
                         @if($pesanan->file_po)
-                            <a href="{{ asset('storage/'.$pesanan->file_po) }}" class="btn btn-maroon w-100 mb-2">
+                            <a href="{{ asset($pesanan->file_po) }}" class="btn btn-maroon w-100 mb-2">
                                 <i class="bi bi-download me-1"></i> Unduh PO
                             </a>
                         @else
@@ -371,7 +371,7 @@
                                             : null;
                                     @endphp
                                     @if($gambar)
-                                        <img src="{{ asset('storage/'.$gambar->path) }}" alt="Gambar Produk" class="img-thumbnail" style="max-width:56px; max-height:56px;">
+                                        <img src="{{ asset($gambar->path) }}" alt="Gambar Produk" class="img-thumbnail" style="max-width:56px; max-height:56px;">
                                     @else
                                         <span class="text-muted">-</span>
                                     @endif
@@ -528,7 +528,7 @@
                                 <td>{{ $bayar->catatan_admin ?? '-' }}</td>
                                 <td class="text-center">
                                     @if($bayar->bukti_transfer)
-                                        <a href="{{ asset('storage/'.$bayar->bukti_transfer) }}" target="_blank">
+                                        <a href="{{ asset($bayar->bukti_transfer) }}" target="_blank">
                                             <i class="bi bi-file-earmark-image-fill fs-4 text-maroon"></i>
                                         </a>
                                     @else

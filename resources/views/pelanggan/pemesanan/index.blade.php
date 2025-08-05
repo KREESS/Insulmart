@@ -200,8 +200,8 @@
                     <div class="mb-2 d-flex align-items-center small">
                     @php $img = $item->varianProduk->produk->gambars->first(); @endphp
                     @if($img)
-                        <img src="{{ asset('storage/'.$img->path) }}" alt=""
-                            class="me-2" style="width:40px; height:40px; object-fit:cover; border-radius:4px;">
+                        <img src="{{ asset($img->path) }}" alt="" class="me-2"
+                            style="width:40px; height:40px; object-fit:cover; border-radius:4px;">
                     @else
                         <span class="me-2" style="width:40px; height:40px; display:inline-block;
                             background:#f0f0f0; border-radius:4px;"></span>

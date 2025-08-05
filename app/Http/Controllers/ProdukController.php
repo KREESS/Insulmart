@@ -56,11 +56,22 @@ class ProdukController extends Controller
             'deskripsi'    => $request->deskripsi,
         ]);
 
-        // Simpan gambar-gambar ke tabel gambar_produks
         foreach ($request->file('gambar') as $image) {
-            $path = $image->store('produk', 'public');
+            // Generate nama unik
+            $filename = uniqid() . '.' . $image->getClientOriginalExtension();
+
+            // Pastikan folder ada
+            $destination = public_path('storage/produk');
+            if (!file_exists($destination)) {
+                mkdir($destination, 0775, true);
+            }
+
+            // Simpan ke public/storage/produk
+            $image->move($destination, $filename);
+
+            // Simpan path ke DB, cukup: storage/produk/namafile.jpg
             $produk->gambars()->create([
-                'path' => $path
+                'path' => 'storage/produk/' . $filename
             ]);
         }
 
@@ -113,38 +124,93 @@ class ProdukController extends Controller
 
         $produk = Produk::findOrFail($id);
 
+        // Update field utama produk
         $produk->update([
             'nama_produk' => $request->nama_produk,
             'jenis_produk' => $request->jenis_produk === 'lainnya' ? $request->jenis_produk_baru : $request->jenis_produk,
             'deskripsi' => $request->deskripsi,
         ]);
 
-        // Update varian
-        $produk->varians()->delete();
+        // =========================
+        // UPDATE VARIAN
+        // =========================
+
+        $oldVarianIds = $produk->varians->pluck('id')->toArray();
+        $formVarianIds = [];
+
         if ($request->has('varian')) {
             foreach ($request->varian as $v) {
-                $produk->varians()->create($v);
+                if (!empty($v['id'])) {
+                    // Update varian lama
+                    $produk->varians()->where('id', $v['id'])->update([
+                        'tipe' => $v['tipe'],
+                        'ukuran' => $v['ukuran'],
+                        'ketebalan' => $v['ketebalan'],
+                        'densitas' => $v['densitas'],
+                        'harga' => $v['harga'],
+                        'stok' => $v['stok'],
+                    ]);
+                    $formVarianIds[] = $v['id'];
+                } else {
+                    // Tambah varian baru
+                    $produk->varians()->create([
+                        'tipe' => $v['tipe'],
+                        'ukuran' => $v['ukuran'],
+                        'ketebalan' => $v['ketebalan'],
+                        'densitas' => $v['densitas'],
+                        'harga' => $v['harga'],
+                        'stok' => $v['stok'],
+                    ]);
+                }
             }
+            // Hapus varian lama yang tidak ada di form
+            $toDelete = array_diff($oldVarianIds, $formVarianIds);
+            if (!empty($toDelete)) {
+                $produk->varians()->whereIn('id', $toDelete)->delete();
+            }
+        } else {
+            // Jika user hapus semua varian di form
+            $produk->varians()->delete();
         }
 
-        // Simpan gambar baru jika diupload
+        // =========================
+        // TAMBAH GAMBAR BARU SAJA (Gambar lama tetap, hapus manual jika mau)
+        // =========================
         if ($request->hasFile('gambar')) {
             foreach ($request->file('gambar') as $file) {
-                $path = $file->store('produk', 'public');
-                $produk->gambars()->create(['path' => $path]);
+                $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+
+                // Pastikan folder tujuan ada
+                $destination = public_path('storage/produk');
+                if (!file_exists($destination)) {
+                    mkdir($destination, 0775, true);
+                }
+
+                // Simpan file ke public/storage/produk
+                $file->move($destination, $filename);
+
+                // Simpan path ke DB, contoh: storage/produk/namafile.jpg
+                $produk->gambars()->create([
+                    'path' => 'produk/' . $filename
+                ]);
             }
         }
 
         return redirect()->route('produk.index')->with('success', 'Produk berhasil diperbarui!');
     }
 
+
     public function destroyGambar($id)
     {
         $gambar = ProdukGambar::findOrFail($id);
-        if (Storage::exists('public/' . $gambar->path)) {
-            Storage::delete('public/' . $gambar->path);
+
+        // Path lengkap ke file di public
+        $filePath = public_path($gambar->path);
+
+        if (file_exists($filePath)) {
+            unlink($filePath); // Hapus file
         }
-        $gambar->delete();
+        $gambar->delete(); // Hapus data di DB
 
         return back()->with('success', 'Gambar berhasil dihapus.');
     }

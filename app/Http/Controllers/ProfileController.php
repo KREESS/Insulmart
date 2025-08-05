@@ -27,10 +27,20 @@ class ProfileController extends Controller
             'profile_photo' => 'nullable|image|max:2048',
         ]);
 
-        // Handle photo upload
         if ($request->hasFile('profile_photo')) {
-            $photo = $request->file('profile_photo')->store('profile-photos', 'public');
-            $user->profile_photo_path = $photo;
+            $file = $request->file('profile_photo');
+            $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+
+            // Simpan ke public/storage/profile-photos
+            $destination = public_path('storage/profile-photos');
+            if (!file_exists($destination)) {
+                mkdir($destination, 0775, true); // Buat folder jika belum ada
+            }
+            $file->move($destination, $filename);
+
+            // Simpan path di database
+            $user->profile_photo_path = 'storage/profile-photos/' . $filename;
+            $user->save();
         }
 
         // Update basic info

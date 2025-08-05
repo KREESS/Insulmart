@@ -110,75 +110,82 @@
 </div>
 <br>
 
-{{-- Script Preview --}}
 <script>
-document.getElementById('gambar').addEventListener('change', function (e) {
-  const preview = document.getElementById('preview');
-  preview.innerHTML = ''; // Reset preview
-  const files = e.target.files;
+  document.addEventListener('DOMContentLoaded', function () {
+      const inputGambar = document.getElementById('gambar');
+      const preview = document.getElementById('preview');
 
-  Array.from(files).forEach(file => {
-    if (!file.type.match('image.*')) return;
+      if (!inputGambar || !preview) return;
 
-    const reader = new FileReader();
-    reader.onload = function (e) {
-      const img = document.createElement('img');
-      img.src = e.target.result;
-      img.classList.add('img-thumbnail');
-      img.style.maxWidth = '150px';
-      img.style.maxHeight = '150px';
-      img.style.objectFit = 'cover';
-      preview.appendChild(img);
-    };
-    reader.readAsDataURL(file);
+      inputGambar.addEventListener('change', function (e) {
+          preview.innerHTML = ''; // Kosongkan preview
+          const files = e.target.files;
+          if (!files.length) return;
+
+          Array.from(files).forEach(file => {
+              if (!file.type.startsWith('image/')) return;
+
+              const reader = new FileReader();
+              reader.onload = function (ev) {
+                  const img = document.createElement('img');
+                  img.src = ev.target.result;
+                  img.className = 'img-thumbnail m-1';
+                  img.style.maxWidth = '120px';
+                  img.style.maxHeight = '120px';
+                  img.style.objectFit = 'cover';
+                  preview.appendChild(img);
+              };
+              reader.readAsDataURL(file);
+          });
+      });
   });
-});
-</script>
-
-<script>
-function toggleInputJenis(value) {
-  const inputBaru = document.getElementById('inputJenisBaru');
-  if (value === 'lainnya') {
-    inputBaru.classList.remove('d-none');
-    inputBaru.required = true;
-  } else {
-    inputBaru.classList.add('d-none');
-    inputBaru.required = false;
-  }
-}
 </script>
 
 
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-  let varianIndex = 1;
-  const wrapper = document.getElementById('varian-wrapper');
-  const addBtn = document.getElementById('btn-add-varian');
-
-  addBtn.addEventListener('click', () => {
-    const row = document.createElement('div');
-    row.classList.add('row', 'g-2', 'mb-3', 'varian-row');
-    row.innerHTML = `
-      <div class="col-md-2"><input type="text" name="varian[${varianIndex}][tipe]" class="form-control" placeholder="Tipe (misal: S60/25)" required></div>
-      <div class="col-md-2"><input type="text" name="varian[${varianIndex}][ukuran]" class="form-control" placeholder="Ukuran" required></div>
-      <div class="col-md-2"><input type="number" name="varian[${varianIndex}][ketebalan]" class="form-control" placeholder="Ketebalan" required></div>
-      <div class="col-md-2"><input type="number" name="varian[${varianIndex}][densitas]" class="form-control" placeholder="Densitas" required></div>
-      <div class="col-md-3"><input type="number" name="varian[${varianIndex}][harga]" class="form-control" placeholder="Harga (Rp)" required></div>
-      <div class="col-md-2"><input type="number" name="varian[${varianIndex}][stok]" class="form-control" placeholder="Stok" required></div>
-      <div class="col-md-1 text-end">
-        <button type="button" class="btn btn-danger btn-sm btn-remove-varian"><i class="bi bi-x"></i></button>
-      </div>
-    `;
-    wrapper.appendChild(row);
-    varianIndex++;
-  });
-
-  wrapper.addEventListener('click', function (e) {
-    if (e.target.closest('.btn-remove-varian')) {
-      e.target.closest('.varian-row').remove();
+  function toggleInputJenis(value) {
+    const inputBaru = document.getElementById('inputJenisBaru');
+    if (value === 'lainnya') {
+      inputBaru.classList.remove('d-none');
+      inputBaru.required = true;
+    } else {
+      inputBaru.classList.add('d-none');
+      inputBaru.required = false;
     }
+  }
+</script>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    let varianIndex = 1;
+    const wrapper = document.getElementById('varian-wrapper');
+    const addBtn = document.getElementById('btn-add-varian');
+
+    addBtn.addEventListener('click', () => {
+      const row = document.createElement('div');
+      row.classList.add('row', 'g-2', 'mb-3', 'varian-row');
+      row.innerHTML = `
+        <div class="col-md-2"><input type="text" name="varian[${varianIndex}][tipe]" class="form-control" placeholder="Tipe (misal: S60/25)" required></div>
+        <div class="col-md-2"><input type="text" name="varian[${varianIndex}][ukuran]" class="form-control" placeholder="Ukuran" required></div>
+        <div class="col-md-2"><input type="number" name="varian[${varianIndex}][ketebalan]" class="form-control" placeholder="Ketebalan" required></div>
+        <div class="col-md-2"><input type="number" name="varian[${varianIndex}][densitas]" class="form-control" placeholder="Densitas" required></div>
+        <div class="col-md-3"><input type="number" name="varian[${varianIndex}][harga]" class="form-control" placeholder="Harga (Rp)" required></div>
+        <div class="col-md-2"><input type="number" name="varian[${varianIndex}][stok]" class="form-control" placeholder="Stok" required></div>
+        <div class="col-md-1 text-end">
+          <button type="button" class="btn btn-danger btn-sm btn-remove-varian"><i class="bi bi-x"></i></button>
+        </div>
+      `;
+      wrapper.appendChild(row);
+      varianIndex++;
+    });
+
+    wrapper.addEventListener('click', function (e) {
+      if (e.target.closest('.btn-remove-varian')) {
+        e.target.closest('.varian-row').remove();
+      }
+    });
   });
-});
 </script>
 
 @endsection

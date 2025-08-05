@@ -123,7 +123,7 @@
               @foreach ($produk->gambars as $index => $gambar)
                 <div class="carousel-item {{ $index == 0 ? 'active' : '' }} h-100">
                   <div class="d-flex justify-content-center align-items-center h-100 w-100">
-                    <img src="{{ asset('storage/' . $gambar->path) }}"
+                    <img src="{{ $gambar->path && file_exists(public_path($gambar->path)) ? asset($gambar->path) : asset('images/no-image.png') }}"
                         class="produk-img d-block"
                         alt="Gambar {{ $index + 1 }}">
                   </div>
@@ -133,7 +133,7 @@
           </div>
         @else
           <div class="produk-img-wrapper">
-            <img src="{{ asset('storage/' . $produk->gambar) }}" class="produk-img" alt="{{ $produk->nama_produk }}">
+            <img src="{{ asset($produk->gambar) }}" class="produk-img" alt="{{ $produk->nama_produk }}">
           </div>
         @endif
 

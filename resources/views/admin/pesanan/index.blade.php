@@ -710,11 +710,6 @@
                     title="Lihat Detail">
                 <i class="bi bi-eye"></i>
                 </a>
-                <a class="btn btn-sm gradient-action-btn"
-                    href="{{ route('admin.pesanan.edit', $o->id) }}"
-                    title="Edit Pesanan">
-                <i class="bi bi-pencil-square"></i>
-                </a>
             </td>
 
             </tr>
@@ -790,7 +785,15 @@
               <dl class="row mb-0">
                 <dt class="col-sm-4">Pelanggan</dt>
                 <dd class="col-sm-8 d-flex align-items-center">
-                  <img src="{{ $o->pengguna->profile_photo_path ? asset('storage/'.$o->pengguna->profile_photo_path) : asset('images/default-avatar.png') }}" class="avatar-cust me-2" alt="user" width="38" height="38">
+                  <img 
+                      src="{{ $o->pengguna->profile_photo_path && file_exists(public_path($o->pengguna->profile_photo_path)) 
+                          ? asset($o->pengguna->profile_photo_path) 
+                          : asset('images/default-avatar.png') }}" 
+                      width="38"
+                      height="38"
+                      class="avatar-cust me-2 rounded-circle"
+                      style="object-fit: cover;"
+                      alt="user">
                   <span class="fw-bold">{{ $o->pengguna->name }}</span>
                 </dd>
                 <dt class="col-sm-4">Email</dt>
@@ -839,7 +842,7 @@
                 <dt class="col-5">File PO</dt>
                 <dd class="col-7">
                   @if(!empty($o->file_po))
-                    <a href="{{ asset('storage/' . $o->file_po) }}"
+                    <a href="{{ asset($o->file_po) }}"
                        class="btn btn-sm gradient-download-btn"
                        target="_blank">
                        <i class="bi bi-file-earmark-arrow-down"></i> Lihat / Download
@@ -899,7 +902,7 @@
                           $gambar = $d->varianProduk->produk->gambars->first();
                         @endphp
                         @if($gambar)
-                          <img src="{{ asset('storage/'.$gambar->path) }}" alt="Gambar {{ $d->varianProduk->produk->nama_produk }}" style="width:48px; height:48px; object-fit:cover; border-radius:7px;">
+                          <img src="{{ asset($gambar->path) }}" alt="Gambar {{ $d->varianProduk->produk->nama_produk }}" style="width:48px; height:48px; object-fit:cover; border-radius:7px;">
                         @else
                           <span style="color:#999; font-size:13px;">Tidak ada gambar</span>
                         @endif
@@ -963,7 +966,7 @@
                       </td>
                       <td>
                         @if($p->bukti_transfer)
-                          <a href="{{ asset('storage/'.$p->bukti_transfer) }}" target="_blank"
+                          <a href="{{ asset($p->bukti_transfer) }}" target="_blank"
                             class="btn btn-sm gradient-bukti-btn">
                             <i class="bi bi-eye"></i> Lihat Bukti
                           </a>

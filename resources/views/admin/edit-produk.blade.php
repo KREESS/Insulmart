@@ -106,7 +106,9 @@
             @forelse ($produk->gambars as $gambar)
               <div class="col-md-3 mb-3">
                 <div class="gambar-wrapper">
-                  <img src="{{ asset('storage/' . $gambar->path) }}" alt="Gambar Produk" class="img-fluid rounded">
+                  <img src="{{ $gambar->path && file_exists(public_path($gambar->path)) ? asset($gambar->path) : asset('images/no-image.png') }}" 
+                      alt="Gambar Produk" 
+                      class="img-fluid rounded">
                   <button
                     type="button"
                     class="btn btn-danger btn-sm rounded-circle btn-delete-gambar"
@@ -138,6 +140,7 @@
           <div class="col-md-3"><input type="number" name="varian[{{ $i }}][harga]" class="form-control" value="{{ $varian->harga }}" required></div>
           <div class="col-md-2"><input type="number" name="varian[{{ $i }}][stok]" class="form-control" value="{{ $varian->stok }}" required></div>
           <div class="col-md-1 text-end"><button type="button" class="btn btn-danger btn-sm btn-remove-varian"><i class="bi bi-x"></i></button></div>
+                <input type="hidden" name="varian[{{$i}}][id]" value="{{ $varian->id }}">
         </div>
         @endforeach
       </div>

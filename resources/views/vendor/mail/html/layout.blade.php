@@ -97,14 +97,13 @@
 <body>
     <div class="email-wrapper">
         <div class="email-content">
-            
             {{-- Header --}}
             <div style="background-color: #8B0000; padding: 10px 0;">
                 <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
                     <tr>
                         <td align="center">
                             <a href="{{ config('app.url') }}" style="display: inline-block;">
-                                <img src="https://i.ibb.co/mCdNtvQh/insulmart-new-bg-new.png" alt="Insulmart Logo" style="height: 100px; display: block;">
+                                <img src="https://i.ibb.co.com/FqxcdxWS/insulmart-new-bg-new.png" alt="Insulmart Logo" style="height: 100px; display: block;">
                             </a>
                         </td>
                     </tr>

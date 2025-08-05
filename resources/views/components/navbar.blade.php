@@ -48,10 +48,16 @@
                     <button class="dropdown-toggle-button" type="button"
                             onclick="toggleDropdown()"
                             style="background: none; border: none; display: flex; align-items: center; cursor: pointer;">
-                        <img src="{{ auth()->user()->profile_photo_path ? asset('storage/' . auth()->user()->profile_photo_path) : asset('images/default-user.png') }}"
-                            alt="Foto Profil"
-                            class="profile-pic"
-                            style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1px solid #ccc; margin-right: 8px;">
+                            <img 
+                                src="{{ 
+                                    auth()->user()->profile_photo_path && file_exists(public_path(auth()->user()->profile_photo_path)) 
+                                        ? asset(auth()->user()->profile_photo_path) 
+                                        : asset('images/default-user.png') 
+                                }}"
+                                alt="Foto Profil"
+                                class="profile-pic"
+                                style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1px solid #ccc; margin-right: 8px;"
+                            >
                         <span style="color: white; font-weight: bold; display: flex; align-items: center; gap: 5px;">
                             {{ auth()->user()->name }}
                             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="white" viewBox="0 0 16 16">

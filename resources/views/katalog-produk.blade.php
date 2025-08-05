@@ -106,9 +106,7 @@
                     @foreach ($gambars as $index => $gambar)
                       <div class="carousel-item {{ $index == 0 ? 'active' : '' }} h-100">
                         <div class="d-flex justify-content-center align-items-center h-100">
-                          <img src="{{ asset('storage/' . $gambar->path) }}"
-                              class="produk-img"
-                              alt="{{ $nama }} {{ $index + 1 }}">
+                          <img src="{{ asset($gambar->path) }}" class="produk-img" alt="{{ $nama }} {{ $index + 1 }}">
                         </div>
                       </div>
                     @endforeach

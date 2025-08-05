@@ -86,7 +86,7 @@
                         <p class="mb-1"><strong>PO:</strong> {{ $pemesanan->nomor_po ?? '–' }}</p>
                         <p class="mb-2">
                             ✅ Sudah diunggah:
-                            <a href="{{ asset('storage/' . $pemesanan->file_po) }}" target="_blank" class="fw-bold text-decoration-underline text-maroon">Lihat PO</a>
+                            <a href="{{ asset($pemesanan->file_po) }}" target="_blank" class="fw-bold text-decoration-underline text-maroon">Lihat PO</a>
                         </p>
 
                         {{-- Preview kecil untuk gambar atau PDF --}}
@@ -98,9 +98,9 @@
 
                         <div class="mb-3">
                             @if($isImage)
-                                <img src="{{ asset('storage/' . $pemesanan->file_po) }}" alt="Preview PO" style="max-width: 150px; border-radius: 6px; border: 1px solid #ccc;">
+                                <img src="{{ asset($pemesanan->file_po) }}" alt="Preview PO" style="max-width: 150px; border-radius: 6px; border: 1px solid #ccc;">
                             @elseif($isPdf)
-                                <iframe src="{{ asset('storage/' . $pemesanan->file_po) }}" width="100%" height="180px" style="border: 1px solid #ccc; border-radius: 6px;"></iframe>
+                                <iframe src="{{ asset($pemesanan->file_po) }}" width="100%" height="180px" style="border: 1px solid #ccc; border-radius: 6px;"></iframe>
                             @endif
                         </div>
 
@@ -214,14 +214,14 @@
                                     @if($termin->bukti_transfer)
                                         <div class="mt-3 fade-up">
                                             <p class="mb-1"><strong>Bukti Transfer:</strong></p>
-                                            <a href="{{ asset('storage/'.$termin->bukti_transfer) }}"
+                                            <a href="{{ asset($termin->bukti_transfer) }}"
                                             target="_blank" class="text-decoration-underline">
                                                 <i class="bi bi-eye me-1"></i>Lihat File
                                             </a>
 
                                             @if(Str::endsWith($termin->bukti_transfer, ['.jpg','jpeg','png']))
                                                 <div class="mt-2">
-                                                    <img src="{{ asset('storage/'.$termin->bukti_transfer) }}"
+                                                    <img src="{{ asset($termin->bukti_transfer) }}"
                                                         alt="Bukti Transfer"
                                                         class="img-preview">
                                                 </div>

@@ -278,7 +278,15 @@ class PesananController extends Controller
 
         $pemesanan = Pemesanan::where('id', $id)->where('pengguna_id', auth()->id())->firstOrFail();
 
-        $path = $request->file('file_po')->store('po', 'public');
+        // Buat nama file unik
+        $filename = uniqid() . '_' . time() . '.' . $request->file('file_po')->getClientOriginalExtension();
+
+        // Simpan file ke public/po
+        $request->file('file_po')->move(public_path('po'), $filename);
+
+        // Path untuk disimpan di DB
+        $path = 'po/' . $filename;
+
         $pemesanan->update([
             'file_po'   => $path,
             'nomor_po'  => $request->nomor_po,
@@ -299,7 +307,11 @@ class PesananController extends Controller
                 $q->where('pengguna_id', auth()->id());
             })->firstOrFail();
 
-        $path = $request->file('bukti_transfer')->store('bukti-transfer', 'public');
+        // Buat nama file unik dan simpan ke public/bukti-transfer
+        $filename = uniqid() . '_' . time() . '.' . $request->file('bukti_transfer')->getClientOriginalExtension();
+        $request->file('bukti_transfer')->move(public_path('bukti-transfer'), $filename);
+        $path = 'bukti-transfer/' . $filename;
+
         $pembayaran->update([
             'bukti_transfer' => $path,
             'tanggal_pembayaran' => now(),
@@ -318,9 +330,12 @@ class PesananController extends Controller
                 $q->where('pengguna_id', $userId);
             })->firstOrFail();
 
-        // Hapus file dari storage jika ada
-        if ($pembayaran->bukti_transfer && Storage::disk('public')->exists($pembayaran->bukti_transfer)) {
-            Storage::disk('public')->delete($pembayaran->bukti_transfer);
+        // Hapus file dari public jika ada
+        if ($pembayaran->bukti_transfer) {
+            $fullPath = public_path($pembayaran->bukti_transfer);
+            if (file_exists($fullPath)) {
+                @unlink($fullPath);
+            }
         }
 
         // Reset kolom
@@ -339,10 +354,15 @@ class PesananController extends Controller
             ->where('pengguna_id', auth()->id())
             ->firstOrFail();
 
-        if ($pemesanan->file_po && Storage::disk('public')->exists($pemesanan->file_po)) {
-            Storage::disk('public')->delete($pemesanan->file_po);
+        // Hapus file dari public
+        if ($pemesanan->file_po) {
+            $fullPath = public_path($pemesanan->file_po);
+            if (file_exists($fullPath)) {
+                @unlink($fullPath); // @ untuk suppress warning jika gagal
+            }
         }
 
+        // Update DB
         $pemesanan->update([
             'file_po' => null,
             'status_po' => 'menunggu',

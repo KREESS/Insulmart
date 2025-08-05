@@ -121,12 +121,12 @@
             <div class="form-section-title">Informasi Akun</div>
 
             <div class="mb-3 text-center">
-              @if($user->profile_photo_path)
-                <img src="{{ asset('storage/' . $user->profile_photo_path) }}" width="120" class="rounded-photo shadow">
-              @else
-                <img src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&background=8B0000&color=fff&size=120" class="rounded-photo shadow">
-              @endif
-              <input type="file" name="profile_photo" class="form-control mt-2">
+                @if ($user->profile_photo_path && file_exists(public_path($user->profile_photo_path)))
+                    <img src="{{ asset($user->profile_photo_path) }}" width="120" class="rounded-photo shadow">
+                @else
+                    <img src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&background=8B0000&color=fff&size=120" width="120" class="rounded-photo shadow">
+                @endif
+                <input type="file" name="profile_photo" class="form-control mt-2">
             </div>
 
             <div class="mb-3">
