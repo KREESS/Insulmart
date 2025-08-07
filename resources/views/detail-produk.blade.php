@@ -62,12 +62,12 @@
                                 @foreach ($produk->gambars as $index => $gambar)
                                 <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
                                     <div class="d-flex align-items-center justify-content-center w-100 h-100">
-                                        <img src="{{ asset ('storage/' . $gambar->path) }}"
-                                            class="img-fluid"
-                                            style="max-height: 100%; max-width: 100%; object-fit: contain; cursor: zoom-in;"
-                                            alt="Gambar Produk {{ $index + 1 }}"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#modalGambar{{ $index }}">
+                                        <img src="{{ asset('storage/' . $gambar->path) }}"
+                                             class="img-fluid"
+                                             style="max-height: 100%; max-width: 100%; object-fit: contain; cursor: zoom-in;"
+                                             alt="Gambar Produk {{ $index + 1 }}"
+                                             data-bs-toggle="modal"
+                                             data-bs-target="#modalGambar{{ $index }}">
                                     </div>
 
                                     {{-- Modal Zoom --}}
@@ -175,7 +175,7 @@
                             @foreach ($produk->varians as $varian)
                             <div class="col-md-6">
                                 <label class="border rounded p-3 w-100 h-100 d-flex gap-3 align-items-center varian-card position-relative">
-                                    <img src="{{ $produk->gambars->first() ? asset($produk->gambars->first()->path) : asset('assets/img/no-image.png') }}"
+                                    <img src="{{ $produk->gambars->first() ? asset('storage/' . $produk->gambars->first()->path) : asset('assets/img/no-image.png') }}"
                                         class="rounded" style="width: 60px; height: 60px; object-fit: cover;" alt="Varian">
 
                                     <div class="flex-grow-1">
