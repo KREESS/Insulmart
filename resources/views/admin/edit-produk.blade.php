@@ -106,9 +106,15 @@
             @forelse ($produk->gambars as $gambar)
               <div class="col-md-3 mb-3">
                 <div class="gambar-wrapper">
-                  <img src="{{ $gambar->path && file_exists(public_path($gambar->path)) ? asset($gambar->path) : asset('images/no-image.png') }}" 
-                      alt="Gambar Produk" 
-                      class="img-fluid rounded">
+<img 
+    src="{{ 
+        $gambar->path && file_exists(public_path('storage/' . $gambar->path)) 
+            ? asset('storage/' . $gambar->path) 
+            : asset('images/no-image.png') 
+    }}" 
+    alt="Gambar Produk" 
+    class="img-fluid rounded">
+
                   <button
                     type="button"
                     class="btn btn-danger btn-sm rounded-circle btn-delete-gambar"

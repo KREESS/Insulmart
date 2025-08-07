@@ -79,7 +79,7 @@
   <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-2">
     <div>
       <h3 class="mb-1 fw-bold text-merah d-flex align-items-center">
-        📦 Daftar Produk
+        ðŸ“¦ Daftar Produk
       </h3>
       <p class="text-muted small mb-0">Kelola semua produk yang tersedia di toko Anda dengan mudah.</p>
     </div>
@@ -123,7 +123,12 @@
               @foreach ($produk->gambars as $index => $gambar)
                 <div class="carousel-item {{ $index == 0 ? 'active' : '' }} h-100">
                   <div class="d-flex justify-content-center align-items-center h-100 w-100">
-                    <img src="{{ $gambar->path && file_exists(public_path($gambar->path)) ? asset($gambar->path) : asset('images/no-image.png') }}"
+                    <img 
+                        src="{{ 
+                            $gambar->path && file_exists(public_path('storage/' . $gambar->path)) 
+                                ? asset('storage/' . $gambar->path) 
+                                : asset('images/no-image.png') 
+                        }}"
                         class="produk-img d-block"
                         alt="Gambar {{ $index + 1 }}">
                   </div>

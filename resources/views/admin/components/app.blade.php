@@ -10,10 +10,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-    <!-- CSS Custom -->
-    @vite(['resources/css/style-admin.css'])
-    <!-- Animasi JS -->
-    @vite(['resources/js/animation-admin.js'])
+
+    <link rel="stylesheet" href="{{ asset('assets/css/style-admin.css') }}">
+    <script src="{{ asset('assets/js/animation-admin.js') }}"></script>
     <!-- Favicon -->
     <link rel="icon" href="{{ asset('assets/img/insulmart_new1.png') }}" type="image/png">
     <!-- JQuery -->

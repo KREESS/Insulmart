@@ -902,7 +902,7 @@
                           $gambar = $d->varianProduk->produk->gambars->first();
                         @endphp
                         @if($gambar)
-                          <img src="{{ asset($gambar->path) }}" alt="Gambar {{ $d->varianProduk->produk->nama_produk }}" style="width:48px; height:48px; object-fit:cover; border-radius:7px;">
+                          <img src="{{ asset('storage/' . $gambar->path) }}" alt="Gambar {{ $d->varianProduk->produk->nama_produk }}" style="width:48px; height:48px; object-fit:cover; border-radius:7px;">
                         @else
                           <span style="color:#999; font-size:13px;">Tidak ada gambar</span>
                         @endif

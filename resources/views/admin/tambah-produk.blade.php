@@ -22,6 +22,31 @@
   <div class="container">
     <h2 class="mb-4"><i class="bi bi-plus-circle me-2 text-success"></i>Tambah Produk Baru</h2>
 
+    {{-- Notifikasi Sukses --}}
+    @if(session('success'))
+      <div class="alert alert-success d-flex align-items-center alert-dismissible fade show shadow-sm" role="alert">
+        <i class="bi bi-check-circle-fill me-2 fs-5"></i>
+        <div>{{ session('success') }}</div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Tutup"></button>
+      </div>
+    @endif
+
+    {{-- Notifikasi Error --}}
+    @if($errors->any())
+      <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
+        <div class="d-flex align-items-center mb-2">
+          <i class="bi bi-exclamation-triangle-fill me-2 fs-5"></i>
+          <strong>Terjadi kesalahan saat menginput data:</strong>
+        </div>
+        <ul class="mb-0 ps-4">
+          @foreach($errors->all() as $error)
+            <li>{{ $error }}</li>
+          @endforeach
+        </ul>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Tutup"></button>
+      </div>
+    @endif
+
     <form action="{{ route('produk.store') }}" method="POST" enctype="multipart/form-data" class="bg-white p-4 rounded shadow-sm">
       @csrf
 

@@ -49,29 +49,29 @@ class ProdukController extends Controller
             ? $request->jenis_produk
             : $request->jenis_produk_baru;
 
-        // Simpan data produk utama (tanpa gambar karena gambar masuk tabel terpisah)
+        // Simpan data produk utama
         $produk = Produk::create([
             'nama_produk'  => $request->nama_produk,
             'jenis_produk' => $jenisProduk,
             'deskripsi'    => $request->deskripsi,
         ]);
 
+        // Simpan gambar ke public/storage/produk
         foreach ($request->file('gambar') as $image) {
-            // Generate nama unik
             $filename = uniqid() . '.' . $image->getClientOriginalExtension();
 
-            // Pastikan folder ada
+            // Pastikan folder tujuan ada
             $destination = public_path('storage/produk');
             if (!file_exists($destination)) {
                 mkdir($destination, 0775, true);
             }
 
-            // Simpan ke public/storage/produk
+            // Simpan file ke public/storage/produk
             $image->move($destination, $filename);
 
-            // Simpan path ke DB, cukup: storage/produk/namafile.jpg
+            // Simpan path ke DB: cukup produk/namafile.jpg
             $produk->gambars()->create([
-                'path' => 'storage/produk/' . $filename
+                'path' => 'produk/' . $filename
             ]);
         }
 
@@ -174,7 +174,7 @@ class ProdukController extends Controller
         }
 
         // =========================
-        // TAMBAH GAMBAR BARU SAJA (Gambar lama tetap, hapus manual jika mau)
+        // UPLOAD GAMBAR BARU LANGSUNG KE public/storage/produk
         // =========================
         if ($request->hasFile('gambar')) {
             foreach ($request->file('gambar') as $file) {
@@ -189,7 +189,7 @@ class ProdukController extends Controller
                 // Simpan file ke public/storage/produk
                 $file->move($destination, $filename);
 
-                // Simpan path ke DB, contoh: storage/produk/namafile.jpg
+                // Simpan path ke DB, contoh: produk/namafile.jpg
                 $produk->gambars()->create([
                     'path' => 'produk/' . $filename
                 ]);
@@ -204,13 +204,16 @@ class ProdukController extends Controller
     {
         $gambar = ProdukGambar::findOrFail($id);
 
-        // Path lengkap ke file di public
-        $filePath = public_path($gambar->path);
+        // Path relatif ke storage disk 'public'
+        $filePath = $gambar->path; // contoh: 'produk/nama-file.jpg'
 
-        if (file_exists($filePath)) {
-            unlink($filePath); // Hapus file
+        // Hapus file dari storage/app/public/produk/xxx.jpg
+        if (Storage::disk('public')->exists($filePath)) {
+            Storage::disk('public')->delete($filePath);
         }
-        $gambar->delete(); // Hapus data di DB
+
+        // Hapus data gambar di database
+        $gambar->delete();
 
         return back()->with('success', 'Gambar berhasil dihapus.');
     }

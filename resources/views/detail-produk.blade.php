@@ -62,7 +62,7 @@
                                 @foreach ($produk->gambars as $index => $gambar)
                                 <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
                                     <div class="d-flex align-items-center justify-content-center w-100 h-100">
-                                        <img src="{{ asset ($gambar->path) }}"
+                                        <img src="{{ asset ('storage/' . $gambar->path) }}"
                                             class="img-fluid"
                                             style="max-height: 100%; max-width: 100%; object-fit: contain; cursor: zoom-in;"
                                             alt="Gambar Produk {{ $index + 1 }}"
@@ -77,7 +77,7 @@
                                                 <div class="modal-body p-0 position-relative">
                                                     <button type="button" class="btn-close position-absolute top-0 end-0 m-3"
                                                         data-bs-dismiss="modal" aria-label="Close"></button>
-                                                    <img src="{{ asset ($gambar->path) }}"
+                                                    <img src="{{ asset ('storage/' . $gambar->path) }}"
                                                         class="img-fluid rounded mx-auto d-block"
                                                         style="max-height: 90vh; object-fit: contain;">
                                                 </div>

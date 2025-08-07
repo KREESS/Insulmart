@@ -15,11 +15,8 @@
             href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"
             integrity="sha384-0evHe/X+R7YkSU7A9Kw7P4OPDHyw+3Ulwp8dw55zDZ81D9g3PC5lMZ9jdb4BQ+fX" crossorigin="anonymous">
 
-        <!-- ✅ File CSS Custom -->
-        @vite(['resources/css/style.css'])
-
-        <!-- ✅ Animasi JS -->
-        @vite(['resources/js/app.js'])
+        <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+        <script src="{{ asset('assets/js/animation.js') }}"></script>
 
         <!-- ✅ Bootstrap JS (Popper & Bundle) -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"

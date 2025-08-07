@@ -69,7 +69,12 @@
                         <div class="carousel-inner rounded shadow-sm">
                             @foreach($produk->gambars as $index => $gambar)
                                 <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
-                                    <img src="{{ $gambar->path && file_exists(public_path($gambar->path)) ? asset($gambar->path) : asset('images/no-image.png') }}"
+                                    <img 
+                                        src="{{ 
+                                            $gambar->path && file_exists(public_path('storage/' . $gambar->path)) 
+                                                ? asset('storage/' . $gambar->path) 
+                                                : asset('images/no-image.png') 
+                                        }}"
                                         class="d-block w-100"
                                         style="max-height: 260px; object-fit: contain;"
                                         alt="Gambar {{ $index + 1 }}">

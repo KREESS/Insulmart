@@ -371,7 +371,7 @@
                                             : null;
                                     @endphp
                                     @if($gambar)
-                                        <img src="{{ asset($gambar->path) }}" alt="Gambar Produk" class="img-thumbnail" style="max-width:56px; max-height:56px;">
+                                        <img src="{{ asset('storage/' . $gambar->path) }}" alt="Gambar Produk" class="img-thumbnail" style="max-width:56px; max-height:56px;">
                                     @else
                                         <span class="text-muted">-</span>
                                     @endif
