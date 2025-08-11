@@ -338,41 +338,44 @@
                     </div>
 
                     <div class="d-flex justify-content-between align-items-center mt-4 flex-wrap flex-md-nowrap cart-summary-responsive">
-                        <div class="mt-4 cart-summary-block">
-                            <div class="alert alert-success p-2 mb-2 d-inline-block w-100" style="font-size:0.97em; border-radius: 6px;">
-                                <i class="bi bi-truck"></i>
-                                <b>Jarak kurang dari 25 km &mdash; Gratis Ongkir!</b>
-                            </div>
-                            <span class="fw-semibold text-maroon">Ongkos Kirim:</span>
-                            <span id="ongkir-display" class="fw-bold">Rp0</span>
-                            <div class="text-muted small" id="ongkir-detail" style="margin-top: 2px;"></div>
-                            <br>
-                            <small class="text-muted" id="armada-nama"></small>
+                    <div class="mt-4 cart-summary-block">
+                        <div id="free-ship-banner" class="alert p-2 mb-2 d-inline-block w-100" style="font-size:0.97em; border-radius: 6px;">
+                        <!-- akan diisi JS sesuai kondisi -->
                         </div>
-                        <div class="cart-summary-block">
-                            <span class="fw-semibold text-maroon">Total Harga Produk Dipilih:</span>
-                            <span id="cart-total" class="fw-bold">Rp0</span>
-                            <small class="text-success d-block">*Harga sudah termasuk PPN 11%</small>
-                        </div>
-                        <div class="mt-2 cart-summary-block">
-                            <span class="fw-semibold text-maroon">Total Keseluruhan:</span>
-                            <span id="grand-total" class="fw-bold text-dark">Rp0</span>
-                        </div>
-                        <form id="checkout-form" action="{{ route('keranjang.checkout') }}" method="POST" class="cart-summary-block" style="min-width:140px;">
-                            @csrf
-                            <div id="selected-inputs"></div>
-                            <!-- ✅ Tambahkan hidden input di sini -->
-                            <input type="hidden" name="total_harga_produk" id="total_harga_produk" value="0">
-                            <input type="hidden" name="total_pack" id="total_pack" value="0">
-                            <input type="hidden" name="biaya_ongkir" id="biaya_ongkir" value="0">
-                            <input type="hidden" name="jarak_km" id="jarak_km" value="{{ $jarakKoreksi ?? 0 }}">
 
-                            <!-- Ini akan di-inject lewat JS -->
-                            <input type="hidden" name="armada_list" id="armada_list" value="[]">
-                            <button type="submit" class="btn btn-maroon btn-lg w-100" id="btn-checkout" disabled>
-                                <i class="bi bi-bag-check-fill me-2"></i> Checkout
-                            </button>
-                        </form>
+                        <span class="fw-semibold text-maroon">Ongkos Kirim:</span>
+                        <span id="ongkir-display" class="fw-bold">Rp0</span>
+                        <div class="text-muted small" id="ongkir-detail" style="margin-top: 2px;"></div>
+                        <br>
+                        <small class="text-muted" id="armada-nama"></small>
+                    </div>
+
+                    <div class="cart-summary-block">
+                        <span class="fw-semibold text-maroon">Total Harga Produk Dipilih:</span>
+                        <span id="cart-total" class="fw-bold">Rp0</span>
+                        <small class="text-success d-block">*Harga sudah termasuk PPN 11%</small>
+                    </div>
+
+                    <div class="mt-2 cart-summary-block">
+                        <span class="fw-semibold text-maroon">Total Keseluruhan:</span>
+                        <span id="grand-total" class="fw-bold text-dark">Rp0</span>
+                    </div>
+
+                    <form id="checkout-form" action="{{ route('keranjang.checkout') }}" method="POST" class="cart-summary-block" style="min-width:140px;">
+                        @csrf
+                        <div id="selected-inputs"></div>
+
+                        <!-- Hidden inputs yang dipakai saat submit -->
+                        <input type="hidden" name="total_harga_produk" id="total_harga_produk" value="0">
+                        <input type="hidden" name="total_pack" id="total_pack" value="0">
+                        <input type="hidden" name="biaya_ongkir" id="biaya_ongkir" value="0">
+                        <input type="hidden" name="jarak_km" id="jarak_km" value="{{ $jarakKoreksi ?? 0 }}">
+                        <input type="hidden" name="armada_list" id="armada_list" value="[]">
+
+                        <button type="submit" class="btn btn-maroon btn-lg w-100" id="btn-checkout" disabled>
+                        <i class="bi bi-bag-check-fill me-2"></i> Checkout
+                        </button>
+                    </form>
                     </div>
 
                 @endif
@@ -572,180 +575,289 @@
     </script>
 
     <script>
-        const armadas = @json($armadas);
-        const jarakKoreksi = {{ $jarakKoreksi ?? 'null' }};
+        (() => {
+        // ====== STATE & KONFIG ======
+        const armadas = Array.isArray(@json($armadas)) ? @json($armadas) : [];
+        const jarakKoreksiRaw = {{ $jarakKoreksi ?? 'null' }};
+        const jarakKoreksi = (jarakKoreksiRaw === null ? null : Number(jarakKoreksiRaw));
 
-        // Format dan parsing Rupiah
-        function parseRp(txt) {
-            return parseInt((txt || '').replace(/[^0-9]/g, '')) || 0;
-        }
+        const FREE_MIN_SUBTOTAL = 5_000_000; // Rp5jt
+        const FREE_MAX_KM = 25;
 
-        function updateGrandTotalFromDom() {
-            const ongkir = parseRp(document.getElementById('ongkir-display').textContent);
-            const totalProduk = parseRp(document.getElementById('cart-total').textContent);
-            const grandTotal = ongkir + totalProduk;
-            document.getElementById('grand-total').textContent = 'Rp' + grandTotal.toLocaleString('id-ID');
-        }
+        // ====== UTIL ======
+        const $ = (sel, ctx = document) => ctx.querySelector(sel);
+        const $$ = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
+        const toNum = (v) => {
+            if (v == null) return 0;
+            if (typeof v === 'number') return isFinite(v) ? v : 0;
+            const s = String(v).replace(/[^0-9\-.,]/g, '').replace(/\./g, '').replace(',', '.');
+            const n = parseFloat(s);
+            return isFinite(n) ? n : 0;
+        };
+        const parseRp = (txt) => {
+            if (!txt) return 0;
+            return parseInt(String(txt).replace(/[^0-9]/g, ''), 10) || 0;
+        };
+        const fmtRp = (n) => 'Rp' + (toNum(n) || 0).toLocaleString('id-ID');
 
-        // Generate semua kombinasi yang mungkin untuk mencukupi total bal
+        // Debounce + raf
+        const rafDebounce = (fn, delay = 60) => {
+            let t = 0, raf = 0;
+            return (...args) => {
+            if (t) clearTimeout(t);
+            t = setTimeout(() => {
+                if (raf) cancelAnimationFrame(raf);
+                raf = requestAnimationFrame(() => fn(...args));
+            }, delay);
+            };
+        };
+
+        // ====== DOM TARGETS (safe) ======
+        const elOngkirDisplay = $('#ongkir-display');
+        const elOngkirDetail  = $('#ongkir-detail');
+        const elArmadaNama    = $('#armada-nama');
+        const elCartTotal     = $('#cart-total');
+        const elGrandTotal    = $('#grand-total');
+        const elBtnCheckout   = $('#btn-checkout');
+        const elBanner        = $('#free-ship-banner');
+
+        const setHidden = (id, val) => { const el = $('#'+id); if (el) el.value = val; };
+
+        const setBanner = (status, html) => {
+            if (!elBanner) return;
+            elBanner.className = 'alert p-2 mb-2 d-inline-block w-100 alert-' + status;
+            elBanner.innerHTML = html;
+        };
+
+        const updateGrandTotalFromDom = () => {
+            const ongkir = parseRp(elOngkirDisplay?.textContent || '0');
+            const totalProduk = parseRp(elCartTotal?.textContent || '0');
+            if (elGrandTotal) elGrandTotal.textContent = fmtRp(ongkir + totalProduk);
+        };
+
+        const toggleCheckoutButton = () => {
+            if (!elBtnCheckout) return;
+            const totalProduk = parseRp(elCartTotal?.textContent || '0');
+            const anySelected = $$('.select-item:checked').length > 0;
+            elBtnCheckout.disabled = !(anySelected && totalProduk > 0);
+        };
+
+        // ====== ARMADA KOMBINASI ======
         function generateAllValidCombos(armadas, totalBal, maxUnit = 6) {
-            let results = [];
-
-            function backtrack(index, currentCombo) {
-                if (index === armadas.length) {
-                    const totalMuatan = currentCombo.reduce((sum, a, i) => sum + (a * armadas[i].kapasitas_pack), 0);
-                    if (totalMuatan >= totalBal) {
-                        const combo = currentCombo.map((jumlah, i) => ({
-                            ...armadas[i],
-                            jumlah
-                        })).filter(a => a.jumlah > 0);
-                        results.push(combo);
-                    }
-                    return;
+            const results = [];
+            const n = armadas.length;
+            const backtrack = (i, cur) => {
+            if (i === n) {
+                const muatan = cur.reduce((sum, j, idx) => sum + j * (armadas[idx].kapasitas_pack || 0), 0);
+                if (muatan >= totalBal) {
+                const combo = cur.map((j, idx) => ({...armadas[idx], jumlah: j})).filter(a => a.jumlah > 0);
+                results.push(combo);
                 }
-
-                for (let j = 0; j <= maxUnit; j++) {
-                    currentCombo.push(j);
-                    backtrack(index + 1, currentCombo);
-                    currentCombo.pop();
-                }
+                return;
             }
-
+            for (let j = 0; j <= maxUnit; j++) {
+                cur.push(j);
+                backtrack(i+1, cur);
+                cur.pop();
+            }
+            };
             backtrack(0, []);
             return results;
         }
 
-        // Dapatkan kombinasi ongkir termurah
         function getTermurahCombo(totalBal) {
-            const allCombos = generateAllValidCombos(armadas, totalBal, 5);
-            let minHarga = Infinity;
-            let bestCombo = null;
-
-            for (const combo of allCombos) {
-                const ongkir = combo.reduce((sum, a) =>
-                    sum + (a.tarif_per_km * a.jumlah * jarakKoreksi), 0);
-
-                if (ongkir < minHarga) {
-                    minHarga = ongkir;
-                    bestCombo = combo;
-                }
+            if (!Array.isArray(armadas) || armadas.length === 0) return null;
+            const combos = generateAllValidCombos(armadas, totalBal, 5);
+            let best = null, minHarga = Infinity;
+            const km = (jarakKoreksi || 0);
+            for (const combo of combos) {
+            const ongkir = combo.reduce((s, a) => s + (toNum(a.tarif_per_km) * km * toNum(a.jumlah)), 0);
+            if (ongkir < minHarga) {
+                minHarga = ongkir; best = combo;
             }
-
-            return bestCombo;
+            }
+            return best;
         }
 
-        // Hitung pengiriman
-        function calculateShipping() {
-            const checkboxes = document.querySelectorAll('.select-item:checked');
+        // ====== HITUNG TOTAL BAL DARI BARIS TERPILIH (REAL-TIME) ======
+        const getSelectedTotalBal = () => {
             let totalBal = 0;
-            checkboxes.forEach(cb => {
-                const row = cb.closest('tr');
-                const qty = parseInt(row.querySelector('.quantity-input').value || 0);
-                totalBal += qty;
+            $$('.select-item:checked').forEach(cb => {
+            const row = cb.closest('tr');
+            if (!row) return;
+            const qtyInput = row.querySelector('.quantity-input');
+            const qty = toNum(qtyInput?.value || qtyInput?.dataset?.value || 0);
+            totalBal += qty;
             });
+            return Math.max(0, Math.floor(totalBal));
+        };
 
-            const ongkirDisplay = document.getElementById('ongkir-display');
-            const ongkirDetail = document.getElementById('ongkir-detail');
-            const inputOngkir = document.getElementById('input-ongkir');
-            const inputArmada = document.getElementById('input-armada');
+        // (opsional) kalau mau total harga produk dihitung ulang langsung dari baris:
+        // const getSelectedSubtotal = () => {
+        //   let subtotal = 0;
+        //   $$('.select-item:checked').forEach(cb => {
+        //     const row = cb.closest('tr');
+        //     const qty = toNum(row?.querySelector('.quantity-input')?.value);
+        //     const harga = parseRp(row?.querySelector('.harga-satuan')?.textContent || '0');
+        //     subtotal += qty * harga;
+        //   });
+        //   return subtotal;
+        // };
 
-            let armadaUsed = [];
+        // ====== INTI PERHITUNGAN ======
+        const recalc = () => {
+            try {
+            const totalBal = getSelectedTotalBal();
+            const totalProduk = parseRp(elCartTotal?.textContent || '0'); // pakai DOM existing
 
-            if (jarakKoreksi !== null && totalBal > 0) {
-                armadaUsed = getTermurahCombo(totalBal) || [];
+            // Update hidden dasar
+            setHidden('total_pack', totalBal);
+            setHidden('total_harga_produk', totalProduk);
+
+            // Guard awal
+            if (!elOngkirDisplay || !elOngkirDetail) return;
+
+            // Kondisi awal / tidak cukup data
+            if (jarakKoreksi === null || isNaN(jarakKoreksi)) {
+                elOngkirDisplay.textContent = fmtRp(0);
+                elOngkirDetail.innerHTML = totalBal === 0 ? '' : '<span class="text-danger">Jarak belum tersedia.</span>';
+                if (elArmadaNama) elArmadaNama.textContent = '';
+                setHidden('biaya_ongkir', 0);
+                setHidden('armada_list', '[]');
+                setBanner('info', '<i class="bi bi-info-circle"></i> Masukkan item & pastikan lokasi agar ongkir bisa dihitung.');
+                updateGrandTotalFromDom(); toggleCheckoutButton(); return;
             }
 
-            const tidakCukup = (armadaUsed.length === 0);
+            if (totalBal === 0) {
+                elOngkirDisplay.textContent = fmtRp(0);
+                elOngkirDetail.innerHTML = '';
+                if (elArmadaNama) elArmadaNama.textContent = '';
+                setHidden('biaya_ongkir', 0);
+                setHidden('armada_list', '[]');
+                setBanner('info', '<i class="bi bi-info-circle"></i> Pilih produk untuk menghitung ongkir.');
+                updateGrandTotalFromDom(); toggleCheckoutButton(); return;
+            }
 
-            if (tidakCukup || totalBal === 0) {
-                ongkirDisplay.textContent = 'Rp0';
-                ongkirDetail.innerHTML = totalBal === 0
-                    ? ''
-                    : `<span class="text-danger">Tidak ada armada yang mampu mengangkut <strong>${totalBal} bal</strong></span>`;
-                if (inputOngkir && inputArmada) {
-                    inputOngkir.value = 0;
-                    inputArmada.value = '';
-                }
+            // Cari combo termurah
+            const combo = getTermurahCombo(totalBal);
+            if (!combo || combo.length === 0) {
+                elOngkirDisplay.textContent = fmtRp(0);
+                elOngkirDetail.innerHTML = `<span class="text-danger">Tidak ada armada yang mampu mengangkut <strong>${totalBal} bal</strong>.</span>`;
+                if (elArmadaNama) elArmadaNama.textContent = '';
+                setHidden('biaya_ongkir', 0);
+                setHidden('armada_list', '[]');
+                setBanner('danger', '<i class="bi bi-exclamation-triangle"></i> Armada tidak mencukupi. Kurangi jumlah atau hubungi admin.');
+                updateGrandTotalFromDom(); toggleCheckoutButton(); return;
+            }
+
+            // Hitung ongkir full (tanpa free km)
+            const km = Number(jarakKoreksi) || 0;
+            let ongkir = Math.ceil(combo.reduce((sum, a) => sum + (toNum(a.tarif_per_km) * km * toNum(a.jumlah)), 0));
+
+            // Syarat free ongkir (DUA syarat)
+            const eligibleDistance = km <= FREE_MAX_KM;
+            const eligibleSubtotal = totalProduk >= FREE_MIN_SUBTOTAL;
+            const eligibleFree    = eligibleDistance && eligibleSubtotal;
+
+            if (eligibleFree) {
+                // Gratis ongkir
+                ongkir = 0;
+                elOngkirDisplay.textContent = fmtRp(0);
+                elOngkirDetail.innerHTML = `
+                <span class="text-success fw-semibold">Gratis Ongkir</span>
+                <div class="small text-muted mb-2">(Jarak ${km.toFixed(2)} km ≤ ${FREE_MAX_KM} km &amp; Subtotal ≥ ${fmtRp(FREE_MIN_SUBTOTAL)})</div>
+                <div><strong>Armada:</strong></div>
+                <ul style="padding-left:18px; margin-bottom:4px">
+                    ${combo.map(a => `<li>${a.jumlah} × ${a.nama} <span class="text-muted">(kapasitas ${a.kapasitas_pack} bal)</span></li>`).join('')}
+                </ul>
+                <div class="mt-1">Estimasi muatan: <strong>${totalBal} bal</strong></div>
+                `;
+                if (elArmadaNama) elArmadaNama.textContent = combo.map(a => `${a.jumlah}×${a.nama}`).join(', ');
+                setHidden('biaya_ongkir', 0);
+                setHidden('armada_list', JSON.stringify(combo.map(a => ({
+                armada_id: a.id, nama: a.nama, kapasitas: a.kapasitas_pack, jumlah: a.jumlah,
+                tarif: a.tarif_per_km, subtotal: 0
+                }))));
+                setBanner('success', `<i class="bi bi-truck"></i> <b>Gratis Ongkir!</b> (Jarak ≤ ${FREE_MAX_KM} km &amp; Subtotal ≥ ${fmtRp(FREE_MIN_SUBTOTAL)})`);
             } else {
-                if (jarakKoreksi <= 25) {
-                    ongkirDisplay.textContent = 'Rp0';
-                    ongkirDetail.innerHTML = `
-                        <span class="text-success fw-semibold">Gratis Ongkir</span>
-                        <div class="small text-muted mb-2">(Jarak ${jarakKoreksi.toFixed(2)} km ≤ 25 km)</div>
-                        <div><strong>Armada:</strong></div>
-                        <ul style="padding-left:18px; margin-bottom:4px">
-                            ${armadaUsed.map(a => `<li>${a.jumlah} × ${a.nama} <span class="text-muted">(kapasitas ${a.kapasitas_pack} bal)</span></li>`).join('')}
-                        </ul>
-                        <div class="mt-1">Estimasi muatan: <strong>${totalBal} bal</strong></div>
-                    `;
-                    if (inputOngkir && inputArmada) {
-                        inputOngkir.value = 0;
-                        inputArmada.value = armadaUsed.map(a => `${a.jumlah}×${a.nama}`).join(', ');
-                    }
-                } else {
-                    const ongkir = Math.ceil(armadaUsed.reduce((sum, a) =>
-                        sum + (a.tarif_per_km * jarakKoreksi * a.jumlah), 0));
+                // Bayar penuh
+                const rows = combo.map(a => `
+                <tr>
+                    <td>${a.jumlah} × ${a.nama} <span class="text-muted">(kapasitas ${a.kapasitas_pack} bal)</span></td>
+                    <td>Rp${toNum(a.tarif_per_km).toLocaleString('id-ID')}/km</td>
+                    <td>Subtotal: <strong>${fmtRp(Math.ceil(toNum(a.tarif_per_km) * km * toNum(a.jumlah)))}</strong></td>
+                </tr>
+                `).join('');
 
-                    const armadaTableRows = armadaUsed.map(a =>
-                        `<tr>
-                            <td>${a.jumlah} × ${a.nama} <span class="text-muted">(kapasitas ${a.kapasitas_pack} bal)</span></td>
-                            <td>Rp${a.tarif_per_km.toLocaleString('id-ID')}/km</td>
-                            <td>Subtotal: <strong>Rp${Math.ceil(a.tarif_per_km * jarakKoreksi * a.jumlah).toLocaleString('id-ID')}</strong></td>
-                        </tr>`
-                    ).join('');
+                elOngkirDisplay.textContent = fmtRp(ongkir);
+                elOngkirDetail.innerHTML = `
+                <div><strong>Armada:</strong></div>
+                <table style="width:100%; font-size:0.96em; margin-bottom:4px;"><tbody>${rows}</tbody></table>
+                <div class="mt-1">Total muatan: <strong>${totalBal} bal</strong></div>
+                <div class="mt-1">Total ongkir: <strong>${fmtRp(ongkir)}</strong> <span class="text-muted">±(${km.toFixed(2)} km)</span></div>
+                `;
+                if (elArmadaNama) elArmadaNama.textContent = combo.map(a => `${a.jumlah}×${a.nama}`).join(', ');
+                setHidden('biaya_ongkir', ongkir);
+                setHidden('armada_list', JSON.stringify(combo.map(a => ({
+                armada_id: a.id, nama: a.nama, kapasitas: a.kapasitas_pack, jumlah: a.jumlah,
+                tarif: a.tarif_per_km, subtotal: Math.ceil(toNum(a.tarif_per_km) * km * toNum(a.jumlah))
+                }))));
 
-                    ongkirDisplay.textContent = 'Rp' + ongkir.toLocaleString('id-ID');
-                    ongkirDetail.innerHTML = `
-                        <div><strong>Armada:</strong></div>
-                        <table style="width:100%; font-size:0.96em; margin-bottom:4px;">
-                            <tbody>${armadaTableRows}</tbody>
-                        </table>
-                        <div class="mt-1">Total muatan: <strong>${totalBal} bal</strong></div>
-                        <div class="mt-1">Total ongkir: <strong>Rp${ongkir.toLocaleString('id-ID')}</strong> <span class="text-muted">±(${jarakKoreksi.toFixed(2)} km)</span></div>
-                    `;
-                    if (inputOngkir && inputArmada) {
-                        inputOngkir.value = ongkir;
-                        inputArmada.value = armadaUsed.map(a => `${a.jumlah}×${a.nama}`).join(', ');
-                    }
-                }
-            }
-
-            const estMuatan = document.getElementById('est-muatan');
-            if (estMuatan) {
-                estMuatan.textContent = `${totalBal} bal`;
-            }
-
-            if (document.getElementById('armada_list')) {
-                const arr = armadaUsed.map(a => ({
-                    armada_id: a.id,
-                    nama: a.nama,
-                    kapasitas: a.kapasitas_pack,
-                    jumlah: a.jumlah,
-                    tarif: a.tarif_per_km,
-                    subtotal: Math.ceil(a.tarif_per_km * jarakKoreksi * a.jumlah)
-                }));
-                document.getElementById('armada_list').value = JSON.stringify(arr);
+                const reason = [];
+                if (!eligibleDistance) reason.push(`Jarak &gt; ${FREE_MAX_KM} km`);
+                if (!eligibleSubtotal) reason.push(`Subtotal &lt; ${fmtRp(FREE_MIN_SUBTOTAL)}`);
+                setBanner('warning', `<i class="bi bi-info-circle"></i> Tidak memenuhi gratis ongkir: ${reason.join(' &nbsp;•&nbsp; ')}`);
             }
 
             updateGrandTotalFromDom();
+            toggleCheckoutButton();
+            } catch (err) {
+            // jangan bikin UX mati kalau ada error kecil
+            console.error('calculateShipping error:', err);
+            setBanner('danger', '<i class="bi bi-exclamation-triangle"></i> Gagal menghitung ongkir. Coba periksa kembali item yang dipilih.');
+            }
+        };
+
+        const scheduleRecalc = rafDebounce(recalc, 40);
+
+        // ====== EVENTS REAL-TIME ======
+        // 1) Perubahan checkbox & qty (delegated)
+        const cartContainer = document; // ganti ke wrapper tabel kalau mau lebih spesifik
+        cartContainer.addEventListener('input', (e) => {
+            if (e.target.matches('.quantity-input')) scheduleRecalc();
+        });
+        cartContainer.addEventListener('change', (e) => {
+            if (e.target.matches('.quantity-input, .select-item, #select-all')) scheduleRecalc();
+        });
+        cartContainer.addEventListener('click', (e) => {
+            if (e.target.matches('.select-item, #select-all')) scheduleRecalc();
+        });
+        cartContainer.addEventListener('keyup', (e) => {
+            if (e.target.matches('.quantity-input')) scheduleRecalc();
+        });
+
+        // 2) Jika script lain mengubah #cart-total (live), pantau via MutationObserver
+        if (elCartTotal) {
+            const mo = new MutationObserver(scheduleRecalc);
+            mo.observe(elCartTotal, { childList: true, characterData: true, subtree: true });
         }
 
-        // Event listeners
-        document.getElementById('select-all')?.addEventListener('change', function () {
-            document.querySelectorAll('.select-item').forEach(cb => {
-                cb.checked = this.checked;
-            });
-            calculateShipping();
-        });
+        // 3) Jika baris tabel diganti/dimuat ulang dinamis, pantau kontainer tabel
+        const tableWrapper = document.querySelector('.cart-table, table') || document.body;
+        const moTable = new MutationObserver(rafDebounce(() => {
+            // re-attach tidak perlu karena kita pakai event delegation, cukup hitung ulang
+            scheduleRecalc();
+        }, 80));
+        moTable.observe(tableWrapper, { childList: true, subtree: true });
 
-        document.querySelectorAll('.select-item, .quantity-input').forEach(el => {
-            el.addEventListener('change', calculateShipping);
-        });
-
+        // 4) Init pertama
         window.addEventListener('DOMContentLoaded', () => {
-            calculateShipping();
-            updateGrandTotalFromDom();
+            scheduleRecalc();
+            // sinkronkan grand total jika ada sisa latency update cart-total
+            setTimeout(scheduleRecalc, 150);
+            setTimeout(scheduleRecalc, 400);
         });
+        })();
     </script>
 
     <script>

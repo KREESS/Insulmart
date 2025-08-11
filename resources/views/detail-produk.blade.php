@@ -146,7 +146,7 @@
                         <span>
                             <i class="bi bi-box-seam me-1 text-danger"></i>
                             <span class="fw-semibold">Stok Tersedia:</span>
-                            <span class="text-dark">{{ $totalStok }}</span>
+                            <span class="text-dark">{{ $totalStok }} Ball</span>
                         </span>
                         @if($habis)
                             {{-- ← badge stok habis --}}
