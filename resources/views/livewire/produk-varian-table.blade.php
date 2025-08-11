@@ -40,6 +40,7 @@
                     <th><i class="bi bi-arrows-angle-expand"></i> Ukuran</th>
                     <th><i class="bi bi-layers"></i> Ketebalan (mm)</th>
                     <th><i class="bi bi-grid"></i> Densitas (kg/m³)</th>
+                    <th><i class="bi bi-box-seam"></i> Ketersediaan</th>
                     <th><i class="bi bi-cash-stack"></i> Harga</th>
                     <th><i class="bi bi-clipboard-check"></i> Stok</th>
                 </tr>
@@ -52,6 +53,7 @@
                     <td>{{ $varian->ukuran }}</td>
                     <td class="text-center">{{ $varian->ketebalan }}</td>
                     <td class="text-center">{{ $varian->densitas }}</td>
+                    <td class="text-center">{{ $varian->status_ketersediaan }}</td>
                     <td class="text-success fw-semibold">Rp{{ number_format($varian->harga, 0, ',', '.') }}</td>
                     <td class="text-center">
                         @if($varian->stok > 10)
@@ -61,7 +63,7 @@
                         @else
                             <span class="badge bg-danger"><i class="bi bi-x-circle"></i> Habis</span>
                         @endif
-                        <div class="small text-muted">{{ $varian->stok }} pcs</div>
+                        <div class="small text-muted">{{ $varian->stok }} Ball</div>
                     </td>
                 </tr>
                 @empty

@@ -179,7 +179,6 @@ nav.scrolled {
     }
 }
 
-
 /* === Toggle Button === */
 .navbar-toggle {
     display: none;
@@ -635,6 +634,8 @@ nav.scrolled {
         margin-left: 3px;
     }
 }
+
+
 
 /* === Form Kontak === */
 .contact-section form {

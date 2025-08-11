@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Cart;
 use App\Models\CartItem;
+use Illuminate\Support\Facades\DB;
 
 class ProdukController extends Controller
 {
@@ -30,65 +31,102 @@ class ProdukController extends Controller
     {
         // Validasi input
         $request->validate([
-            'nama_produk' => 'required|string|max:255',
-            'jenis_produk' => 'required|string|max:255',
-            'deskripsi'    => 'nullable|string',
-            'gambar'       => 'required|array|min:3',
-            'gambar.*'     => 'image|max:2048',
-            'varian'       => 'required|array',
-            'varian.*.tipe'      => 'required|string',
-            'varian.*.ukuran'    => 'required|string',
-            'varian.*.ketebalan' => 'required|numeric',
-            'varian.*.densitas'  => 'required|numeric',
-            'varian.*.harga'     => 'required|numeric',
-            'varian.*.stok'      => 'required|numeric',
+            'nama_produk'         => 'required|string|max:255',
+            'jenis_produk'        => 'required|string|max:255',
+            'jenis_produk_baru'   => 'required_if:jenis_produk,lainnya|nullable|string|max:255',
+            'deskripsi'           => 'nullable|string',
+
+            'gambar'              => 'required|array|min:3',
+            'gambar.*'            => 'image|mimes:jpg,jpeg,png,webp|max:2048',
+
+            'varian'                      => 'required|array|min:1',
+            'varian.*.tipe'               => 'required|string|max:255',
+            'varian.*.ukuran'             => 'required|string|max:255',
+            'varian.*.ketebalan'          => 'required|numeric',
+            'varian.*.densitas'           => 'required|numeric',
+            'varian.*.harga'              => 'required|numeric|min:0',
+            'varian.*.stok'               => 'required|integer|min:0',
+            'varian.*.ketersediaan'       => 'nullable|string|max:50',
         ]);
 
-        // Tentukan jenis produk
+        // Resolve jenis produk
         $jenisProduk = $request->jenis_produk !== 'lainnya'
             ? $request->jenis_produk
-            : $request->jenis_produk_baru;
+            : ($request->jenis_produk_baru ?? 'Lainnya');
 
-        // Simpan data produk utama
-        $produk = Produk::create([
-            'nama_produk'  => $request->nama_produk,
-            'jenis_produk' => $jenisProduk,
-            'deskripsi'    => $request->deskripsi,
-        ]);
+        DB::beginTransaction();
 
-        // Simpan gambar ke public/storage/produk
-        foreach ($request->file('gambar') as $image) {
-            $filename = uniqid() . '.' . $image->getClientOriginalExtension();
+        try {
+            // Simpan data produk utama
+            $produk = Produk::create([
+                'nama_produk'  => $request->nama_produk,
+                'jenis_produk' => $jenisProduk,
+                'deskripsi'    => $request->deskripsi,
+            ]);
 
-            // Pastikan folder tujuan ada
-            $destination = public_path('storage/produk');
-            if (!file_exists($destination)) {
-                mkdir($destination, 0775, true);
+            // Simpan gambar langsung ke public/storage/produk
+            foreach ($request->file('gambar', []) as $image) {
+                $ext = $image->getClientOriginalExtension();
+                $filename = uniqid('prd_', true) . '.' . $ext;
+
+                // Pastikan folder tujuan ada
+                $destination = public_path('storage/produk');
+                if (!file_exists($destination)) {
+                    mkdir($destination, 0775, true);
+                }
+
+                // Simpan file
+                $image->move($destination, $filename);
+
+                // Simpan path ke DB
+                $produk->gambars()->create([
+                    'path' => 'produk/' . $filename
+                ]);
             }
 
-            // Simpan file ke public/storage/produk
-            $image->move($destination, $filename);
+            // Mapping ketersediaan dari input ke status standar
+            $normalizeStatus = function (?string $input, $stok) {
+                if ($input === null || $input === '') {
+                    return ((int)$stok > 0) ? 'Tersedia' : 'Habis';
+                }
+                $key = strtolower(trim($input));
+                $map = [
+                    'ready'     => 'Tersedia',
+                    'tersedia'  => 'Tersedia',
+                    'available' => 'Tersedia',
+                    'habis'     => 'Habis',
+                    'soldout'   => 'Habis',
+                    'sold out'  => 'Habis',
+                    'preorder'  => 'Preorder',
+                    'pre-order' => 'Preorder',
+                    'indent'    => 'Indent',
+                ];
+                return $map[$key] ?? ucfirst($key);
+            };
 
-            // Simpan path ke DB: cukup produk/namafile.jpg
-            $produk->gambars()->create([
-                'path' => 'produk/' . $filename
-            ]);
+            // Simpan semua varian produk
+            foreach ($request->varian as $v) {
+                $status = $normalizeStatus($v['ketersediaan'] ?? null, $v['stok']);
+
+                $produk->varians()->create([
+                    'tipe'                => $v['tipe'],
+                    'ukuran'              => $v['ukuran'],
+                    'ketebalan'           => $v['ketebalan'],
+                    'densitas'            => $v['densitas'],
+                    'harga'               => $v['harga'],
+                    'stok'                => $v['stok'],
+                    'status_ketersediaan' => $status,
+                ]);
+            }
+
+            DB::commit();
+            return redirect()->route('produk.index')->with('success', 'Produk dan variannya berhasil ditambahkan!');
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            return back()->withInput()->with('error', 'Gagal menyimpan produk: ' . $e->getMessage());
         }
-
-        // Simpan semua varian produk
-        foreach ($request->varian as $v) {
-            $produk->varians()->create([
-                'tipe'      => $v['tipe'],
-                'ukuran'    => $v['ukuran'],
-                'ketebalan' => $v['ketebalan'],
-                'densitas'  => $v['densitas'],
-                'harga'     => $v['harga'],
-                'stok'      => $v['stok'],
-            ]);
-        }
-
-        return redirect()->route('produk.index')->with('success', 'Produk dan variannya berhasil ditambahkan!');
     }
+
 
     public function show(Produk $produk)
     {
@@ -108,34 +146,39 @@ class ProdukController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'nama_produk' => 'required|string|max:255',
-            'jenis_produk' => 'required|string',
-            'jenis_produk_baru' => $request->jenis_produk === 'lainnya' ? 'required|string|max:255' : 'nullable',
-            'deskripsi' => 'nullable|string',
-            'varian' => 'nullable|array',
-            'varian.*.tipe' => 'required_with:varian|string',
-            'varian.*.ukuran' => 'required_with:varian|string',
-            'varian.*.ketebalan' => 'required_with:varian|numeric',
-            'varian.*.densitas' => 'required_with:varian|numeric',
-            'varian.*.harga' => 'required_with:varian|numeric',
-            'varian.*.stok' => 'required_with:varian|numeric',
-            'gambar.*' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'nama_produk'        => 'required|string|max:255',
+            'jenis_produk'       => 'required|string',
+            'jenis_produk_baru'  => $request->jenis_produk === 'lainnya' ? 'required|string|max:255' : 'nullable',
+            'deskripsi'          => 'nullable|string',
+
+            'varian'                 => 'nullable|array',
+            'varian.*.id'            => 'nullable|integer',
+            'varian.*.tipe'          => 'required_with:varian|string',
+            'varian.*.ukuran'        => 'required_with:varian|string',
+            'varian.*.ketebalan'     => 'required_with:varian|numeric',
+            'varian.*.densitas'      => 'required_with:varian|numeric',
+            'varian.*.harga'         => 'required_with:varian|numeric',
+            'varian.*.stok'          => 'required_with:varian|numeric',
+            'varian.*.ketersediaan'  => 'required_with:varian|string|max:50', // ← tambah validasi
+
+            'gambar.*'           => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
         $produk = Produk::findOrFail($id);
 
         // Update field utama produk
         $produk->update([
-            'nama_produk' => $request->nama_produk,
-            'jenis_produk' => $request->jenis_produk === 'lainnya' ? $request->jenis_produk_baru : $request->jenis_produk,
-            'deskripsi' => $request->deskripsi,
+            'nama_produk'  => $request->nama_produk,
+            'jenis_produk' => $request->jenis_produk === 'lainnya'
+                ? $request->jenis_produk_baru
+                : $request->jenis_produk,
+            'deskripsi'    => $request->deskripsi,
         ]);
 
         // =========================
         // UPDATE VARIAN
         // =========================
-
-        $oldVarianIds = $produk->varians->pluck('id')->toArray();
+        $oldVarianIds  = $produk->varians->pluck('id')->toArray();
         $formVarianIds = [];
 
         if ($request->has('varian')) {
@@ -143,26 +186,29 @@ class ProdukController extends Controller
                 if (!empty($v['id'])) {
                     // Update varian lama
                     $produk->varians()->where('id', $v['id'])->update([
-                        'tipe' => $v['tipe'],
-                        'ukuran' => $v['ukuran'],
-                        'ketebalan' => $v['ketebalan'],
-                        'densitas' => $v['densitas'],
-                        'harga' => $v['harga'],
-                        'stok' => $v['stok'],
+                        'tipe'                => $v['tipe'],
+                        'ukuran'              => $v['ukuran'],
+                        'ketebalan'           => $v['ketebalan'],
+                        'densitas'            => $v['densitas'],
+                        'harga'               => $v['harga'],
+                        'stok'                => $v['stok'],
+                        'status_ketersediaan' => $v['ketersediaan'], // ← mapping dari form
                     ]);
                     $formVarianIds[] = $v['id'];
                 } else {
                     // Tambah varian baru
                     $produk->varians()->create([
-                        'tipe' => $v['tipe'],
-                        'ukuran' => $v['ukuran'],
-                        'ketebalan' => $v['ketebalan'],
-                        'densitas' => $v['densitas'],
-                        'harga' => $v['harga'],
-                        'stok' => $v['stok'],
+                        'tipe'                => $v['tipe'],
+                        'ukuran'              => $v['ukuran'],
+                        'ketebalan'           => $v['ketebalan'],
+                        'densitas'            => $v['densitas'],
+                        'harga'               => $v['harga'],
+                        'stok'                => $v['stok'],
+                        'status_ketersediaan' => $v['ketersediaan'], // ← mapping dari form
                     ]);
                 }
             }
+
             // Hapus varian lama yang tidak ada di form
             $toDelete = array_diff($oldVarianIds, $formVarianIds);
             if (!empty($toDelete)) {
@@ -174,7 +220,7 @@ class ProdukController extends Controller
         }
 
         // =========================
-        // UPLOAD GAMBAR BARU LANGSUNG KE public/storage/produk
+        // UPLOAD GAMBAR BARU → public/storage/produk (tetap)
         // =========================
         if ($request->hasFile('gambar')) {
             foreach ($request->file('gambar') as $file) {
@@ -189,7 +235,7 @@ class ProdukController extends Controller
                 // Simpan file ke public/storage/produk
                 $file->move($destination, $filename);
 
-                // Simpan path ke DB, contoh: produk/namafile.jpg
+                // Simpan path ke DB: produk/namafile.jpg
                 $produk->gambars()->create([
                     'path' => 'produk/' . $filename
                 ]);
@@ -198,6 +244,7 @@ class ProdukController extends Controller
 
         return redirect()->route('produk.index')->with('success', 'Produk berhasil diperbarui!');
     }
+
 
 
     public function destroyGambar($id)

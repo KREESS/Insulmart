@@ -154,7 +154,7 @@
                 <div class="progress mb-4" style="height:18px; border-radius:20px;">
                     <div class="progress-bar progress-bar-maroon"
                          style="width:{{ min(100,($stokTotal/$stokMax)*100) }}%;font-weight:600;">
-                        {{ $stokTotal }} pcs
+                        {{ $stokTotal }} Ball
                     </div>
                 </div>
 

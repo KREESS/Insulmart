@@ -106,15 +106,14 @@
             @forelse ($produk->gambars as $gambar)
               <div class="col-md-3 mb-3">
                 <div class="gambar-wrapper">
-<img 
-    src="{{ 
-        $gambar->path && file_exists(public_path('storage/' . $gambar->path)) 
-            ? asset('storage/' . $gambar->path) 
-            : asset('images/no-image.png') 
-    }}" 
-    alt="Gambar Produk" 
-    class="img-fluid rounded">
-
+                  <img 
+                      src="{{ 
+                          $gambar->path && file_exists(public_path('storage/' . $gambar->path)) 
+                              ? asset('storage/' . $gambar->path) 
+                              : asset('images/no-image.png') 
+                      }}" 
+                      alt="Gambar Produk" 
+                      class="img-fluid rounded">
                   <button
                     type="button"
                     class="btn btn-danger btn-sm rounded-circle btn-delete-gambar"
@@ -145,6 +144,7 @@
           <div class="col-md-2"><input type="number" name="varian[{{ $i }}][densitas]" class="form-control" value="{{ $varian->densitas }}" required></div>
           <div class="col-md-3"><input type="number" name="varian[{{ $i }}][harga]" class="form-control" value="{{ $varian->harga }}" required></div>
           <div class="col-md-2"><input type="number" name="varian[{{ $i }}][stok]" class="form-control" value="{{ $varian->stok }}" required></div>
+          <div class="col-md-2"><input type="text" name="varian[{{ $i }}][ketersediaan]" class="form-control" value="{{ $varian->status_ketersediaan }}" required></div>
           <div class="col-md-1 text-end"><button type="button" class="btn btn-danger btn-sm btn-remove-varian"><i class="bi bi-x"></i></button></div>
                 <input type="hidden" name="varian[{{$i}}][id]" value="{{ $varian->id }}">
         </div>
@@ -241,8 +241,9 @@ document.addEventListener('DOMContentLoaded', function () {
       <div class="col-md-2"><input type="text" name="varian[${varianIndex}][ukuran]" class="form-control" placeholder="Ukuran" required></div>
       <div class="col-md-2"><input type="number" name="varian[${varianIndex}][ketebalan]" class="form-control" placeholder="Ketebalan" required></div>
       <div class="col-md-2"><input type="number" name="varian[${varianIndex}][densitas]" class="form-control" placeholder="Densitas" required></div>
-      <div class="col-md-3"><input type="number" name="varian[${varianIndex}][harga]" class="form-control" placeholder="Harga" required></div>
-      <div class="col-md-2"><input type="number" name="varian[${varianIndex}][stok]" class="form-control" placeholder="Stok" required></div>
+      <div class="col-md-3"><input type="number" name="varian[${varianIndex}][harga]" class="form-control" placeholder="Harga (Rp)" required></div>
+      <div class="col-md-2"><input type="number" name="varian[${varianIndex}][stok]" class="form-control" placeholder="Stok (Ball)" required></div>
+      <div class="col-md-2"><input type="text" name="varian[${varianIndex}][ketersediaan]" class="form-control" placeholder="Ketersediaan (ready)" required></div>
       <div class="col-md-1 text-end"><button type="button" class="btn btn-danger btn-sm btn-remove-varian"><i class="bi bi-x"></i></button></div>
     `;
     wrapper.appendChild(row);

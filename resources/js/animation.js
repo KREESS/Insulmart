@@ -33,8 +33,8 @@
                 position: 'text-center' // Slide pertama tanpa teks
             },
             {
-                title: "DISTRIBUTOR MATERIAL INSULASI TERPERCAYA",
-                desc: "Insulmart adalah platform distribusi resmi berbagai jenis rockwool, dan material insulasi lainnya untuk kebutuhan rumah, industri, dan proyek.",
+                title: "MARKETPLACE MATERIAL INSULASI TERPERCAYA",
+                desc: "Insulmart adalah platform marketplace resmi berbagai jenis rockwool, dan material insulasi lainnya untuk kebutuhan rumah, industri, dan proyek.",
                 position: 'text-right'
             },
             {

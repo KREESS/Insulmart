@@ -5,8 +5,9 @@
         <div class="footer-column fade-up">
             <h3 class="footer-title">Insulmart</h3>
             <p>
-                JL. RAYA TARUMAJAYA NO. 13 RT 001 RW 029 DUSUN III DESA SETIA ASIH<br>
-                Kec. Tarumajaya, Kab. Bekasi 17215
+                JL. RAYA TARUMAJAYA NO. 13 RT 001 RW 029 DESA SETIA ASIH<br>
+                Kec. Tarumajaya, Kab. Bekasi 17214
+                Jl. Taruma Jaya No.13, Setia Asih, Kec. Tarumajaya, Kota Bks, Jawa Barat 17214
             </p>
             <h4>Jam Operasional</h4>
             <p>Senin - Jumat<br>Pukul 08.00 - 17.00 WIB</p>

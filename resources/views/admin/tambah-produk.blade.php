@@ -89,7 +89,7 @@
 
       {{-- VARIAN PRODUK --}}
       <h5>Varian Produk</h5>
-      <p class="text-muted">Masukkan kombinasi varian produk seperti ukuran, ketebalan, densitas, harga & stok.</p>
+      <p class="text-muted">Masukkan kombinasi varian produk seperti ukuran, ketebalan, densitas, harga, stok, & ketersediaan.</p>
 
       <div id="varian-wrapper">
         <div class="row g-2 mb-3 varian-row">
@@ -109,9 +109,11 @@
             <input type="number" name="varian[0][harga]" class="form-control" placeholder="Harga (Rp)" required>
           </div>
           <div class="col-md-2">
-            <input type="number" name="varian[0][stok]" class="form-control" placeholder="Stok" required>
+            <input type="number" name="varian[0][stok]" class="form-control" placeholder="Stok (Ball)" required>
           </div>
-          <div class="col-md-1 text-end">
+          <div class="col-md-2">
+            <input type="text" name="varian[0][ketersediaan]" class="form-control" placeholder="Ketersediaan (ready)" required>
+          </div>          <div class="col-md-1 text-end">
             <button type="button" class="btn btn-danger btn-sm btn-remove-varian d-none"><i class="bi bi-x"></i></button>
           </div>
         </div>
@@ -197,6 +199,7 @@
         <div class="col-md-2"><input type="number" name="varian[${varianIndex}][densitas]" class="form-control" placeholder="Densitas" required></div>
         <div class="col-md-3"><input type="number" name="varian[${varianIndex}][harga]" class="form-control" placeholder="Harga (Rp)" required></div>
         <div class="col-md-2"><input type="number" name="varian[${varianIndex}][stok]" class="form-control" placeholder="Stok" required></div>
+        <div class="col-md-2"><input type="text" name="varian[${varianIndex}][ketersediaan]" class="form-control" placeholder="Ketersediaan (ready)" required></div>
         <div class="col-md-1 text-end">
           <button type="button" class="btn btn-danger btn-sm btn-remove-varian"><i class="bi bi-x"></i></button>
         </div>

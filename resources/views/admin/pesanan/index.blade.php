@@ -890,7 +890,7 @@
                 <table class="table table-sm mb-0">
                   <thead>
                     <tr>
-                      <th>Gambar Produk</th><th>Produk</th><th>Varian</th><th>Qty</th>
+                      <th>Gambar Produk</th><th>Produk</th><th>Varian</th><th>Qty</th><th>Ketersediaan</th>
                       <th>Harga</th><th>Subtotal</th>
                     </tr>
                   </thead>
@@ -906,9 +906,11 @@
                         @else
                           <span style="color:#999; font-size:13px;">Tidak ada gambar</span>
                         @endif
-                      </td>                      <td>{{ $d->varianProduk->produk->nama_produk }}</td>
+                      </td>
+                      <td>{{ $d->varianProduk->produk->nama_produk }}</td>
                       <td>{{ $d->varianProduk->tipe }}</td>
                       <td>{{ $d->kuantitas }}</td>
+                      <td>{{ $d->status_ketersediaan }}</td>
                       <td>Rp {{ number_format($d->harga_satuan,0,',','.') }}</td>
                       <td>Rp {{ number_format($d->subtotal,0,',','.') }}</td>
                     </tr>

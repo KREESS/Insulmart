@@ -31,6 +31,11 @@ class CartController extends Controller
 
     public function store(Request $request)
     {
+        // Cek login dulu
+        if (!Auth::check()) {
+            return redirect('/login')->with('error', 'Silakan login terlebih dahulu untuk menambahkan ke keranjang.');
+        }
+
         $user = Auth::user();
 
         $request->validate([

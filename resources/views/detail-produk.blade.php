@@ -44,58 +44,72 @@
                 <div class="row">
                     {{-- Gambar Produk --}}
                     <div class="col-md-6 mb-4 mb-md-0">
+                    @php
+                        $habis = ($produk->varians->sum('stok') <= 0);
+                    @endphp
+
+                    <div class="produk-media position-relative rounded overflow-hidden">
+                        @if ($habis)
+                        {{-- Badge di atas gambar --}}
+                        <span class="stock-badge shadow-sm">
+                            <i class="bi bi-exclamation-triangle me-1"></i> Stok Habis
+                        </span>
+                        {{-- Overlay halus agar badge lebih kebaca --}}
+                        <span class="stock-mask"></span>
+                        @endif
+
                         @if ($produk->gambars->count() > 0)
                         <div id="carouselDetailProduk" class="carousel slide" data-bs-ride="carousel">
-                            {{-- Carousel Indicators --}}
+                            {{-- Indicators --}}
                             <div class="carousel-indicators">
-                                @foreach ($produk->gambars as $index => $gambar)
+                            @foreach ($produk->gambars as $index => $gambar)
                                 <button type="button" data-bs-target="#carouselDetailProduk"
-                                    data-bs-slide-to="{{ $index }}"
-                                    class="{{ $index == 0 ? 'active' : '' }}"
-                                    aria-current="{{ $index == 0 ? 'true' : 'false' }}"
-                                    aria-label="Slide {{ $index + 1 }}"></button>
-                                @endforeach
+                                        data-bs-slide-to="{{ $index }}"
+                                        class="{{ $index == 0 ? 'active' : '' }}"
+                                        aria-current="{{ $index == 0 ? 'true' : 'false' }}"
+                                        aria-label="Slide {{ $index + 1 }}"></button>
+                            @endforeach
                             </div>
 
-                            {{-- Carousel Slides --}}
+                            {{-- Slides --}}
                             <div class="carousel-inner carousel-fixed-height rounded">
-                                @foreach ($produk->gambars as $index => $gambar)
+                            @foreach ($produk->gambars as $index => $gambar)
                                 <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
-                                    <div class="d-flex align-items-center justify-content-center w-100 h-100">
-                                        <img src="{{ asset('storage/' . $gambar->path) }}"
-                                             class="img-fluid"
-                                             style="max-height: 100%; max-width: 100%; object-fit: contain; cursor: zoom-in;"
-                                             alt="Gambar Produk {{ $index + 1 }}"
-                                             data-bs-toggle="modal"
-                                             data-bs-target="#modalGambar{{ $index }}">
-                                    </div>
+                                <div class="d-flex align-items-center justify-content-center w-100 h-100">
+                                    <img src="{{ asset('storage/' . $gambar->path) }}"
+                                        class="img-fluid"
+                                        style="max-height: 100%; max-width: 100%; object-fit: contain; cursor: zoom-in;"
+                                        alt="Gambar Produk {{ $index + 1 }}"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#modalGambar{{ $index }}">
+                                </div>
 
-                                    {{-- Modal Zoom --}}
-                                    <div class="modal fade" id="modalGambar{{ $index }}" tabindex="-1" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered modal-xl">
-                                            <div class="modal-content bg-transparent border-0">
-                                                <div class="modal-body p-0 position-relative">
-                                                    <button type="button" class="btn-close position-absolute top-0 end-0 m-3"
-                                                        data-bs-dismiss="modal" aria-label="Close"></button>
-                                                    <img src="{{ asset ('storage/' . $gambar->path) }}"
-                                                        class="img-fluid rounded mx-auto d-block"
-                                                        style="max-height: 90vh; object-fit: contain;">
-                                                </div>
-                                            </div>
+                                {{-- Modal Zoom --}}
+                                <div class="modal fade" id="modalGambar{{ $index }}" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered modal-xl">
+                                    <div class="modal-content bg-transparent border-0">
+                                        <div class="modal-body p-0 position-relative">
+                                        <button type="button" class="btn-close position-absolute top-0 end-0 m-3"
+                                                data-bs-dismiss="modal" aria-label="Close"></button>
+                                        <img src="{{ asset ('storage/' . $gambar->path) }}"
+                                            class="img-fluid rounded mx-auto d-block"
+                                            style="max-height: 90vh; object-fit: contain;">
                                         </div>
                                     </div>
+                                    </div>
                                 </div>
-                                @endforeach
+                                </div>
+                            @endforeach
                             </div>
 
-                            {{-- Tombol Panah Slider --}}
+                            {{-- Controls --}}
                             <button class="carousel-control-prev custom-carousel-control" type="button" data-bs-target="#carouselDetailProduk" data-bs-slide="prev">
-                                <span class="custom-carousel-icon">&#10094;</span>
-                                <span class="visually-hidden">Sebelumnya</span>
+                            <span class="custom-carousel-icon">&#10094;</span>
+                            <span class="visually-hidden">Sebelumnya</span>
                             </button>
                             <button class="carousel-control-next custom-carousel-control" type="button" data-bs-target="#carouselDetailProduk" data-bs-slide="next">
-                                <span class="custom-carousel-icon">&#10095;</span>
-                                <span class="visually-hidden">Berikutnya</span>
+                            <span class="custom-carousel-icon">&#10095;</span>
+                            <span class="visually-hidden">Berikutnya</span>
                             </button>
                         </div>
                         @else
@@ -105,49 +119,71 @@
                             alt="No image available">
                         @endif
                     </div>
+                    </div>
 
                     {{-- Detail Produk --}}
                     <div class="col-md-6">
                         <h2 class="fw-bold mb-3">{{ $produk->nama_produk }}</h2>
                         <p class="text-muted mb-2">
-                            <i class="bi bi-tag-fill me-1 text-danger"></i> {{ ucfirst($produk->jenis_produk) }}
+                        <i class="bi bi-tag-fill me-1 text-danger"></i> {{ ucfirst($produk->jenis_produk) }}
                         </p>
 
                         @php
-                            $min = $produk->varians->min('harga');
-                            $max = $produk->varians->max('harga');
+                        $min = $produk->varians->min('harga');
+                        $max = $produk->varians->max('harga');
+                        $totalStok = $produk->varians->sum('stok');
+                        $habis = $totalStok <= 0;
                         @endphp
 
                         <h4 class="text-black fw-bold mb-3">
-                            Rp{{ number_format($min, 0, ',', '.') }}
-                            @if ($min != $max)
-                                <span class="text-black">~ Rp{{ number_format($max, 0, ',', '.') }}</span>
-                            @endif
+                        Rp{{ number_format($min, 0, ',', '.') }}
+                        @if ($min != $max)
+                            <span class="text-black">~ Rp{{ number_format($max, 0, ',', '.') }}</span>
+                        @endif
                         </h4>
 
+                        <div class="mb-2 d-flex align-items-center gap-2">
+                        <span>
+                            <i class="bi bi-box-seam me-1 text-danger"></i>
+                            <span class="fw-semibold">Stok Tersedia:</span>
+                            <span class="text-dark">{{ $totalStok }}</span>
+                        </span>
+                        @if($habis)
+                            {{-- ← badge stok habis --}}
+                            <span class="badge bg-danger">Stok Habis</span>
+                        @endif
+                        </div>
+
                         <div class="deskripsi-produk mb-4 p-3 rounded">
-                            <h5 class="fw-semibold mb-2 text-dark">
-                                <i class="bi bi-info-circle me-2 text-danger"></i> Deskripsi Produk
-                            </h5>
+                        <h5 class="fw-semibold mb-2 text-dark">
+                            <i class="bi bi-info-circle me-2 text-danger"></i> Deskripsi Produk
+                        </h5>
 
-                            {{-- Wrapper untuk animasi slide --}}
-                            <div id="deskripsiWrapper" class="deskripsi-wrapper collapsed">
-                                <div id="deskripsiFull" class="text-secondary">
-                                    {!! $produk->deskripsi !!}
-                                </div>
+                        {{-- Wrapper untuk animasi slide --}}
+                        <div id="deskripsiWrapper" class="deskripsi-wrapper collapsed">
+                            <div id="deskripsiFull" class="text-secondary">
+                            {!! $produk->deskripsi !!}
                             </div>
+                        </div>
 
-                            <button id="toggleDeskripsiBtn" class="btn btn-sm btn-outline-merah mt-3">
-                                Lebih Lengkap <i class="bi bi-chevron-down"></i>
-                            </button>
+                        <button id="toggleDeskripsiBtn" class="btn btn-sm btn-outline-merah mt-3">
+                            Lebih Lengkap <i class="bi bi-chevron-down"></i>
+                        </button>
                         </div>
 
                         {{-- Tombol Aksi --}}
                         <div class="d-grid gap-2 d-md-flex">
-                            <!-- Tombol Beli Sekarang -->
-                            <button class="btn btn-outline-merah px-4 py-2" data-bs-toggle="modal" data-bs-target="#modalVarian" name="beli_sekarang" value="1">
-                                <i class="bi bi-bag-check me-1"></i> Beli Sekarang
+                        @if ($habis)
+                            {{-- tombol disabled + tidak membuka modal --}}
+                            <button class="btn btn-outline-secondary px-4 py-2" type="button" disabled aria-disabled="true" title="Stok habis">
+                            <i class="bi bi-bag-x me-1"></i> Stok Habis
                             </button>
+                        @else
+                            {{-- tombol normal membuka modal varian --}}
+                            <button class="btn btn-outline-merah px-4 py-2" data-bs-toggle="modal" data-bs-target="#modalVarian" name="beli_sekarang" value="1">
+                            <i class="bi bi-bag-check me-1"></i> Beli Sekarang
+                            </button>
+                        @endif
                         </div>
                     </div>
                 </div>
@@ -173,8 +209,12 @@
 
                         <div class="row g-3">
                             @foreach ($produk->varians as $varian)
+                            @php
+                                $isOut = $varian->stok <= 0;
+                            @endphp
                             <div class="col-md-6">
-                                <label class="border rounded p-3 w-100 h-100 d-flex gap-3 align-items-center varian-card position-relative">
+                                <label class="border rounded p-3 w-100 h-100 d-flex gap-3 align-items-center varian-card position-relative {{ $isOut ? 'bg-light' : '' }}"
+                                    style="{{ $isOut ? 'opacity:0.65; cursor:not-allowed;' : '' }}">
                                     <img src="{{ $produk->gambars->first() ? asset('storage/' . $produk->gambars->first()->path) : asset('assets/img/no-image.png') }}"
                                         class="rounded" style="width: 60px; height: 60px; object-fit: cover;" alt="Varian">
 
@@ -184,7 +224,11 @@
                                             Ukuran: {{ $varian->ukuran }}<br>
                                             Ketebalan: {{ $varian->ketebalan }} mm<br>
                                             Densitas: {{ $varian->densitas }} kg/m³<br>
-                                            Stok: <span class="{{ $varian->stok > 0 ? 'text-success' : 'text-danger' }}">{{ $varian->stok }}</span><br>
+                                            Ketersediaan: {{ $varian->status_ketersediaan }}<br>
+                                            Stok:
+                                            <span class="{{ $isOut ? 'text-danger' : 'text-success' }}">
+                                                {{ $varian->stok }} Ball
+                                            </span><br>
                                             <strong class="text-dark">Rp{{ number_format($varian->harga, 0, ',', '.') }}</strong>
                                         </div>
                                     </div>
@@ -193,8 +237,12 @@
                                         name="varian_id_radio"
                                         value="{{ $varian->id }}"
                                         class="form-check-input position-absolute top-0 end-0 m-2"
-                                        data-stok="{{ $varian->stok }}">
+                                        data-stok="{{ $varian->stok }}"
+                                        {{ $isOut ? 'disabled' : '' }}>
 
+                                    @if($isOut)
+                                        <span class="badge bg-danger position-absolute top-0 start-0 m-2">Stok Habis</span>
+                                    @endif
                                 </label>
                             </div>
                             @endforeach
@@ -409,6 +457,47 @@
         font-weight: bold;
         }
 
+        /* Wrapper media di detail produk */
+        .produk-media { position: relative; }
+
+        /* Badge stok habis — tampil cakep & terbaca di atas gambar */
+        .stock-badge{
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        z-index: 5;
+        background: linear-gradient(135deg, #b30000, #ff3b3b);
+        color: #fff;
+        padding: 8px 12px;
+        border-radius: 999px;     /* pill */
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: .2px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        border: 1px solid rgba(255,255,255,.35);
+        box-shadow: 0 6px 18px rgba(179,0,0,.25);
+        }
+
+        /* Overlay halus agar badge kontras, tanpa mengganggu gambar */
+        .stock-mask{
+        position: absolute;
+        inset: 0;
+        z-index: 4;
+        pointer-events: none;
+        background: linear-gradient(
+            180deg,
+            rgba(0,0,0,.18) 0%,
+            rgba(0,0,0,0) 35%
+        );
+        }
+
+        /* Optional: kecilkan badge di layar kecil */
+        @media (max-width: 575.98px){
+        .stock-badge{ top: 10px; left: 10px; padding: 7px 10px; font-size: 12px; }
+        }
+
         /* Animasi untuk pergerakan produk ke keranjang */
         @keyframes moveToCart {
             0% {
@@ -477,108 +566,92 @@
                 clonedImage.remove();
             }, 1000);
         });
-
     </script>
 
-    <script>
-        const radios = document.querySelectorAll('input[name="varian_id_radio"]');
-        const jumlahInput = document.getElementById('jumlahProduk');
-
-        radios.forEach(radio => {
-            radio.addEventListener('change', function () {
-                const stok = parseInt(this.dataset.stok);
-                jumlahInput.max = stok;
-
-                if (parseInt(jumlahInput.value) > stok) {
-                    jumlahInput.value = stok;
-                }
-            });
-        });
-
-        function submitCart(beliSekarang) {
-            const selectedRadio = document.querySelector('input[name="varian_id_radio"]:checked');
-            const jumlah = parseInt(jumlahInput.value);
-
-            if (!selectedRadio) {
-                alert("Silakan pilih varian terlebih dahulu.");
-                return;
-            }
-
-            const stokTersedia = parseInt(selectedRadio.dataset.stok);
-            if (jumlah > stok) {
-                alert("Jumlah melebihi stok tersedia (" + stok + ").");
-                jumlahInput.value = stok;
-                return;
-            }
-
-            document.getElementById('selectedVarian').value = selectedRadio.value;
-            document.getElementById('jumlahProdukHidden').value = jumlah;
-            document.getElementById('beliSekarangHidden').value = beliSekarang;
-
-            // Jalankan animasi sebelum submit
-            const imageSrc = selectedRadio.closest('.varian-card').querySelector('img').src;
-            animateToCart(imageSrc);
-
-            document.getElementById('formTambahKeranjang').submit();
-        }
-    </script>
     <!-- SweetAlert2 CDN -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
-        function submitCart(beliSekarang) {
+        (function () {
+        // jalan setelah DOM siap
+        document.addEventListener('DOMContentLoaded', () => {
+            const jumlahInput = document.getElementById('jumlahProduk');
+            const radios = document.querySelectorAll('input[name="varian_id_radio"]');
+
+            // Clamp jumlah berdasar stok saat varian berubah
+            radios.forEach(radio => {
+            radio.addEventListener('change', function () {
+                const stok = parseInt(this.dataset.stok || this.getAttribute('data-stok')) || 0;
+                if (stok > 0) {
+                jumlahInput.max = stok;
+                if (parseInt(jumlahInput.value || 0) > stok) {
+                    jumlahInput.value = stok;
+                }
+                } else {
+                jumlahInput.max = 0;
+                jumlahInput.value = 0;
+                }
+            });
+            });
+
+            // Clamp manual input (min 1, max stok)
+            jumlahInput.addEventListener('input', () => {
+            let val = parseInt(jumlahInput.value || 0);
+            if (isNaN(val) || val < 1) val = 1;
+            const checked = document.querySelector('input[name="varian_id_radio"]:checked');
+            const stok = checked ? parseInt(checked.dataset.stok || checked.getAttribute('data-stok')) || Infinity : Infinity;
+            if (val > stok) val = stok;
+            jumlahInput.value = val;
+            });
+        });
+
+        // single submit function (global)
+        window.submitCart = function (beliSekarang) {
             const selectedRadio = document.querySelector('input[name="varian_id_radio"]:checked');
             const jumlahInput = document.getElementById('jumlahProduk');
 
             if (!selectedRadio) {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Varian Belum Dipilih',
-                    text: 'Silakan pilih salah satu varian produk terlebih dahulu.',
-                    confirmButtonText: 'OK',
-                    confirmButtonColor: '#800000', // warna merah tua
-                    customClass: {
-                        popup: 'swal-custom-popup',
-                        title: 'swal-title-maroon',
-                        confirmButton: 'swal-button-maroon'
-                    }
-                });
-                return;
+            return Swal.fire({
+                icon: 'warning',
+                title: 'Varian Belum Dipilih',
+                text: 'Silakan pilih salah satu varian produk terlebih dahulu.',
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#800000',
+            });
             }
 
-            const selectedVarianId = selectedRadio.value;
-            const jumlah = parseInt(jumlahInput.value);
-
-            // Ambil stok dari data attribute (lebih aman)
-            const stokTersedia = parseInt(selectedRadio.getAttribute('data-stok'));
+            const stokTersedia = parseInt(selectedRadio.dataset.stok || selectedRadio.getAttribute('data-stok')) || 0;
+            let jumlah = parseInt(jumlahInput.value || 0);
+            if (isNaN(jumlah) || jumlah < 1) jumlah = 1;
 
             if (jumlah > stokTersedia) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Jumlah Melebihi Stok',
-                    text: `Stok tersedia hanya ${stokTersedia}. Silakan kurangi jumlah pembelian.`,
-                    confirmButtonText: 'OK',
-                    confirmButtonColor: '#800000', // warna merah tua
-                    customClass: {
-                        popup: 'swal-custom-popup',
-                        title: 'swal-title-maroon',
-                        confirmButton: 'swal-button-maroon'
-                    }
-                });
-                return;
+            jumlahInput.value = stokTersedia > 0 ? stokTersedia : 0;
+            return Swal.fire({
+                icon: 'error',
+                title: 'Jumlah Melebihi Stok',
+                text: `Stok tersedia hanya ${stokTersedia}. Silakan kurangi jumlah pembelian.`,
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#800000',
+            });
             }
 
-            // Set form hidden fields
-            document.getElementById('selectedVarian').value = selectedVarianId;
+            // set hidden fields
+            document.getElementById('selectedVarian').value = selectedRadio.value;
             document.getElementById('jumlahProdukHidden').value = jumlah;
             document.getElementById('beliSekarangHidden').value = beliSekarang;
 
-            // Jalankan animasi sebelum submit
-            const imageSrc = selectedRadio.closest('.varian-card').querySelector('img').src;
-            animateToCart(imageSrc);
+            // animasi (optional)
+            try {
+            if (typeof animateToCart === 'function') {
+                const img = selectedRadio.closest('.varian-card')?.querySelector('img');
+                if (img) animateToCart(img.src);
+            }
+            } catch (e) { /* ignore */ }
 
+            // submit normal form (biar redirect auth ke /login jalan)
             document.getElementById('formTambahKeranjang').submit();
-        }
+        };
+        })();
     </script>
 
     <script>

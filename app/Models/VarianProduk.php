@@ -17,6 +17,7 @@ class VarianProduk extends Model
         'densitas',
         'harga',
         'stok',
+        'status_ketersediaan',
     ];
 
     public function produk()

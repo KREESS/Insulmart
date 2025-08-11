@@ -3,6 +3,64 @@
 @section('content')
 
     <br><br><br>
+    <style>
+        /* Mobile besar */
+        @media (max-width: 767.98px) {
+        #beranda {
+            min-height: 85svh;
+            padding: 48px 14px 42px;
+        }
+        .slider-content { bottom: 15vh; }
+        .slider-inner { max-width: 460px; }
+        .welcome-text { font-size: 12px; }
+        #slider-title { font-size: clamp(22px, 6.6vw, 32px); }
+        #slider-desc  { 
+            font-size: 12.5px;
+            display: -webkit-box;
+            -webkit-line-clamp: 5;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .cta-btn { 
+            font-size: 12.5px; 
+            padding: 9px 14px; 
+            display: inline-block; 
+            width: auto; 
+            max-width: 100%;
+        }
+        }
+
+        /* Mobile kecil */
+        @media (max-width: 575.98px) {
+        #beranda {
+            min-height: 81svh;
+            padding: 42px 12px 36px;
+        }
+        .slider-content { bottom: 12vh; padding: 0 14px; }
+        .slider-inner { max-width: 400px; }
+        .welcome-text { font-size: 11px; }
+        #slider-title { font-size: clamp(20px, 7.6vw, 28px); }
+        #slider-desc  { font-size: 12px; line-height: 1.45; }
+        .cta-btn { 
+            display: inline-block; 
+            font-size: 12px; 
+            padding: 9px 14px; 
+            width: auto; 
+            max-width: 100%;
+        }
+        }
+
+        /* Notch / safe-area iPhone */
+        @supports (padding: max(0px)) {
+        @media (max-width: 767.98px) {
+            .slider-content {
+            padding-left: max(14px, env(safe-area-inset-left));
+            padding-right: max(14px, env(safe-area-inset-right));
+            bottom: max(12vh, env(safe-area-inset-bottom));
+            }
+        }
+        }
+    </style>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -18,12 +76,11 @@
                     <p class="welcome-text">Selamat Datang di INSULMART</p>
                     <h1 id="slider-title">TALI REJEKI</h1>
                     <p id="slider-desc">
-                        BERDIRI SEJAK 2011. PT. TALI REJEKI DIPERCAYA SEBAGAI DISTRIBUTOR & AGEN UNTUK BERBAGAI PROJECT BESAR PEREDAM SUARA UNTUK RUANG KARAOKE, BALLROOM, DAN AKUSTIK DI SELURUH INDONESIA.
+                        BERDIRI SEJAK 2011. PT. TALI REJEKI DIPERCAYA SEBAGAI MARKETPLACE & AGEN UNTUK BERBAGAI PROJECT BESAR PEREDAM SUARA UNTUK RUANG KARAOKE, BALLROOM, DAN AKUSTIK DI SELURUH INDONESIA.
                     </p>
                     <a href="{{ url('/produk') }}" class="cta-btn" style="color: white;">Lihat Produk Kami</a>
                 </div>
             </div>
-
         </header>
 
         <!-- Bagian Bawah Edit -->

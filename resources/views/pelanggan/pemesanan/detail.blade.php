@@ -350,9 +350,10 @@
                             <th>Gambar</th>
                             <th>Produk</th>
                             <th>Tipe</th>
-                            <th class="text-end">Harga</th>
+                            <th class="text-center">Ketersediaan</th>
+                            <th class="text-center">Harga</th>
                             <th class="text-center">Qty</th>
-                            <th class="text-end">Subtotal</th>
+                            <th class="text-center">Subtotal</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -378,6 +379,7 @@
                                 </td>
                                 <td>{{ $item->varianProduk->produk->nama_produk ?? '-' }}</td>
                                 <td>{{ $item->varianProduk->tipe }}</td>
+                                <td>{{ $item->varianProduk->status_ketersediaan }}</td>
                                 <td class="text-end">Rp {{ number_format($item->varianProduk->harga,0,',','.') }}</td>
                                 <td class="text-center">{{ $item->kuantitas }}</td>
                                 <td class="text-end">Rp {{ number_format($rowTotal,0,',','.') }}</td>

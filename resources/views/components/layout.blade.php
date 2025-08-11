@@ -4,7 +4,8 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
-        <title>Distributor Material Insulasi Terlengkap | Insulmart</title>
+        <meta name="google-site-verification" content="RWX0JoxC1qJ7luCnwj1CLxSPkaz5nAonaf3y0ULq0ZA" />
+        <title>Marketplace Material Insulasi Terlengkap | Insulmart</title>
 
         <!-- ✅ Bootstrap CSS 5.3.0 -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"

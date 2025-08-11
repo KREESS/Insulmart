@@ -139,10 +139,10 @@
                             <strong>Bank:</strong> Bank Central Asia (BCA)
                         </li>
                         <li class="list-group-item bg-transparent">
-                            <strong>Nama Pemilik:</strong> PT Tali Rejeki
+                            <strong>Nama Pemilik:</strong> Gemah Ismasari
                         </li>
                         <li class="list-group-item bg-transparent">
-                            <strong>No. Rekening:</strong> 123 456 7890
+                            <strong>No. Rekening:</strong> 741-0277969
                         </li>
                     </ul>
 

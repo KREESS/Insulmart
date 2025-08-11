@@ -297,12 +297,17 @@
                                     <td class="text-center" style="width:80px;">
                                         @php $img = $item->varianProduk->produk->gambars->first(); @endphp
                                         @if($img)
-                                            <img src="{{ asset($img->path) }}" alt="Produk" class="img-thumbnail" style="width:56px; height:56px; object-fit:cover;">
+                                            <img src="{{ asset('storage/' . $img->path) }}" alt="Produk" class="img-thumbnail" style="width:56px; height:56px; object-fit:cover;">
                                         @else
                                             <span class="text-muted">—</span>
                                         @endif
                                     </td>
-                                    <td class="fw-semibold text-maroon text-truncate">{{ $item->varianProduk->tipe }}</td>
+                                    <td class="fw-semibold text-maroon text-truncate">
+                                        {{ $item->varianProduk->tipe }}
+                                        <span class="text-secondary text-lowercase small ms-1">
+                                            {{ strtolower($item->varianProduk->status_ketersediaan) }}
+                                        </span>
+                                    </td>
                                     <td class="text-center">
                                         <div class="d-flex justify-content-center align-items-center gap-1">
                                             <button type="button" class="btn btn-light btn-sm btn-qty"
