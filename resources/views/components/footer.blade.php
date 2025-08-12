@@ -83,7 +83,7 @@
     </div>
 
     <div class="footer-bottom fade-up">
-        &copy; <span id="current-year"></span> Insulmart. All rights reserved.
+        Copyright &copy; 2025 - <span id="current-year"></span> Insulmart. All rights reserved.
     </div>
 </footer>
 

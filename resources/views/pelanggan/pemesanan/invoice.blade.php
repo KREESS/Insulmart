@@ -176,7 +176,7 @@
                             CV. INSULMART INDONESIA
                         </div>
                         <div style="font-size:12px; color:#a12c2c;">
-                            JL. RAYA TARUMAJAYA NO. 13 RT 001 RW 029 DUSUN III DESA SETIA ASIH<br>
+                            JL. RAYA TARUMAJAYA NO. 13 RT 001 RW 029 DESA SETIA ASIH<br>
                             Kec. Tarumajaya, Kab. Bekasi 17215
                         </div>
                         <div style="font-size:11px; color:#a12c2c;">
@@ -200,10 +200,6 @@
                     <td class="label">No. Telepon</td>
                     <td>: {{ $pemesanan->pengguna->nomor_telepon ?? '-' }}</td>
                 </tr>
-                {{-- <tr>
-                    <td class="label">Alamat</td>
-                    <td>: {{ $pemesanan->alamatPengiriman->alamat_lengkap ?? '-' }}</td>
-                </tr> --}}
             </table>
 
             <div class="section-title">Rincian Pesanan</div>
@@ -240,6 +236,9 @@
                     </tr>
                 </tfoot>
             </table>
+            <div class="note-PPN" style="font-size: 11px; color: #555; margin-top: 6px;">
+                *Harga Diatas Sudah Temasuk PPN
+            </div>
 
             <!-- ... (table produk di atas) -->
 
@@ -283,14 +282,17 @@
                     <div class="nominal-box">
                         Rp{{ number_format($termin->jumlah_dibayar, 0, ',', '.') }}
                     </div>
+                    <div class="note-rekening" style="font-size: 11px; color: #555; margin-top: 6px;">
+                        Pembayaran dapat ditransfer melalui Bank <b>BCA</b><br> 
+                        No. Rek: <b>066-3059367</b> a/n <b>PT TALI REJEKI</b>
+                    </div>
                 </div>
 
                 <div class="inline-right">
                     <div class="ttd-box">
                         <div class="ttd-label">Hormat Kami,</div>
-                        <img src="{{ public_path('/assets/img/ttd.jpg') }}" alt="Tanda Tangan" class="ttd-img">
-                        <div class="ttd-nama">GEMAH ISMASARI</div>
-                        <div class="ttd-jabatan">Direktur Utama</div>
+                        <img src="{{ public_path('/assets/img/ttd.png') }}" alt="Tanda Tangan" class="ttd-img">
+                        <div class="ttd-nama">YUDHISTIRA JALU</div>
                         <div class="small" style="margin-top:6px;">{{ date('d-m-Y') }}</div>
                     </div>
                 </div>
