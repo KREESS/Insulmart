@@ -130,4 +130,27 @@ class AdminPesananController extends Controller
         // Laravel Excel, misal: composer require maatwebsite/excel
         return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\PemesananExport($data), 'pesanan.xlsx');
     }
+
+    public function suratJalan($id)
+    {
+        $pemesanan = \App\Models\Pemesanan::with([
+            'pengguna',
+            'detailPemesanan.varianProduk.produk',
+            'alamatPengiriman'
+        ])->findOrFail($id);
+
+        // Verify status
+        if (!in_array($pemesanan->status_pemesanan, ['diproses', 'selesai'])) {
+            return back()->with('error', 'Surat jalan hanya dapat diakses untuk pesanan yang diproses atau selesai.');
+        }
+
+        // Generate PDF
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('admin.pesanan.surat-jalan', compact('pemesanan'));
+
+        // Set paper
+        $pdf->setPaper('A4', 'portrait');
+
+        // Download PDF with name
+        return $pdf->stream('Surat_Jalan_' . $pemesanan->kode_pemesanan . '.pdf');
+    }
 }

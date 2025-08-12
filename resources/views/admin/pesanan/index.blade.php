@@ -831,6 +831,16 @@
                 </dd>
                 <dt class="col-sm-4">Total Harga</dt>
                 <dd class="col-sm-8 fw-bold text-maroon">Rp {{ number_format($o->total_harga,0,',','.') }}</dd>
+                @if(in_array($o->status_pemesanan, ['diproses', 'selesai']))
+                <dt class="col-sm-4">Surat Jalan</dt>
+                <dd class="col-sm-8">
+                  <a href="{{ route('admin.pesanan.suratJalan', $o->id) }}" 
+                     class="btn gradient-download-btn"
+                     target="_blank">
+                     <i class="bi bi-file-earmark-text"></i> Download Surat Jalan
+                  </a>
+                </dd>
+                @endif
               </dl>
             </div>
           </div>

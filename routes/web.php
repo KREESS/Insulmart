@@ -139,6 +139,7 @@ Route::middleware(['auth'])->group(function () {
         Route::patch('/admin/pembayaran/{id}/update-status-verif', [AdminPesananController::class, 'updateStatusVerif'])->name('admin.pembayaran.updateStatusVerif');
         Route::patch('/admin/pembayaran/{id}/update-catatan', [AdminPesananController::class, 'updateCatatan'])->name('admin.pembayaran.updateCatatan');
         Route::get('/admin/pesanan/export', [AdminPesananController::class, 'export'])->name('admin.pesanan.export');
+        Route::get('/admin/pesanan/{id}/surat-jalan', [AdminPesananController::class, 'suratJalan'])->name('admin.pesanan.suratJalan');
         // ============ BATAS =============
 
 
