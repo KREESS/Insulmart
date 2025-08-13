@@ -268,7 +268,18 @@
                 <td>{{ $detail->varianProduk->produk->nama_produk }}</td>
                 <td>{{ $detail->varianProduk->tipe }}</td>
                 <td style="text-align: center;">{{ $detail->kuantitas }} Ball/Pack</td>
-                <td>{{ $pemesanan->armadaPengiriman ? $pemesanan->armadaPengiriman->jenis_armada : '-' }}</td>
+                <td>
+                    @if($pemesanan->armadaPemesanan->count() > 0)
+                        @foreach($pemesanan->armadaPemesanan as $armada)
+                            {{ $armada->armada->nama }} ({{ $armada->jumlah_mobil }} Unit)
+                            @if(!$loop->last)
+                            <br>
+                            @endif
+                        @endforeach
+                    @else
+                        -
+                    @endif
+                </td>
             </tr>
             @endforeach
         </tbody>
