@@ -5,186 +5,245 @@
         <title>Invoice #{{ $pemesanan->kode_pemesanan }} Termin {{ $termin->termin_ke }}</title>
         <link rel="icon" href="{{ asset('assets/img/insulmart_new1.png') }}" type="image/png">
         <style>
-            body { font-family: DejaVu Sans, sans-serif; font-size: 13px; color: #222; margin: 0; padding: 0;}
-            .wrapper { max-width: 800px; margin: 0 auto; background: #fff; padding: 32px 28px 22px 28px;}
-            .header-grid {
-                display: grid;
-                grid-template-columns: 105px 1fr 210px;
-                align-items: center;
-                padding-bottom: 16px;
-                border-bottom: 2.5px solid #800000;
-                margin-bottom: 28px;
-                gap: 14px;
-            }
-            .logo-img {
-                width: 92px;
-                height: 65px;
-                object-fit: contain;
-                display: block;
-                margin: 0 auto;
-            }
-            .center-info {
-                text-align: center;
-            }
-            .pt-name {
-                font-size: 17px;
-                font-weight: bold;
-                color: #800000;
-                letter-spacing: 1.1px;
-                margin-bottom: 2px;
-            }
-            .pt-info, .npwp {
-                font-size: 11px;
-                color: #a12c2c;
-                line-height: 1.4;
-            }
-            .npwp { margin-top: 1.5px; }
-            .invoice-block {
-                text-align: right;
-            }
-            .invoice-title {
-                font-size: 18px;
-                font-weight: bold;
-                color: #800000;
-                margin-bottom: 5px;
-                letter-spacing: 1.1px;
-            }
-            .invoice-data {
-                font-size: 13px;
-                color: #800000;
-            }
-            .invoice-data .label { font-weight: bold; color: #800000; }
-            .info-table { width: 100%; margin-bottom: 18px;}
-            .info-table td { padding: 2px 0; font-size: 13px;}
-            .info-table .label { width: 125px; color: #800000; }
-            .section-title { color: #800000; font-weight: 700; font-size: 15px; margin-bottom: 8px; margin-top: 30px; letter-spacing: .7px;}
-            .table { width: 100%; border-collapse: collapse; margin-top: 14px;}
-            .table, .table th, .table td { border: 1.5px solid #e4dada;}
-            .table th, .table td { padding: 8px 11px; font-size: 13px;}
-            .table th { background: #800000; color: #fff; font-weight: 600;}
-            .table td { background: #fdfbfa;}
-            .table tr:nth-child(even) td { background: #faf6f6;}
-            .total { font-weight: bold; background: #f8ecec;}
-            .right { text-align: right;}
-            .nominal-box { padding: 13px 24px; background: #f8ecec; border-radius: 12px; display: inline-block; font-size: 16px; font-weight: 700; color: #800000; box-shadow: 0 2px 8px rgba(128,0,0,0.08);}
-            .inline-container {
-                display: table;
-                width: 100%;
-                margin-top: 48px;
-                table-layout: fixed;
+            body { 
+                font-family: DejaVu Sans, sans-serif; 
+                font-size: 11px; 
+                color: #333; 
+                margin: 0; 
+                padding: 0;
+                line-height: 1.3;
             }
 
-            .inline-left, .inline-right {
-                display: table-cell;
-                vertical-align: bottom;
+            .wrapper { 
+                max-width: 800px; 
+                margin: 0 auto; 
+                background: #fff; 
+                padding: 16px 16px 16px;
+                box-shadow: 0 0 20px rgba(0,0,0,0.03);
+            }
+
+            /* Info Table Styles */
+            .info-table { 
+                width: 100%; 
+                margin: 16px 0 20px;
+                border-spacing: 0;
+                border-collapse: separate;
+            }
+
+            .info-table td { 
+                padding: 4px 8px; 
+                font-size: 12px;
+                line-height: 1.4;
+                vertical-align: top;
+            }
+
+            .info-table .label { 
+                width: 130px; 
+                color: #800000;
+                font-weight: 600;
+                padding-left: 0;
+            }
+
+            /* Section Titles */
+            .section-title { 
+                color: #800000; 
+                font-weight: 700; 
+                font-size: 14px; 
+                margin: 24px 0 12px;
+                letter-spacing: 0.5px;
+                padding-bottom: 6px;
+                border-bottom: 1px solid rgba(128,0,0,0.1);
+            }
+
+            /* Main Tables */
+            .table { 
+                width: 100%; 
+                border-collapse: separate;
+                border-spacing: 0;
+                margin: 6px 0;
+                border-radius: 4px;
+                overflow: hidden;
+                box-shadow: 0 0 0 1px #e4dada;
+            }
+
+            .table th { 
+                background: #800000; 
+                color: #fff; 
+                font-weight: 600;
+                font-size: 10px;
+                padding: 6px 8px;
+                text-align: left;
+                border-bottom: 1px solid #700000;
+            }
+
+            .table td { 
+                padding: 4px 8px; 
+                font-size: 10px;
+                background: #fff;
+                border-bottom: 1px solid #e4dada;
+            }
+
+            .table tr:last-child td {
+                border-bottom: none;
+            }
+
+            .table tr:nth-child(even) td { 
+                background: #fdfafa;
+            }
+
+            .table .right {
+                text-align: right;
+            }
+
+            .total { 
+                font-weight: 700; 
+                background: #f8ecec !important;
+                color: #800000;
+            }
+
+            /* Notes */
+            .note-PPN, .note-rekening { 
+                font-size: 9px; 
+                color: #666; 
+                margin-top: 4px;
+                line-height: 1.2;
+                padding: 4px 8px;
+                background: #fafafa;
+                border-radius: 3px;
+                border-left: 2px solid #800000;
+            }
+
+            /* Payment Section */
+            .inline-container {
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+                margin-top: 16px;
+                gap: 24px;
             }
 
             .inline-left {
-                width: 60%;
+                flex: 1;
+                max-width: 450px;
             }
 
             .inline-right {
-                text-align: right;
-                width: 40%;
+                width: 180px;
+            }
+
+            .nominal-section {
+                display: flex;
+                align-items: center;
+                margin-bottom: 8px;
+            }
+
+            .nominal-label {
+                color: #800000;
+                font-weight: 700;
+                font-size: 12px;
+                margin-right: 12px;
+                white-space: nowrap;
             }
 
             .nominal-box {
-                font-size: 1.6rem;
-                font-weight: bold;
+                background: #f8f3f3;
+                padding: 6px 12px;
+                border-radius: 4px;
+                box-shadow: 0 1px 4px rgba(128,0,0,0.08);
+                border: 1px solid rgba(128,0,0,0.1);
+                font-size: 13px;
+                font-weight: 700;
                 color: #800000;
-                background: #f8f8f8;
-                padding: 16px 24px;
-                border-radius: 10px;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-                display: inline-block;
-                max-width: 100%;
-                word-break: break-word;
+                text-align: right;
+                flex: 1;
             }
 
+            /* Signature Box */
             .ttd-box {
-                font-size: 0.9rem;
+                font-size: 10px;
+                width: 160px;
+                text-align: center;
             }
 
             .ttd-img {
-                width: 140px;
+                width: 75px;
                 height: auto;
-                margin: 4px 0;
+                display: block;
+                margin: 4px auto;
             }
 
             .ttd-nama {
-                font-weight: bold;
-                margin-top: 6px;
-                text-decoration: underline;
+                font-weight: 700;
+                color: #800000;
+                border-bottom: 1px solid #800000;
+                display: inline-block;
+                padding-bottom: 1px;
+                margin: 2px 0;
             }
 
-            .ttd-jabatan {
-                font-size: 0.85rem;
+            .ttd-label {
+                margin-bottom: 2px;
                 color: #555;
             }
 
-            @media (max-width: 650px) {
-                .inline-container {
-                    display: block;
-                }
-                .inline-left, .inline-right {
-                    display: block;
-                    width: 100%;
-                }
-                .inline-right {
-                    text-align: left;
-                    margin-top: 24px;
-                }
+            .small {
+                font-size: 9px;
+                color: #666;
             }
 
-
-            @media (max-width: 650px) {
-                .wrapper { padding: 16px 6px 8px 6px;}
-                .header-grid { grid-template-columns: 72px 1fr 1fr; gap: 7px; }
-                .invoice-block { font-size: 11px; }
-                .invoice-title { font-size: 15px;}
-                .logo-img { width: 58px; height: 40px;}
-                .pt-name { font-size: 13px; }
+            @media print {
+                body { background: #fff; }
+                .wrapper { 
+                    box-shadow: none;
+                    padding: 20px;
+                }
+                .table { box-shadow: 0 0 0 1px #e4dada; }
+                .nominal-box, .ttd-box {
+                    box-shadow: none;
+                    border: 1px solid rgba(128,0,0,0.1);
+                }
             }
         </style>
     </head>
     <body>
         <div class="wrapper">
-            <table width="100%" style="border-bottom:2px solid #800000; margin-bottom:24px; border-collapse:separate;">
-                <tr>
-                    <!-- Logo besar, rata tengah -->
-                    <td style="width:122px; text-align:left; vertical-align:middle; padding-left:0;">
-                        <img src="{{ public_path('/assets/img/icon-logo.png') }}"
-                            alt="Logo PT"
-                            style="height:190px; width:auto; display:block; object-fit:contain;">
-                    </td>
-                    <!-- HEADER KANAN: semua info inline, font kecil proporsional -->
-                    <td style="vertical-align:middle; text-align:left; padding-left:22px;">
-                        <div style="display:flex; align-items:center; gap:15px; flex-wrap:wrap;">
-                            <span style="font-size:20px; color:#800000; font-weight:700; letter-spacing:1px;">
-                                INVOICE TERMIN {{ $termin->termin_ke }}
-                            </span>
-                            <br>
-                            <span style="font-size:13px; color:#800000; font-weight:bold;">
-                                No.: <span style="font-weight:400;">#{{ $pemesanan->kode_pemesanan }}</span>
-                            </span>
-                            <br>
-                            <span style="font-size:13px; color:#800000; font-weight:bold;">
-                                Tanggal: <span style="font-weight:400;">{{ \Carbon\Carbon::parse($pemesanan->created_at)->format('d-m-Y') }}</span>
-                            </span>
-                        </div>
-                        <div style="margin-top:7px; font-size:15px; color:#800000; font-weight:700;">
-                            CV. INSULMART INDONESIA
-                        </div>
-                        <div style="font-size:12px; color:#a12c2c;">
-                            JL. RAYA TARUMAJAYA NO. 13 RT 001 RW 029 DESA SETIA ASIH<br>
-                            Kec. Tarumajaya, Kab. Bekasi 17215
-                        </div>
-                        <div style="font-size:11px; color:#a12c2c;">
-                            NPWP: 1000-0000-0424-4481
-                        </div>
-                    </td>
-                </tr>
-            </table>
+            <!-- Header dengan logo dan informasi perusahaan -->
+            <div style="background: #fff; border-radius: 4px; box-shadow: 0 1px 3px rgba(128,0,0,0.08); margin-bottom: 12px; overflow: hidden; border: 1px solid #f0f0f0; border-bottom: 2px solid #800000;">
+                <table width="100%" style="border-collapse: separate; border-spacing: 0;">
+                    <tr>
+                        <td style="width: 80px; text-align: center; vertical-align: middle; padding: 8px; border-right: 1px solid #f5f5f5;">
+                            <img src="{{ public_path('/assets/img/icon-logo.png') }}"
+                                alt="Logo PT"
+                                style="height: 65px; width: auto; display: block; object-fit: contain; margin: 0 auto 2px;">
+                            <div style="text-align: center; font-size: 8px; color: #800000; font-weight: 500;">www.insulmart.co.id</div>
+                        </td>
+                        <td style="vertical-align: middle; padding: 8px 12px;">
+                            <div style="border-bottom: 1px solid #f0f0f0; padding-bottom: 6px; margin-bottom: 6px;">
+                                <div style="font-size: 16px; color: #800000; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 3px;">
+                                    INVOICE TERMIN {{ $termin->termin_ke }}
+                                </div>
+                                <div style="font-size: 10px; color: #800000; display: flex; align-items: center; gap: 6px;">
+                                    <span style="font-weight: 600;">No.:</span>
+                                    <span style="font-weight: 500;">INV-{{ $pemesanan->kode_pemesanan }}</span>
+                                    <span style="color: #ddd;">|</span>
+                                    <span style="font-weight: 600;">Tanggal:</span>
+                                    <span style="font-weight: 500;">{{ \Carbon\Carbon::parse($pemesanan->created_at)->timezone('Asia/Jakarta')->locale('id')->translatedFormat('d F Y - H:i') }} WIB</span>
+                                </div>
+                            </div>
+                            <div style="font-size: 14px; color: #800000; font-weight: 700; margin-bottom: 4px;">
+                                CV. INSULMART INDONESIA
+                            </div>
+                            <div style="font-size: 11px; color: #666; line-height: 1.3;">
+                                JL. RAYA TARUMAJAYA NO. 13 RT 001 RW 029 DESA SETIA ASIH,
+                                Kec. Tarumajaya, Kab. Bekasi 17215
+                            </div>
+                            <div style="font-size: 11px; color: #666; margin-top: 2px;">
+                                <span style="font-weight: 600;">NPWP:</span> 1000-0000-0424-4481
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
 
             <!-- === SISA TIDAK BERUBAH === -->
             <table class="info-table borderless">
@@ -192,6 +251,10 @@
                     <td class="label">Nama Customer</td>
                     <td>: {{ $pemesanan->pengguna->name }}</td>
                 </tr>
+                <tr>
+                    <td class="label">Nama Perusahaan</td>
+                    <td>: {{ $pemesanan->pengguna->perusahaan }}</td>
+                </tr>                
                 <tr>
                     <td class="label">Email</td>
                     <td>: {{ $pemesanan->pengguna->email }}</td>
@@ -224,7 +287,7 @@
                             <td>{{ $item->varianProduk->produk->nama_produk ?? '-' }}</td>
                             <td>{{ $item->varianProduk->tipe ?? '-' }}</td>
                             <td class="right">Rp{{ number_format($item->varianProduk->harga,0,',','.') }}</td>
-                            <td class="right">{{ $item->kuantitas }}</td>
+                            <td class="right">{{ $item->kuantitas }} Ball</td>
                             <td class="right">Rp{{ number_format($subtotal,0,',','.') }}</td>
                         </tr>
                     @endforeach
@@ -241,7 +304,6 @@
             </div>
 
             <!-- ... (table produk di atas) -->
-
             <div class="section-title">Rincian Ongkos Kirim</div>
             <table class="table">
                 <thead>
@@ -260,7 +322,7 @@
                         @php $totalOngkir += $armada->subtotal_ongkir; @endphp
                         <tr>
                             <td>{{ $armada->armada->nama ?? '-' }}</td>
-                            <td>{{ $armada->armada->kapasitas_pack ?? '-' }} bal</td>
+                            <td>{{ $armada->armada->kapasitas_pack ?? '-' }} ball</td>
                             <td class="right">{{ $armada->jumlah_mobil }}</td>
                             <td class="right">Rp{{ number_format($armada->armada->tarif_per_km ?? 0, 0, ',', '.') }}/km</td>
                             <td class="right">{{ number_format($armada->jarak_km, 2) }}</td>
@@ -276,29 +338,25 @@
                 </tfoot>
             </table>
 
-            <div class="inline-container">
-                <div class="inline-left">
-                    <div class="section-title">Nominal Pembayaran Termin {{ $termin->termin_ke }}</div>
+            <div style="margin-top: 24px;">
+                <div class="nominal-section">
+                    <div class="nominal-label">Nominal Pembayaran Termin {{ $termin->termin_ke }}:</div>
                     <div class="nominal-box">
                         Rp{{ number_format($termin->jumlah_dibayar, 0, ',', '.') }}
                     </div>
-                    <div class="note-rekening" style="font-size: 11px; color: #555; margin-top: 6px;">
+                    <div class="note-rekening" style="margin-top: 8px;">
                         Pembayaran dapat ditransfer melalui Bank <b>BCA</b><br> 
                         No. Rek: <b>066-3059367</b> a/n <b>PT TALI REJEKI</b>
                     </div>
-                </div>
-
-                <div class="inline-right">
-                    <div class="ttd-box">
+                    <div class="ttd-box" style="margin-left: 24px;">
                         <div class="ttd-label">Hormat Kami,</div>
                         <img src="{{ public_path('/assets/img/ttd.png') }}" alt="Tanda Tangan" class="ttd-img">
                         <div class="ttd-nama">YUDHISTIRA JALU</div>
-                        <div class="small" style="margin-top:6px;">{{ date('d-m-Y') }}</div>
+                        <div class="small">Jakarta, {{ \Carbon\Carbon::now()->timezone('Asia/Jakarta')->locale('id')->translatedFormat('d F Y') }}</div>
                     </div>
                 </div>
+
             </div>
-
-
         </div>
     </body>
 </html>

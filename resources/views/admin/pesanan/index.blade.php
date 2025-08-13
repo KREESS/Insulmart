@@ -889,6 +889,51 @@
           </div>
         </div>
 
+        {{-- SECTION: Armada Pengiriman --}}
+        <div class="mb-3">
+          <div class="card card-section shadow-sm">
+            <div class="card-header gradient-section-header text-white fw-bold">
+              <i class="bi bi-truck me-1"></i> Armada Pengiriman
+            </div>
+            <div class="card-body p-2">
+              <div class="table-responsive">
+                <table class="table table-sm mb-0">
+                  <thead>
+                    <tr>
+                      <th>Jenis Armada</th>
+                      <th>Jumlah Unit</th>
+                      <th>Jarak (KM)</th>
+                      <th>Tarif/KM</th>
+                      <th>Ongkir</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @if($o->armadaPemesanan->count() > 0)
+                      @foreach($o->armadaPemesanan as $ap)
+                      <tr>
+                        <td>{{ $ap->armada->nama }}</td>
+                        <td>{{ $ap->jumlah_mobil }} Unit</td>
+                        <td>{{ $ap->jarak_km }} KM</td>
+                        <td>Rp {{ number_format($ap->armada->tarif_per_km, 0, ',', '.') }}</td>
+                        <td>Rp {{ number_format($ap->subtotal_ongkir, 0, ',', '.') }}</td>
+                      </tr>
+                      @endforeach
+                      <tr>
+                        <td colspan="4" class="text-end fw-bold">Total Ongkir:</td>
+                        <td class="fw-bold">Rp {{ number_format($o->armadaPemesanan->sum('subtotal_ongkir'), 0, ',', '.') }}</td>
+                      </tr>
+                    @else
+                      <tr>
+                        <td colspan="5" class="text-center text-muted">Belum ada armada yang ditentukan</td>
+                      </tr>
+                    @endif
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {{-- SECTION: Produk Dipesan --}}
         <div class="mb-3">
           <div class="card card-section shadow-sm">
