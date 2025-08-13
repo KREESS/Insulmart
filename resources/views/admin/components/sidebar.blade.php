@@ -10,23 +10,27 @@
       </a>
     </li>
     <li class="nav-item mb-2">
-      <a href="/admin/produk" class="nav-link text-white {{ request()->is('admin/produk*') ? 'active fw-bold' : '' }}">
-        <i class="bi bi-box-fill me-2"></i>Produk
+      <a href="/admin/pembelian" class="nav-link text-white {{ request()->is('admin/pembelian*') ? 'active fw-bold' : '' }}">
+        <i class="bi bi-receipt me-2"></i>Pembelian Produk
       </a>
     </li>
-<li class="nav-item mb-2">
-  <a href="/admin/pesanan" class="nav-link text-white d-flex justify-content-between align-items-center {{ request()->is('admin/pesanan*') ? 'active fw-bold' : '' }}">
-    <div>
-      <i class="bi bi-cart-fill me-2"></i>Pesanan
-    </div>
-    @if(isset($waitingOrdersCount) && $waitingOrdersCount > 0)
-      <span class="badge bg-warning text-dark fw-bold rounded-pill px-2 py-1 small">
-        {{ $waitingOrdersCount }}
-      </span>
-    @endif
-  </a>
-</li>
-
+    <li class="nav-item mb-2">
+      <a href="/admin/produk" class="nav-link text-white {{ request()->is('admin/produk*') ? 'active fw-bold' : '' }}">
+        <i class="bi bi-box-seam-fill me-2"></i>Kelola Produk
+      </a>
+    </li>
+    <li class="nav-item mb-2">
+      <a href="/admin/pesanan" class="nav-link text-white d-flex justify-content-between align-items-center {{ request()->is('admin/pesanan*') ? 'active fw-bold' : '' }}">
+        <div>
+          <i class="bi bi-cart-fill me-2"></i>Pesanan
+        </div>
+        @if(isset($waitingOrdersCount) && $waitingOrdersCount > 0)
+          <span class="badge bg-warning text-dark fw-bold rounded-pill px-2 py-1 small">
+            {{ $waitingOrdersCount }}
+          </span>
+        @endif
+      </a>
+    </li>
     <li class="nav-item mb-2">
       <a href="/admin/armada" class="nav-link text-white {{ request()->is('admin/armada*') ? 'active fw-bold' : '' }}">
         <i class="bi bi-truck me-2"></i>Armada Pengiriman
@@ -49,11 +53,6 @@
         @endif
       </a>
     </li>
-    {{-- <li class="nav-item mb-2">
-      <a href="#" class="nav-link text-white">
-        <i class="bi bi-gear-fill me-2"></i>Pengaturan
-      </a>
-    </li> --}}
     <li class="nav-item mt-3">
       <form method="POST" action="{{ route('logout') }}">
         @csrf

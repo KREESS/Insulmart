@@ -79,7 +79,7 @@
   <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-2">
     <div>
       <h3 class="mb-1 fw-bold text-merah d-flex align-items-center">
-        ðŸ“¦ Daftar Produk
+        <i class="bi bi-box-seam-fill me-2"></i>Daftar Produk
       </h3>
       <p class="text-muted small mb-0">Kelola semua produk yang tersedia di toko Anda dengan mudah.</p>
     </div>
@@ -87,6 +87,7 @@
       <i class="bi bi-plus-circle"></i> Tambah Produk
     </a>
   </div>
+
   {{-- Notifikasi Sukses --}}
   @if(session('success'))
     <div class="alert alert-success d-flex align-items-center alert-dismissible fade show shadow-sm" role="alert">

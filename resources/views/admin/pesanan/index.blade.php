@@ -964,7 +964,7 @@
                       </td>
                       <td>{{ $d->varianProduk->produk->nama_produk }}</td>
                       <td>{{ $d->varianProduk->tipe }}</td>
-                      <td>{{ $d->kuantitas }}</td>
+                      <td>{{ $d->kuantitas }} Ball/Pack</td>
                       <td>{{ $d->status_ketersediaan }}</td>
                       <td>Rp {{ number_format($d->harga_satuan,0,',','.') }}</td>
                       <td>Rp {{ number_format($d->subtotal,0,',','.') }}</td>

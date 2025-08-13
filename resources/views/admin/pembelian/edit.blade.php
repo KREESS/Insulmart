@@ -1,0 +1,264 @@
+@extends('admin.components.app')
+
+@section('title', 'Edit Pembelian Varian Produk | Insulmart')
+
+@section('content')
+<style>
+    :root {
+        --color-merah-tua: #8B0000;
+        --color-merah-hover: #a41515;
+        --color-gradient: linear-gradient(90deg, #8B0000 0%, #a41515 100%);
+        --color-gradient-hover: linear-gradient(90deg, #a41515 0%, #8B0000 100%);
+        --color-maroon-light: #fbeaec;
+    }
+    
+    .text-merah {
+        color: var(--color-merah-tua) !important;
+    }
+    
+    .btn-maroon {
+        background: var(--color-gradient);
+        color: #fff;
+        border: none;
+        border-radius: 2em;
+        padding: 0.6rem 1.5rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-maroon:hover {
+        background: var(--color-gradient-hover);
+        color: #fff;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(139, 0, 0, 0.2);
+    }
+
+    .btn-outline-maroon {
+        color: var(--color-merah-tua);
+        border: 2px solid var(--color-merah-tua);
+        border-radius: 2em;
+        padding: 0.5rem 1.2rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .btn-outline-maroon:hover {
+        background: var(--color-gradient);
+        color: #fff;
+        border-color: transparent;
+        transform: translateY(-2px);
+    }
+
+    .card-custom {
+        border-radius: 1rem;
+        border: none;
+        box-shadow: 0 4px 18px 0 rgba(139,0,0,.08);
+    }
+
+    .form-control, .form-select {
+        border-radius: 0.8rem;
+        padding: 0.6rem 1rem;
+        border-color: #dee2e6;
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: var(--color-merah-tua);
+        box-shadow: 0 0 0 0.2rem rgba(139, 0, 0, 0.1);
+    }
+
+    .input-group .form-control {
+        border-radius: 0 0.8rem 0.8rem 0;
+    }
+
+    .input-group-text {
+        border-radius: 0.8rem 0 0 0.8rem;
+        background: var(--color-maroon-light);
+        border-color: #dee2e6;
+        color: var(--color-merah-tua);
+    }
+
+    .form-label {
+        color: var(--color-merah-tua);
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+    }
+
+    .info-icon {
+        color: var(--color-merah-tua);
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+    }
+</style>
+
+<main class="main-content p-4 bg-light" id="mainContent">
+    <div class="mb-4 border-bottom pb-3">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h3 class="fw-bold text-merah mb-1" style="font-size:2rem;letter-spacing:.5px">
+                    <i class="bi bi-pencil-square me-2"></i> Edit Pembelian
+                </h3>
+                <p class="text-muted mb-0">Edit data pembelian varian produk</p>
+            </div>
+            <a href="{{ route('pembelian.index') }}" class="btn btn-outline-maroon">
+                <i class="bi bi-arrow-left me-2"></i> Kembali
+            </a>
+        </div>
+    </div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <form action="{{ route('pembelian.update', $pembelian->id) }}" method="POST">
+                    @csrf
+                    @method('PUT')
+
+                    <div class="mb-4">
+                        <label for="varian_id" class="form-label">Pilih Varian Produk</label>
+                        <select name="varian_id" id="varian_id" class="form-select @error('varian_id') is-invalid @enderror">
+                            <option value="">Pilih Varian</option>
+                            @foreach($varians as $varian)
+                                <option value="{{ $varian->id }}" 
+                                    {{ old('varian_id', $pembelian->varian_id) == $varian->id ? 'selected' : '' }}>
+                                    {{ $varian->produk->nama_produk }} - {{ $varian->nama_varian }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('varian_id')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <label for="qty" class="form-label">Jumlah</label>
+                            <input type="number" name="qty" id="qty" class="form-control @error('qty') is-invalid @enderror"
+                                   value="{{ old('qty', $pembelian->qty) }}" min="1" step="1">
+                            <small class="text-muted">Masukkan jumlah dalam angka bulat</small>
+                            @error('qty')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="harga_satuan" class="form-label">Harga Satuan</label>
+                            <div class="input-group">
+                                <span class="input-group-text">Rp</span>
+                                <input type="number" name="harga_satuan" id="harga_satuan" 
+                                       class="form-control @error('harga_satuan') is-invalid @enderror"
+                                       value="{{ old('harga_satuan', $pembelian->harga_satuan) }}" min="0">
+                            </div>
+                            @error('harga_satuan')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <label for="tanggal_beli" class="form-label">Tanggal Pembelian</label>
+                            <input type="date" name="tanggal_beli" id="tanggal_beli" 
+                                   class="form-control @error('tanggal_beli') is-invalid @enderror"
+                                   value="{{ old('tanggal_beli', $pembelian->tanggal_beli->format('Y-m-d')) }}">
+                            @error('tanggal_beli')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="status" class="form-label">Status</label>
+                            <select name="status" id="status" class="form-select @error('status') is-invalid @enderror">
+                                <option value="draft" {{ old('status', $pembelian->status) == 'draft' ? 'selected' : '' }}>Draft</option>
+                                <option value="dipesan" {{ old('status', $pembelian->status) == 'dipesan' ? 'selected' : '' }}>Dipesan</option>
+                                <option value="dikirim" {{ old('status', $pembelian->status) == 'dikirim' ? 'selected' : '' }}>Dikirim</option>
+                                <option value="diterima_sebagian" {{ old('status', $pembelian->status) == 'diterima_sebagian' ? 'selected' : '' }}>Diterima Sebagian</option>
+                                <option value="selesai" {{ old('status', $pembelian->status) == 'selesai' ? 'selected' : '' }}>Selesai</option>
+                                <option value="dibatalkan" {{ old('status', $pembelian->status) == 'dibatalkan' ? 'selected' : '' }}>Dibatalkan</option>
+                                <option value="dikembalikan_ke_supplier" {{ old('status', $pembelian->status) == 'dikembalikan_ke_supplier' ? 'selected' : '' }}>Dikembalikan ke Supplier</option>
+                            </select>
+                            @error('status')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="catatan" class="form-label">Catatan</label>
+                        <textarea name="catatan" id="catatan" rows="3" 
+                                  class="form-control @error('catatan') is-invalid @enderror">{{ old('catatan', $pembelian->catatan) }}</textarea>
+                        @error('catatan')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label">Total Harga</label>
+                        <div class="input-group">
+                            <span class="input-group-text">Rp</span>
+                            <input type="text" id="total_harga" class="form-control" readonly 
+                                   value="{{ number_format($pembelian->total_harga, 0, ',', '.') }}">
+                        </div>
+                        <small class="text-muted">Total harga akan dihitung otomatis</small>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2">
+                        <a href="{{ route('pembelian.index') }}" class="btn btn-outline-maroon">
+                            <i class="bi bi-x-circle me-2"></i>Batal
+                        </a>
+                        <button type="submit" class="btn btn-maroon">
+                            <i class="bi bi-check-circle me-2"></i>Update Pembelian
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card card-custom">
+            <div class="card-body p-4">
+                <div class="text-center mb-4">
+                    <i class="bi bi-info-circle-fill info-icon"></i>
+                    <h5 class="card-title text-merah">
+                        Informasi Pembaruan
+                    </h5>
+                <ul class="list-unstyled mb-0">
+                    <li class="mb-2">
+                        <i class="bi bi-check2-circle text-success me-2"></i>
+                        Edit data pembelian sesuai kebutuhan
+                    </li>
+                    <li class="mb-2">
+                        <i class="bi bi-check2-circle text-success me-2"></i>
+                        Pastikan data yang dimasukkan benar
+                    </li>
+                    <li class="mb-2">
+                        <i class="bi bi-check2-circle text-success me-2"></i>
+                        Total harga akan diperbarui otomatis
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+@endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const qtyInput = document.getElementById('qty');
+    const hargaInput = document.getElementById('harga_satuan');
+    const totalInput = document.getElementById('total_harga');
+
+    function hitungTotal() {
+        const qty = parseInt(qtyInput.value) || 0;
+        const harga = parseInt(hargaInput.value) || 0;
+        const total = qty * harga;
+        totalInput.value = total.toLocaleString('id-ID');
+    }
+
+    qtyInput.addEventListener('input', hitungTotal);
+    hargaInput.addEventListener('input', hitungTotal);
+});
+</script>
+@endpush

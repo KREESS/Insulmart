@@ -18,7 +18,9 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\AdminPesananController;
 use App\Http\Controllers\Admin\AdminArmadaController;
-// ======== BATAS =========
+use App\Http\Controllers\Admin\PembelianProdukController;
+use App\Http\Controllers\PembelianVarianProdukController;
+// =========== BATAS ============
 
 
 // =========== NO ROLE LANDING PAGE ===========
@@ -39,8 +41,6 @@ Route::get('/galeri', [LandingController::class, 'galeri'])->name('galeri.penggu
 // ======== HUBUNGI KAMI ===========
 Route::get('/hubungi-kami', [LandingController::class, 'kontak'])->name('kontak.pengguna');
 // ======== BATAS =============
-
-
 
 
 // ======== LOGIN ========
@@ -96,6 +96,12 @@ Route::middleware(['auth'])->group(function () {
         // ============ BATAS =============
 
 
+        // =========== KELOLA PEMBELIAN VARIAN PRODUK ADMIN ===========
+        Route::resource('/admin/pembelian', PembelianVarianProdukController::class);
+        Route::get('/admin/pembelian-produk/{pembelian}/download-po', [PembelianVarianProdukController::class, 'downloadPo'])->name('pembelian.produk.downloadPo');
+        // ============ BATAS =============
+
+
         // =========== KELOLA PRODUK ADMIN ===========
         Route::get('/admin/produk', [ProdukController::class, 'index'])->name('produk.index');
         Route::delete('/admin/produk/{id}', [ProdukController::class, 'destroy'])->name('produk.destroy');
@@ -106,7 +112,6 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/admin/produk/{id}', [ProdukController::class, 'update'])->name('produk.update');
         Route::delete('/admin/produk/gambar/{id}', [ProdukController::class, 'destroyGambar'])->name('produk.gambar.destroy');
         Route::get('/admin/produk/{produk}/ajax-varians', [ProdukController::class, 'ajaxVarians'])->name('produk.ajax-varians');
-
         // ============ BATAS =============
 
 
