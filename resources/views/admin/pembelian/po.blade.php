@@ -2,10 +2,10 @@
 <html lang="id">
 <head>
   <meta charset="utf-8">
-  <title>{{ $kodePo }} — CV INSULMART INDONESIA</title>
+  <title>{{ $kodePo }} — CV. INSULMART INDONESIA</title>
   <style>
     body { font-family: DejaVu Sans, Arial, sans-serif; font-size: 12px; color: #111; }
-    .header { display:flex; justify-content:space-between; align-items:center; margin-bottom: 16px; }
+    .header { /* flex kurang didukung dompdf, tapi header ini sederhana */ display:flex; justify-content:space-between; align-items:center; margin-bottom: 16px; }
     .title { font-size: 18px; font-weight: bold; text-transform: uppercase; }
     .meta  { font-size: 12px; color:#555; text-align:right; }
     .box   { border:1px solid #ddd; border-radius:8px; padding:12px; margin-bottom:12px; }
@@ -15,6 +15,13 @@
     th { background:#f7f7f7; }
     .right { text-align:right; }
     .muted { color:#666; }
+
+    /* TTD styles */
+    .ttd-box { text-align: right; }
+    .ttd-label { font-weight: bold; margin-bottom: 6px; }
+    .ttd-img { height: 70px; margin: 6px 0; }
+    .ttd-nama { font-weight: bold; letter-spacing: .3px; }
+    .small { font-size: 11px; color: #555; }
   </style>
 </head>
 <body>
@@ -22,22 +29,29 @@
     <div class="title">Purchase Order (PO)</div>
     <div class="meta">
       <div><strong>No. PO:</strong> {{ $kodePo }}</div>
-      <div><strong>Tanggal:</strong> {{ optional($pembelian->tanggal_beli)->format('d M Y H:i') ?? '-' }}</div>
+      <div>
+        <strong>Tanggal:</strong>
+        @php
+          // pastikan $pembelian->tanggal_beli dicast ke datetime di Model
+          $tglWIB = $pembelian->tanggal_beli?->copy()->timezone('Asia/Jakarta');
+        @endphp
+        {{ $tglWIB ? ($tglWIB->format('H:i') !== '00:00' ? $tglWIB->format('d M Y H:i') : $tglWIB->format('d M Y')) : '-' }}
+      </div>
     </div>
   </div>
 
   {{-- Identitas Pembeli & Pemasok --}}
   <div class="box">
-    <table>
+    <table style="border:0;">
       <tr>
-        <td style="width:50%;">
+        <td style="width:50%; border:0;">
           <h4>Pembeli (Buyer)</h4>
-          <strong>CV INSULMART INDONESIA</strong><br>
-          Jl. ..................................................<br>
-          Telp: 08xx-xxxx-xxxx &middot; Email: admin@insulmart.co.id<br>
-          NPWP: — <span class="muted">(opsional)</span>
+          <strong>CV. INSULMART INDONESIA</strong><br>
+          Telp: 021-29470622, 021-22889956 <br>
+          Email: insulmart@gmail.com<br>
+          NPWP: 1000-0000-0424-4481
         </td>
-        <td style="width:50%;">
+        <td style="width:50%; border:0;">
           <h4>Pemasok (Supplier)</h4>
           <strong>{{ $supplier->nama ?? '-' }}</strong><br>
           {{ $supplier->alamat ?? '—' }}<br>
@@ -46,15 +60,16 @@
         </td>
       </tr>
       <tr>
-        <td>
+        <td style="border:0;">
           <h4>Kirim Ke (Ship To)</h4>
-          Gudang CV INSULMART INDONESIA<br>
-          Alamat Gudang: ......................................
+          Gudang CV. INSULMART INDONESIA<br>
+          Alamat Gudang: JL. RAYA TARUMAJAYA NO. 13 RT 001 RW 029 DESA SETIA ASIH, Kec. Tarumajaya, Kab. Bekasi<br>
+          17215
         </td>
-        <td>
+        <td style="border:0;">
           <h4>Tagih Ke (Bill To)</h4>
-          CV INSULMART INDONESIA &middot; Finance<br>
-          Email: finance@insulmart.co.id
+          CV. INSULMART INDONESIA &middot; Finance<br>
+          Email: insulmart@gmail.com
         </td>
       </tr>
     </table>
@@ -97,17 +112,22 @@
   </table>
 
   {{-- Tanda Tangan --}}
-  <div style="margin-top:24px; display:flex; justify-content:space-between;">
-    <div>
-      <div><strong>Disetujui oleh (Pemasok),</strong></div>
-      <div style="margin-top:56px;">__________________________</div>
-      <div class="meta">Nama & Tanda Tangan</div>
-    </div>
-    <div>
-      <div><strong>Hormat Kami,</strong></div>
-      <div style="margin-top:56px;">__________________________</div>
-      <div class="meta">CV INSULMART INDONESIA</div>
-    </div>
-  </div>
+  <table style="width:100%; margin-top:24px; border:0;">
+    <tr>
+      <td style="width:50%; border:0; vertical-align:top;">
+        <div><strong>Disetujui oleh (Pemasok),</strong></div>
+        <div style="margin-top:56px;">__________________________</div>
+        <div class="meta">{{ $supplier->nama ?? 'Nama Pemasok' }}</div>
+      </td>
+      <td style="width:50%; border:0; vertical-align:top; text-align:right;">
+        <div class="ttd-box" style="margin-left: 24px;">
+          <div class="ttd-label">Hormat Kami,</div>
+          <img src="{{ public_path('/assets/img/ttd.png') }}" alt="Tanda Tangan" class="ttd-img">
+          <div class="ttd-nama">YUDHISTIRA JALU</div>
+          <div class="small">Jakarta, {{ \Carbon\Carbon::now()->timezone('Asia/Jakarta')->locale('id')->translatedFormat('d F Y') }}</div>
+        </div>
+      </td>
+    </tr>
+  </table>
 </body>
 </html>
