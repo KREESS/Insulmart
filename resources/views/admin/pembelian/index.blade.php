@@ -1,6 +1,9 @@
 @extends('admin.components.app')
 
-@section('title', 'Pembelian Varian Produk | Insulmart')
+    <head>
+        <title>@yield('title', 'Pembelian Produk | Insulmart')</title>
+        <!-- Tag lain seperti meta, link CSS, dll -->
+    </head>
 
 @section('content')
 <style>
@@ -143,7 +146,7 @@
                     <tr>
                         <th>No</th>
                         <th>Produk</th>
-                        <th>Varian</th>
+                        <th>Name PT</th>
                         <th>Qty</th>
                         <th>Harga Satuan</th>
                         <th>Total Harga</th>
@@ -156,8 +159,29 @@
                     @forelse($pembelians as $index => $pembelian)
                         <tr>
                             <td>{{ $index + 1 }}</td>
-                            <td>{{ $pembelian->varian->produk->nama_produk }}</td>
-                            <td>{{ $pembelian->varian->nama_varian }}</td>
+                            <td>
+                                <div class="lh-sm">
+                                    <div class="fw-semibold">
+                                    {{ data_get($pembelian, 'varian.produk.nama_produk', '-') }}
+                                    </div>
+                                    <div class="mt-1">
+                                    <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle">
+                                        {{ data_get($pembelian, 'varian.tipe', '-') }}
+                                    </span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="lh-sm">
+                                    <div class="fw-semibold">
+                                    {{ data_get($pembelian, 'distributor.name_pt', '-') }}
+                                    </div>
+                                    <div class="text-muted small">
+                                    @php $cp = data_get($pembelian, 'distributor.contact_person'); @endphp
+                                    <i class="bi bi-person-badge me-1"></i>{{ $cp ?: '—' }}
+                                    </div>
+                                </div>
+                            </td>
                             <td>{{ $pembelian->qty }}</td>
                             <td>Rp {{ number_format($pembelian->harga_satuan, 0, ',', '.') }}</td>
                             <td>Rp {{ number_format($pembelian->total_harga, 0, ',', '.') }}</td>

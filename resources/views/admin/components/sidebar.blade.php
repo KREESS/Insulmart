@@ -15,6 +15,11 @@
       </a>
     </li>
     <li class="nav-item mb-2">
+      <a href="/admin/distributor" class="nav-link text-white {{ request()->is('admin/distributor*') ? 'active fw-bold' : '' }}">
+        <i class="bi bi-shop me-2"></i>Kelola Distributor
+      </a>
+    </li>
+    <li class="nav-item mb-2">
       <a href="/admin/produk" class="nav-link text-white {{ request()->is('admin/produk*') ? 'active fw-bold' : '' }}">
         <i class="bi bi-box-seam-fill me-2"></i>Kelola Produk
       </a>

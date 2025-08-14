@@ -1,6 +1,9 @@
 @extends('admin.components.app')
 
-@section('title', 'Tambah Pembelian Varian Produk | Insulmart')
+    <head>
+        <title>@yield('title', 'Tambah Pembelian Produk | Insulmart')</title>
+        <!-- Tag lain seperti meta, link CSS, dll -->
+    </head>
 
 @section('content')
 <style>
@@ -175,7 +178,7 @@
                             <option value="">Pilih Varian</option>
                             @foreach($varians as $varian)
                                 <option value="{{ $varian->id }}" {{ old('varian_id') == $varian->id ? 'selected' : '' }}>
-                                    {{ $varian->produk->nama_produk }} - {{ $varian->tipe }}
+                                    {{ $varian->produk->nama_produk }} - {{ $varian->tipe }} ⮕ {{ $varian->stok }}
                                 </option>
                             @endforeach
                         </select>
@@ -184,12 +187,31 @@
                         @enderror
                     </div>
 
+                    {{-- PILIH DISTRIBUTOR --}}
+                    <div class="mb-4">
+                        <label for="distributor_id" class="form-label">Pilih Distributor</label>
+                        <select name="distributor_id" id="distributor_id"
+                                class="form-select @error('distributor_id') is-invalid @enderror">
+                            <option value="">Pilih Distributor</option>
+                            @foreach(($distributors ?? collect()) as $dist)
+                                <option value="{{ $dist->id }}" {{ old('distributor_id') == $dist->id ? 'selected' : '' }}>
+                                    {{ $dist->name_pt }}
+                                    @if($dist->contact_person) — {{ $dist->contact_person }} ⮕ {{ $dist->notes }} @endif
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('distributor_id')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                        <small class="text-muted">Jika belum ada, tambahkan dulu di menu Kelola Distributor.</small>
+                    </div>
+
                     <div class="row mb-4">
                         <div class="col-md-6">
                             <label for="qty" class="form-label">Jumlah</label>
                             <input type="number" name="qty" id="qty" class="form-control @error('qty') is-invalid @enderror"
                                    value="{{ old('qty') }}" min="1" step="1">
-                            <small class="text-muted">Gunakan titik (.) untuk desimal</small>
+                            <small class="text-muted">Masukkan harga dalam angka bulat</small>
                             @error('qty')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror

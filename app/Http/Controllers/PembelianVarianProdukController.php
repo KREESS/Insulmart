@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
+use App\Models\Distributor;
 
 class PembelianVarianProdukController extends Controller
 {
@@ -21,32 +23,56 @@ class PembelianVarianProdukController extends Controller
 
     public function create()
     {
-        $varians = VarianProduk::with('produk')->get();
-        return view('admin.pembelian.create', compact('varians'));
+        // Ambil varian beserta produk untuk dropdown
+        $varians = VarianProduk::with(['produk:id,nama_produk'])
+            ->orderByDesc('id')
+            ->get(['id', 'produk_id', 'tipe', 'stok']); // sesuaikan kolom bila perlu
+
+        // Ambil distributor aktif untuk dropdown
+        $distributors = Distributor::where('is_active', true)
+            ->orderBy('name_pt')
+            ->get(['id', 'name_pt', 'contact_person', 'notes']);
+
+        return view('admin.pembelian.create', compact('varians', 'distributors'));
     }
 
     public function store(Request $request)
     {
-        $request->validate([
-            'varian_id' => 'required|exists:varian_produks,id',
-            'qty' => 'required|integer|min:1',
-            'harga_satuan' => 'required|integer|min:0',
-            'tanggal_beli' => 'required|date',
-            'status' => 'required|in:draft,dipesan,dikirim,diterima_sebagian,selesai,dibatalkan,dikembalikan_ke_supplier',
-            'catatan' => 'nullable|string|max:255',
+        $validated = $request->validate([
+            'varian_id'       => ['required', 'exists:varian_produks,id'],
+            'distributor_id'  => ['required', 'exists:distributors,id'], // wajib pilih distributor
+            'qty'             => ['required', 'integer', 'min:1'],
+            'harga_satuan'    => ['required', 'integer', 'min:0'],
+            'tanggal_beli'    => ['required', 'date'],
+            'status'          => [
+                'required',
+                Rule::in(['draft', 'dipesan', 'dikirim', 'diterima_sebagian', 'selesai', 'dibatalkan', 'dikembalikan_ke_supplier']),
+            ],
+            'catatan'         => ['nullable', 'string', 'max:255'],
         ]);
 
-        $pembelian = new PembelianVarianProduk();
-        $pembelian->varian_id = $request->varian_id;
-        $pembelian->qty = $request->qty;
-        $pembelian->harga_satuan = $request->harga_satuan;
-        $pembelian->total_harga = $request->qty * $request->harga_satuan;
-        $pembelian->tanggal_beli = Carbon::parse($request->tanggal_beli)->setTimezone('Asia/Jakarta');
-        $pembelian->status = $request->status;
-        $pembelian->catatan = $request->catatan;
-        $pembelian->save();
+        // Hitung total dan normalisasi tanggal (WIB)
+        $qty          = (int) $validated['qty'];
+        $hargaSatuan  = (int) $validated['harga_satuan'];
+        $total        = $qty * $hargaSatuan;
 
-        return redirect()->route('pembelian.index')
+        $tanggalBeliWIB = Carbon::parse($validated['tanggal_beli'])
+            ->setTimezone('Asia/Jakarta');
+
+        // Simpan
+        PembelianVarianProduk::create([
+            'varian_id'      => $validated['varian_id'],
+            'distributor_id' => $validated['distributor_id'],
+            'qty'            => $qty,
+            'harga_satuan'   => $hargaSatuan,
+            'total_harga'    => $total,
+            'tanggal_beli'   => $tanggalBeliWIB,
+            'status'         => $validated['status'],
+            'catatan'        => $validated['catatan'] ?? null,
+        ]);
+
+        return redirect()
+            ->route('pembelian.index')
             ->with('success', 'Pembelian berhasil ditambahkan.');
     }
 

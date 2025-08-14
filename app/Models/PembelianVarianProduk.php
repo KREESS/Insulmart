@@ -10,6 +10,7 @@ class PembelianVarianProduk extends Model
 
     protected $fillable = [
         'varian_id',
+        'distributor_id',
         'qty',
         'harga_satuan',
         'total_harga',
@@ -31,6 +32,11 @@ class PembelianVarianProduk extends Model
     public function varian()
     {
         return $this->belongsTo(VarianProduk::class, 'varian_id');
+    }
+
+    public function distributor()
+    {
+        return $this->belongsTo(Distributor::class, 'distributor_id');
     }
 
     /**

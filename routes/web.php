@@ -20,6 +20,7 @@ use App\Http\Controllers\Admin\AdminPesananController;
 use App\Http\Controllers\Admin\AdminArmadaController;
 use App\Http\Controllers\Admin\PembelianProdukController;
 use App\Http\Controllers\PembelianVarianProdukController;
+use App\Http\Controllers\DistributorController;
 // =========== BATAS ============
 
 
@@ -99,6 +100,11 @@ Route::middleware(['auth'])->group(function () {
         // =========== KELOLA PEMBELIAN VARIAN PRODUK ADMIN ===========
         Route::resource('/admin/pembelian', PembelianVarianProdukController::class);
         Route::get('/admin/pembelian-produk/{pembelian}/download-po', [PembelianVarianProdukController::class, 'downloadPo'])->name('pembelian.produk.downloadPo');
+        // ============ BATAS =============
+
+
+        // =========== KELOLA PEMBELIAN VARIAN PRODUK ADMIN ===========
+        Route::resource('/admin/distributor', DistributorController::class);
         // ============ BATAS =============
 
 

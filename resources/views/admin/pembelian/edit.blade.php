@@ -1,6 +1,9 @@
 @extends('admin.components.app')
 
-@section('title', 'Edit Pembelian Varian Produk | Insulmart')
+    <head>
+        <title>@yield('title', 'Edit Pembelian Produk | Insulmart')</title>
+        <!-- Tag lain seperti meta, link CSS, dll -->
+    </head>
 
 @section('content')
 <style>
@@ -120,7 +123,7 @@
                             @foreach($varians as $varian)
                                 <option value="{{ $varian->id }}" 
                                     {{ old('varian_id', $pembelian->varian_id) == $varian->id ? 'selected' : '' }}>
-                                    {{ $varian->produk->nama_produk }} - {{ $varian->nama_varian }}
+                                    {{ $varian->produk->nama_produk }} - {{ $varian->tipe }}
                                 </option>
                             @endforeach
                         </select>
