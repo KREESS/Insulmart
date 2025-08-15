@@ -84,6 +84,7 @@
   padding: 16px;
   box-shadow: 0 10px 30px rgba(139,0,0,.06);
 }
+
 .search-pill{
   position: relative;
   border-radius: 999px;
@@ -93,14 +94,17 @@
     radial-gradient(60% 160% at 100% 100%, rgba(194,29,29,.25), transparent 40%),
     linear-gradient(135deg, rgba(139,0,0,.55), rgba(194,29,29,.55));
 }
+
 .search-inner{
   display: flex; align-items: center; gap: 10px;
   background: #fff; border-radius: 999px; padding: 10px 12px 10px 14px;
 }
+
 .search-icon{
   width: 28px; height: 28px; display: grid; place-items: center;
   border-radius: 999px; background: rgba(139,0,0,.08);
 }
+
 .search-input{
   border: 0; outline: none; flex: 1; font-size: 1.05rem; padding: 8px 6px;
 }
@@ -110,17 +114,21 @@
   background-image: linear-gradient(135deg, #C21D1D, #FF4D4D);
 }
 .search-btn:hover{ opacity:.95; }
+
 .search-clear{
   display:none; border:0; background:#f3f3f4; color:#555; border-radius:999px;
   width:36px; height:36px; line-height:36px; text-align:center;
 }
 .search-clear:hover{ background:#ececee; }
+
 .quick-tags{ display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
+
 .quick-tags a{
   text-decoration:none; font-size:.85rem; color:#8B0000; background:#fff;
   border:1px solid rgba(139,0,0,.18); padding:.35rem .7rem; border-radius:999px;
 }
 .quick-tags a:hover{ background:rgba(139,0,0,.06); }
+
 .kbd{
   font: 500 11px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
   color:#666; background:#f2f2f3; border:1px solid #e6e6e7;
@@ -151,7 +159,6 @@
         <div class="search-pill">
           <div class="search-inner">
             <div class="search-icon" aria-hidden="true">
-              {{-- ikon search (bootstrap icon svg) --}}
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
                 <path d="M11.742 10.344a6.5 6.5 0 10-1.397 1.398h-.001l3.85 3.85a1 1 0 001.415-1.414l-3.867-3.834zM12 6.5a5.5 5.5 0 11-11 0 5.5 5.5 0 0111 0z" fill="currentColor"/>
               </svg>
@@ -166,16 +173,17 @@
               placeholder="Cari cepat: &quot;glasswool&quot;, &quot;rockwool&quot;, &quot;aluminium foil&quot;…"
               aria-label="Cari produk">
 
-            {{-- tombol clear --}}
             <button type="button" class="search-clear" id="btnClearQ" aria-label="Hapus kata kunci">✕</button>
-
-            {{-- tombol submit --}}
             <button class="search-btn" type="submit">Cari</button>
           </div>
         </div>
 
-        {{-- info jumlah + shortcut --}}
-        @php $jumlah = is_countable($produks) ? $produks->count() : (method_exists($produks,'count') ? $produks->count() : 0); @endphp
+        {{-- info jumlah + shortcut (pakai total() kalau paginator) --}}
+        @php
+          $jumlah = $produks instanceof \Illuminate\Pagination\LengthAwarePaginator
+            ? $produks->total()
+            : (is_countable($produks) ? count($produks) : 0);
+        @endphp
         <div class="d-flex flex-wrap justify-content-between align-items-center mt-2">
           <div class="small text-muted">
             @if(request('q'))
@@ -192,9 +200,9 @@
           </div>
         </div>
 
-        {{-- quick tags (sugesti dari DB kolom jenis_produk) --}}
+        {{-- quick tags (kolom jenis_produk) --}}
         @php
-          // batasi jumlah tag biar rapi (opsional)
+          // suggestions dari controller berbentuk Collection<string>
           $showSuggestions = collect($suggestions ?? [])->take(10);
         @endphp
 
@@ -202,7 +210,7 @@
           <div class="quick-tags" aria-label="Sugesti cepat">
             @foreach($showSuggestions as $s)
               @php
-                // klik tag → set q = jenis_produk (biar pakai mekanisme search yang sudah ada)
+                // klik tag → set q = jenis_produk
                 $qs = array_merge(request()->except('page'), ['q' => $s]);
               @endphp
               <a href="{{ url()->current() . '?' . http_build_query($qs) }}">{{ $s }}</a>
@@ -364,6 +372,22 @@
         input.focus();
       });
     }
+  })();
+</script>
+
+<script>
+  (function(){
+    const input = document.getElementById('q');
+    const clearBtn = document.getElementById('btnClearQ');
+    function syncClear(){ if(!clearBtn) return; clearBtn.style.display = (input && input.value.trim().length) ? 'inline-block' : 'none'; }
+    if (input) {
+      input.addEventListener('input', syncClear);
+      syncClear();
+      window.addEventListener('keydown', function(e){
+        if (e.key === '/' && document.activeElement !== input) { e.preventDefault(); input.focus(); input.select(); }
+      });
+    }
+    if (clearBtn && input) { clearBtn.addEventListener('click', function(){ input.value = ''; syncClear(); input.focus(); }); }
   })();
 </script>
 

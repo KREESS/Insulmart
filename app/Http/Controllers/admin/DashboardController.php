@@ -165,6 +165,25 @@ class DashboardController extends Controller
             'dikembalikan_ke_supplier'
         ])->count();
 
+        // Aktivitas terbaru
+        $recentOrders      = Pemesanan::latest()->limit(5)->get();
+        $recentProducts    = Produk::latest()->limit(3)->get();
+        $recentPayments    = PembayaranPemesanan::latest()->limit(3)->get();
+        $recentPurchases   = PembelianVarianProduk::latest()->limit(5)->get(); // << tambah pembelian
+
+        // Opsional: kalau model ada, tampilkan juga
+        $recentDistributors = class_exists(\App\Models\Distributor::class)
+            ? \App\Models\Distributor::latest()->limit(3)->get()
+            : collect();
+
+        $recentCustomers = User::role('pelanggan')->latest()->limit(3)->get();
+
+        $recentArmadas = class_exists(\App\Models\ArmadaPengiriman::class)
+            ? \App\Models\ArmadaPengiriman::latest()->limit(3)->get()
+            : collect();
+
+        // Chat terbaru (opsional kalau model ada)
+        $recentChats = \App\Models\ChatMessage::orderByDesc('created_at')->limit(10)->get();
 
 
         return view('admin.dashboard', compact(
@@ -214,7 +233,17 @@ class DashboardController extends Controller
             'totalPembelianAktif',
             'totalPembelianSelesai',
             'totalPembelianDibatalkan',
-            'totalPembelianRetur'
+            'totalPembelianRetur',
+
+            // angain
+            'recentOrders',
+            'recentProducts',
+            'recentPayments',
+            'recentPurchases',
+            'recentDistributors',
+            'recentCustomers',
+            'recentArmadas',
+            'recentChats',
         ));
     }
 }

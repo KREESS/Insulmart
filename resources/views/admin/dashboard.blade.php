@@ -683,37 +683,118 @@
                     </div>
                 </div>
 
-                @php
-                $allActivities = collect();
-                foreach($recentOrders as $order) {
-                    $allActivities->push([
-                        'icon' => '🛒',
-                        'type' => 'order',
-                        'text' => 'Pesanan baru oleh <b>' . e($order->pengguna->name ?? '-') . '</b>',
-                        'date' => $order->created_at->format('d M Y H:i'),
-                        'created_at' => $order->created_at->timestamp,
-                    ]);
-                }
-                foreach($recentProducts as $produk) {
-                    $allActivities->push([
-                        'icon' => '📦',
-                        'type' => 'produk',
-                        'text' => 'Produk <b>' . e($produk->nama_produk) . '</b> ditambahkan',
-                        'date' => $produk->created_at->format('d M Y H:i'),
-                        'created_at' => $produk->created_at->timestamp,
-                    ]);
-                }
-                foreach($recentPayments as $pay) {
-                    $allActivities->push([
-                        'icon' => '💳',
-                        'type' => 'pembayaran',
-                        'text' => 'Pembayaran oleh <b>' . e($pay->pemesanan->pengguna->name ?? '-') . '</b>',
-                        'date' => $pay->created_at->format('d M Y H:i'),
-                        'created_at' => $pay->created_at->timestamp,
-                    ]);
-                }
-                $allActivities = $allActivities->sortByDesc('created_at')->values()->all();
-                @endphp
+@php
+$allActivities = collect();
+
+// Pesanan baru
+foreach ($recentOrders as $order) {
+    $allActivities->push([
+        'icon'       => '🛒',
+        'type'       => 'pesanan',
+        'text'       => 'Pesanan baru oleh <b>' . e($order->pengguna->name ?? '-') . '</b>',
+        'date'       => $order->created_at->format('d M Y H:i'),
+        'created_at' => $order->created_at->timestamp,
+    ]);
+}
+
+// Produk baru
+foreach ($recentProducts as $produk) {
+    $allActivities->push([
+        'icon'       => '📦',
+        'type'       => 'produk',
+        'text'       => 'Produk <b>' . e($produk->nama_produk) . '</b> ditambahkan',
+        'date'       => $produk->created_at->format('d M Y H:i'),
+        'created_at' => $produk->created_at->timestamp,
+    ]);
+}
+
+// Pembayaran
+foreach ($recentPayments as $pay) {
+    $nama = $pay->pemesanan->pengguna->name ?? '-';
+    $allActivities->push([
+        'icon'       => '💳',
+        'type'       => 'pembayaran',
+        'text'       => 'Pembayaran oleh <b>' . e($nama) . '</b>',
+        'date'       => $pay->created_at->format('d M Y H:i'),
+        'created_at' => $pay->created_at->timestamp,
+    ]);
+}
+
+// PEMBELIAN (baru dibuat)
+foreach ($recentPurchases as $pb) {
+    $kode = $pb->id; // ganti ke $pb->kode_po kalau ada
+    $status = $pb->status ?? '-';
+    $allActivities->push([
+        'icon'       => '🧾',
+        'type'       => 'pembelian',
+        'text'       => 'Pembelian <b>#' . e($kode) . '</b> dibuat (status: ' . e($status) . ')',
+        'date'       => $pb->created_at->format('d M Y H:i'),
+        'created_at' => $pb->created_at->timestamp,
+    ]);
+}
+
+// DISTRIBUTOR baru (opsional)
+foreach ($recentDistributors as $dist) {
+    $allActivities->push([
+        'icon'       => '🏪',
+        'type'       => 'distributor',
+        'text'       => 'Distributor <b>' . e($dist->nama ?? $dist->name ?? ('#'.$dist->id)) . '</b> ditambahkan',
+        'date'       => $dist->created_at->format('d M Y H:i'),
+        'created_at' => $dist->created_at->timestamp,
+    ]);
+}
+
+// PELANGGAN baru
+foreach ($recentCustomers as $cust) {
+    $allActivities->push([
+        'icon'       => '👤',
+        'type'       => 'pelanggan',
+        'text'       => 'Pelanggan baru <b>' . e($cust->name ?? ('#'.$cust->id)) . '</b> terdaftar',
+        'date'       => $cust->created_at->format('d M Y H:i'),
+        'created_at' => $cust->created_at->timestamp,
+    ]);
+}
+
+// ARMADA baru (opsional)
+foreach ($recentArmadas as $arm) {
+    $allActivities->push([
+        'icon'       => '🚚',
+        'type'       => 'armada',
+        'text'       => 'Armada <b>' . e($arm->nama ?? $arm->plat_nomor ?? ('#'.$arm->id)) . '</b> ditambahkan',
+        'date'       => $arm->created_at->format('d M Y H:i'),
+        'created_at' => $arm->created_at->timestamp,
+    ]);
+}
+
+// CHAT terbaru
+foreach ($recentChats as $cm) {
+    // Sender name fallback: user->name | pengguna->name | nama | #user_id
+    $sender = $cm->user->name
+        ?? ($cm->pengguna->name ?? null)
+        ?? ($cm->nama ?? null)
+        ?? ('#'.$cm->user_id);
+
+    // Ambil isi pesan dengan fallback beberapa kemungkinan kolom
+    $body = $cm->message
+        ?? ($cm->isi ?? null)
+        ?? ($cm->text ?? '');
+
+    $snippet = \Illuminate\Support\Str::limit((string)$body, 80);
+
+    $allActivities->push([
+        'icon'       => '💬',
+        'type'       => 'chat',
+        'text'       => 'Pesan chat dari <b>' . e($sender) . '</b>: “' . e($snippet) . '”',
+        'date'       => optional($cm->created_at)->format('d M Y H:i'),
+        'created_at' => optional($cm->created_at)->timestamp ?? 0,
+    ]);
+}
+
+
+// Urutkan terbaru
+$allActivities = $allActivities->sortByDesc('created_at')->values()->all();
+@endphp
+
 
 
                 <div class="recent-activity-box">
