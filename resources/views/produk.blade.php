@@ -178,25 +178,35 @@
           </div>
         </div>
 
-        {{-- info jumlah + shortcut (pakai total() kalau paginator) --}}
+        {{-- info jumlah + shortcut (responsif hanya di blok ini) --}}
         @php
           $jumlah = $produks instanceof \Illuminate\Pagination\LengthAwarePaginator
-            ? $produks->total()
-            : (is_countable($produks) ? count($produks) : 0);
+              ? $produks->total()
+              : (is_countable($produks) ? count($produks) : 0);
         @endphp
-        <div class="d-flex flex-wrap justify-content-between align-items-center mt-2">
-          <div class="small text-muted">
-            @if(request('q'))
-              Menemukan <strong>{{ $jumlah }}</strong> produk untuk <strong>“{{ request('q') }}”</strong>.
-            @else
-              Menampilkan <strong>{{ $jumlah }}</strong> produk.
-            @endif
+
+        <div class="row align-items-center mt-2 g-2">
+          <div class="col-12 col-md-6">
+            <div class="small text-muted text-center text-md-start">
+              @if(request('q'))
+                Menemukan <strong>{{ $jumlah }}</strong> produk untuk <strong>“{{ request('q') }}”</strong>.
+              @else
+                Menampilkan <strong>{{ $jumlah }}</strong> produk.
+              @endif
+            </div>
           </div>
-          <div class="small text-muted d-none d-md-inline">
-            Tip: tekan <span class="kbd">/</span> untuk fokus ke pencarian
-            @if(request('q'))
-              • <a href="{{ url()->current() }}" class="link-secondary">Reset</a>
-            @endif
+
+          <div class="col-12 col-md-6">
+            <div class="small text-muted text-center text-md-end">
+              {{-- Tip disembunyikan di layar kecil, tampil di md+ --}}
+              <span class="d-none d-md-inline">Tip: tekan <span class="kbd">/</span> untuk fokus ke pencarian</span>
+
+              @if(request('q'))
+                <span class="d-none d-md-inline"> • </span>
+                {{-- Reset selalu tampil (termasuk mobile) --}}
+                <a href="{{ url()->current() }}" class="link-secondary">Reset</a>
+              @endif
+            </div>
           </div>
         </div>
 
