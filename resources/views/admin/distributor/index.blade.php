@@ -287,6 +287,10 @@
             <input type="email" name="email" class="form-control">
           </div>
           <div class="col-md-4">
+            <label class="form-label">NPWP</label>
+            <input type="text" name="npwp" class="form-control" placeholder="12.345.678.9-012.345">
+          </div>
+          <div class="col-md-6">
             <label class="form-label">Status</label>
             <select name="is_active" class="form-select">
               <option value="1">Aktif</option>
@@ -320,19 +324,19 @@
             </select>
           </div>
 
-          <div class="col-md-2">
+          <div class="col-md-3">
             <label class="form-label">RT</label>
             <input type="text" name="rt" class="form-control" placeholder="001">
           </div>
-          <div class="col-md-2">
+          <div class="col-md-3">
             <label class="form-label">RW</label>
             <input type="text" name="rw" class="form-control" placeholder="002">
           </div>
-          <div class="col-md-3">
+          <div class="col-md-6">
             <label class="form-label">Kode Pos</label>
             <input type="text" name="kode_pos" class="form-control" placeholder="12345">
           </div>
-          <div class="col-md-5">
+          <div class="col-md-6">
             <label class="form-label">Koordinat (Lat,Lng)</label>
             <input type="text" name="coordinate" class="form-control" placeholder="-6.2, 106.81">
           </div>

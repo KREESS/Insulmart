@@ -21,6 +21,7 @@ class DistributorController extends Controller
             'contact_person'  => 'nullable|string|max:150',
             'phone'           => 'nullable|string|max:50',
             'email'           => 'nullable|email|max:150',
+            'npwp'            => ['nullable', 'string', 'max:32', 'regex:/^[0-9.\-\s]+$/'],
             'province'        => 'nullable|string|max:100',
             'regency'         => 'nullable|string|max:100',
             'district'        => 'nullable|string|max:100',
@@ -32,14 +33,16 @@ class DistributorController extends Controller
             'coordinate'      => 'nullable|string|max:50',
             'notes'           => 'nullable|string',
             'is_active'       => 'required|boolean',
+        ], [
+            'npwp.regex' => 'Format NPWP hanya boleh berisi angka, titik, spasi, dan tanda minus.',
         ]);
 
-        // Map field name model
         $payload = [
             'name_pt'        => $data['name_pt'],
             'contact_person' => $data['contact_person'] ?? null,
             'phone'          => $data['phone'] ?? null,
             'email'          => $data['email'] ?? null,
+            'npwp'           => $data['npwp'] ?? null,             // <— tambahkan
             'province'       => $data['province'] ?? null,
             'regency'        => $data['regency'] ?? null,
             'district'       => $data['district'] ?? null,
@@ -62,7 +65,6 @@ class DistributorController extends Controller
 
     public function edit(Distributor $distributor)
     {
-        // Tampilkan form edit
         return view('admin.distributor.edit', compact('distributor'));
     }
 
@@ -73,6 +75,7 @@ class DistributorController extends Controller
             'contact_person'  => 'nullable|string|max:150',
             'phone'           => 'nullable|string|max:50',
             'email'           => 'nullable|email|max:150',
+            'npwp'            => ['nullable', 'string', 'max:32', 'regex:/^[0-9.\-\s]+$/'], // <— NPWP
             'province'        => 'nullable|string|max:100',
             'regency'         => 'nullable|string|max:100',
             'district'        => 'nullable|string|max:100',
@@ -84,6 +87,8 @@ class DistributorController extends Controller
             'coordinate'      => 'nullable|string|max:50',
             'notes'           => 'nullable|string',
             'is_active'       => 'required|boolean',
+        ], [
+            'npwp.regex' => 'Format NPWP hanya boleh berisi angka, titik, spasi, dan tanda minus.',
         ]);
 
         $distributor->update($data);

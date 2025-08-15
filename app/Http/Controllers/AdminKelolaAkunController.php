@@ -85,7 +85,6 @@ class AdminKelolaAkunController extends Controller
             ->with('success', 'Akun berhasil diperbarui.');
     }
 
-
     public function destroy($id)
     {
         $user = User::findOrFail($id);

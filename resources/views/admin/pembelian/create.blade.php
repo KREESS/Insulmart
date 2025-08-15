@@ -172,6 +172,22 @@
                 <form action="{{ route('pembelian.store') }}" method="POST">
                     @csrf
 
+                    {{-- KODE PO (opsional). Kalau datang dari query, kunci supaya konsisten --}}
+                    <div class="mb-4">
+                        <label for="po_code" class="form-label">Kode PO (opsional)</label>
+                        <input type="text" name="po_code" id="po_code"
+                                class="form-control @error('po_code') is-invalid @enderror"
+                                value="{{ old('po_code', $activePoCode ?? '') }}"
+                                {{ !empty($activePoCode) ? 'readonly' : '' }}
+                                placeholder="Kosongkan untuk auto-generate">
+                        @error('po_code') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        @if(!empty($activePoCode))
+                            <small class="text-muted">Menambahkan item ke PO: <b>{{ $activePoCode }}</b></small>
+                        @else
+                            <small class="text-muted">Kosongkan bila ingin dibuat otomatis.</small>
+                        @endif
+                    </div>
+
                     <div class="mb-4">
                         <label for="varian_id" class="form-label">Pilih Varian Produk</label>
                         <select name="varian_id" id="varian_id" class="form-select @error('varian_id') is-invalid @enderror">
@@ -327,20 +343,20 @@
 
 @push('scripts')
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    const qtyInput = document.getElementById('qty');
-    const hargaInput = document.getElementById('harga_satuan');
-    const totalInput = document.getElementById('total_harga');
+    document.addEventListener('DOMContentLoaded', function () {
+        const qtyInput = document.getElementById('qty');
+        const hargaInput = document.getElementById('harga_satuan');
+        const totalInput = document.getElementById('total_harga');
 
-    function hitungTotal() {
-        const qty = parseInt(qtyInput.value) || 0;
-        const harga = parseInt(hargaInput.value) || 0;
-        const total = qty * harga;
-        totalInput.value = total.toLocaleString('id-ID');
-    }
+        function hitungTotal() {
+            const qty = parseInt(qtyInput.value) || 0;
+            const harga = parseInt(hargaInput.value) || 0;
+            const total = qty * harga;
+            totalInput.value = total.toLocaleString('id-ID');
+        }
 
-    qtyInput.addEventListener('input', hitungTotal);
-    hargaInput.addEventListener('input', hitungTotal);
-});
+        qtyInput.addEventListener('input', hitungTotal);
+        hargaInput.addEventListener('input', hitungTotal);
+    });
 </script>
 @endpush

@@ -10,37 +10,69 @@ use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use App\Models\Distributor;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class PembelianVarianProdukController extends Controller
 {
     public function index()
     {
-        $pembelians = PembelianVarianProduk::with('varian.produk')
-            ->orderBy('tanggal_beli', 'desc')
-            ->get();
-        return view('admin.pembelian.index', compact('pembelians'));
+        // 1) Ambil grup per PO
+        $groups = PembelianVarianProduk::query()
+            ->with(['distributor:id,name_pt,contact_person'])
+            ->select(
+                'po_code',
+                'distributor_id',
+                DB::raw('COUNT(*) as items'),
+                DB::raw('SUM(total_harga) as grand_total'),
+                DB::raw('MIN(tanggal_beli) as first_date'),
+                DB::raw('MAX(tanggal_beli) as last_date')
+            )
+            ->groupBy('po_code', 'distributor_id')
+            ->orderByDesc('last_date')
+            ->paginate(10);
+
+        // 2) Ambil item untuk semua po_code yang tampil di halaman ini agar efisien
+        $poCodes = $groups->pluck('po_code')->all();
+
+        $itemsByPo = PembelianVarianProduk::with([
+            'varian.produk:id,nama_produk',
+            'distributor:id,name_pt,contact_person'
+        ])
+            ->whereIn('po_code', $poCodes)
+            ->orderBy('tanggal_beli')
+            ->get()
+            ->groupBy('po_code');
+
+        return view('admin.pembelian.index', [
+            'groups'    => $groups,
+            'itemsByPo' => $itemsByPo,
+        ]);
     }
 
-    public function create()
+    public function create(Request $request)
     {
         // Ambil varian beserta produk untuk dropdown
         $varians = VarianProduk::with(['produk:id,nama_produk'])
             ->orderByDesc('id')
-            ->get(['id', 'produk_id', 'tipe', 'stok']); // sesuaikan kolom bila perlu
+            ->get(['id', 'produk_id', 'tipe', 'stok']);
 
         // Ambil distributor aktif untuk dropdown
         $distributors = Distributor::where('is_active', true)
             ->orderBy('name_pt')
             ->get(['id', 'name_pt', 'contact_person', 'notes']);
 
-        return view('admin.pembelian.create', compact('varians', 'distributors'));
+        // Jika sedang menambahkan item ke PO yang sama
+        $activePoCode = $request->query('po_code');
+
+        return view('admin.pembelian.create', compact('varians', 'distributors', 'activePoCode'));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
+            'po_code'         => ['nullable', 'string', 'max:30'],
             'varian_id'       => ['required', 'exists:varian_produks,id'],
-            'distributor_id'  => ['required', 'exists:distributors,id'], // wajib pilih distributor
+            'distributor_id'  => ['required', 'exists:distributors,id'],
             'qty'             => ['required', 'integer', 'min:1'],
             'harga_satuan'    => ['required', 'integer', 'min:0'],
             'tanggal_beli'    => ['required', 'date'],
@@ -51,29 +83,41 @@ class PembelianVarianProdukController extends Controller
             'catatan'         => ['nullable', 'string', 'max:255'],
         ]);
 
-        // Hitung total dan normalisasi tanggal (WIB)
-        $qty          = (int) $validated['qty'];
-        $hargaSatuan  = (int) $validated['harga_satuan'];
-        $total        = $qty * $hargaSatuan;
+        // Hitung total & normalisasi tanggal (WIB)
+        $qty         = (int) $validated['qty'];
+        $hargaSatuan = (int) $validated['harga_satuan'];
+        $total       = $qty * $hargaSatuan;
 
         $tanggalBeliWIB = Carbon::parse($validated['tanggal_beli'])
             ->setTimezone('Asia/Jakarta');
 
-        // Simpan
+        // Generate po_code jika kosong
+        $poCode = trim($validated['po_code'] ?? '');
+        if ($poCode === '') {
+            // format: PO-YYYYMMDD-ABCDE (acak)
+            $poCode = 'PO-' . date('Ymd') . '-' . strtoupper(Str::random(5));
+
+            // (opsional) pastikan unik sederhana
+            while (PembelianVarianProduk::where('po_code', $poCode)->exists()) {
+                $poCode = 'PO-' . date('Ymd') . '-' . strtoupper(Str::random(5));
+            }
+        }
+
         PembelianVarianProduk::create([
-            'varian_id'      => $validated['varian_id'],
+            'po_code'       => $poCode,
+            'varian_id'     => $validated['varian_id'],
             'distributor_id' => $validated['distributor_id'],
-            'qty'            => $qty,
-            'harga_satuan'   => $hargaSatuan,
-            'total_harga'    => $total,
-            'tanggal_beli'   => $tanggalBeliWIB,
-            'status'         => $validated['status'],
-            'catatan'        => $validated['catatan'] ?? null,
+            'qty'           => $qty,
+            'harga_satuan'  => $hargaSatuan,
+            'total_harga'   => $total,
+            'tanggal_beli'  => $tanggalBeliWIB,
+            'status'        => $validated['status'],
+            'catatan'       => $validated['catatan'] ?? null,
         ]);
 
         return redirect()
             ->route('pembelian.index')
-            ->with('success', 'Pembelian berhasil ditambahkan.');
+            ->with('success', 'Pembelian berhasil ditambahkan. Kode PO: ' . $poCode);
     }
 
     public function show(PembelianVarianProduk $pembelian)
@@ -84,92 +128,133 @@ class PembelianVarianProdukController extends Controller
 
     public function edit(PembelianVarianProduk $pembelian)
     {
-        $varians = VarianProduk::with('produk')->get();
-        return view('admin.pembelian.edit', compact('pembelian', 'varians'));
+        $varians = VarianProduk::with('produk:id,nama_produk')->get(['id', 'produk_id', 'tipe']);
+        $distributors = Distributor::where('is_active', true)
+            ->orderBy('name_pt')
+            ->get(['id', 'name_pt', 'contact_person', 'notes']);
+
+        return view('admin.pembelian.edit', compact('pembelian', 'varians', 'distributors'));
     }
 
     public function update(Request $request, PembelianVarianProduk $pembelian)
     {
+        // 1) Validasi input (tetap lengkap, karena pada UI field yang dikunci tetap dikirim via hidden/readonly)
         $data = $request->validate([
-            'varian_id'      => 'required|exists:varian_produks,id',
-            'qty'            => 'required|integer|min:1',
-            'harga_satuan'   => 'required|integer|min:0',
-            'tanggal_beli'   => 'required|date',
-            'status'         => 'required|in:draft,dipesan,dikirim,diterima_sebagian,selesai,dibatalkan,dikembalikan_ke_supplier',
-            'catatan'        => 'nullable|string|max:255',
+            'varian_id'       => 'required|exists:varian_produks,id',
+            'distributor_id'  => 'required|exists:distributors,id',
+            'qty'             => 'required|integer|min:1',
+            'harga_satuan'    => 'required|integer|min:0',
+            'tanggal_beli'    => 'required|date',
+            'status'          => 'required|in:draft,dipesan,dikirim,diterima_sebagian,selesai,dibatalkan,dikembalikan_ke_supplier',
+            'catatan'         => 'nullable|string|max:255',
         ]);
 
-        // Normalisasi field turunan
-        $data['total_harga']  = $data['qty'] * $data['harga_satuan'];
+        $terminalStatuses = ['selesai', 'dibatalkan', 'dikembalikan_ke_supplier'];
+        $progressStatuses = ['dipesan', 'dikirim', 'diterima_sebagian'];
+
+        // 2) Jika status lama terminal → tolak semua perubahan
+        if (in_array($pembelian->status, $terminalStatuses, true)) {
+            return back()
+                ->withErrors(['status' => 'Transaksi berstatus final (' . $pembelian->status . '). Data tidak dapat diubah.'])
+                ->withInput();
+        }
+
+        // 3) Normalisasi dasar
         $data['tanggal_beli'] = Carbon::parse($data['tanggal_beli'])->setTimezone('Asia/Jakarta');
 
+        // 4) Jika status lama progress → hanya izinkan ganti status. Field lain dikunci di server.
+        if (in_array($pembelian->status, $progressStatuses, true)) {
+            $data = array_merge($pembelian->only([
+                'varian_id',
+                'distributor_id',
+                'qty',
+                'harga_satuan',
+                'tanggal_beli',
+                'catatan'
+            ]), [
+                'status' => $data['status'],
+            ]);
+
+            // Hitung ulang total_harga dari nilai lama (qty & harga_satuan tidak berubah)
+            $data['total_harga'] = (int)($pembelian->qty) * (int)($pembelian->harga_satuan);
+        } else {
+            // status lama draft → bebas edit, hitung total_harga dari input baru
+            $data['total_harga'] = (int) $data['qty'] * (int) $data['harga_satuan'];
+        }
+
+        // 5) Simpan + penyesuaian stok (transaction + row locking)
         DB::transaction(function () use ($pembelian, $data) {
-            // Simpan nilai lama untuk menentukan penyesuaian stok
+            // Snapshot lama
             $oldStatus   = $pembelian->getOriginal('status');
-            $oldVarianId = $pembelian->getOriginal('varian_id');
+            $oldVarianId = (int) $pembelian->getOriginal('varian_id');
             $oldQty      = (int) $pembelian->getOriginal('qty');
 
-            $newStatus   = $data['status'];
-            $newVarianId = (int) $data['varian_id'];
-            $newQty      = (int) $data['qty'];
-
-            // Update data pembelian dulu
+            // Update model
             $pembelian->fill($data);
             $pembelian->save();
 
-            // ==== LOGIKA PENYESUAIAN STOK ====
-            // Kita kunci baris varian yang terdampak agar aman dari race condition
+            // Nilai baru (setelah fill/save)
+            $newStatus   = $pembelian->status;
+            $newVarianId = (int) $pembelian->varian_id;
+            $newQty      = (int) $pembelian->qty;
+
+            // Kunci baris varian terdampak
             $varianIdsToLock = array_unique([$oldVarianId, $newVarianId]);
-            $varianMap = VarianProduk::whereIn('id', $varianIdsToLock)
+            $varianMap = \App\Models\VarianProduk::whereIn('id', $varianIdsToLock)
                 ->lockForUpdate()
                 ->get()
                 ->keyBy('id');
 
-            // 1) Dari status selain 'selesai' -> ke 'selesai'  ==> stok naik (varian baru)
+            // === LOGIKA PENYESUAIAN STOK ===
+            // (A) non-selesai -> selesai : stok varian baru bertambah
             if ($oldStatus !== 'selesai' && $newStatus === 'selesai') {
-                $varian = $varianMap[$newVarianId];
-                $varian->stok = ($varian->stok ?? 0) + $newQty;
-                $varian->save();
-                return; // selesai
+                if (isset($varianMap[$newVarianId])) {
+                    $v = $varianMap[$newVarianId];
+                    $v->stok = (int)($v->stok ?? 0) + $newQty;
+                    $v->save();
+                }
+                return;
             }
 
-            // 2) Tetap 'selesai' -> 'selesai'
+            // (B) tetap di 'selesai'
             if ($oldStatus === 'selesai' && $newStatus === 'selesai') {
-                // a) Varian berganti: kurangi stok varian lama, tambah stok varian baru
                 if ($oldVarianId !== $newVarianId) {
-                    $oldVar = $varianMap[$oldVarianId];
-                    $newVar = $varianMap[$newVarianId];
-
-                    $oldVar->stok = ($oldVar->stok ?? 0) - $oldQty;
-                    $oldVar->save();
-
-                    $newVar->stok = ($newVar->stok ?? 0) + $newQty;
-                    $newVar->save();
+                    if (isset($varianMap[$oldVarianId])) {
+                        $vv = $varianMap[$oldVarianId];
+                        $vv->stok = (int)($vv->stok ?? 0) - $oldQty;
+                        $vv->save();
+                    }
+                    if (isset($varianMap[$newVarianId])) {
+                        $vn = $varianMap[$newVarianId];
+                        $vn->stok = (int)($vn->stok ?? 0) + $newQty;
+                        $vn->save();
+                    }
                 } else {
-                    // b) Varian sama: sesuaikan selisih qty
-                    $diff = $newQty - $oldQty; // bisa + atau -
-                    if ($diff !== 0) {
-                        $varian = $varianMap[$newVarianId];
-                        $varian->stok = ($varian->stok ?? 0) + $diff;
-                        $varian->save();
+                    $diff = $newQty - $oldQty;
+                    if ($diff !== 0 && isset($varianMap[$newVarianId])) {
+                        $v = $varianMap[$newVarianId];
+                        $v->stok = (int)($v->stok ?? 0) + $diff;
+                        $v->save();
                     }
                 }
-                return; // selesai
+                return;
             }
 
-            // 3) Dari 'selesai' -> status lain  ==> stok turunkan kembali (rollback)
+            // (C) dari 'selesai' -> non-selesai : rollback stok varian lama
             if ($oldStatus === 'selesai' && $newStatus !== 'selesai') {
-                $varian = $varianMap[$oldVarianId];
-                $varian->stok = ($varian->stok ?? 0) - $oldQty;
-                $varian->save();
-                return; // selesai
+                if (isset($varianMap[$oldVarianId])) {
+                    $v = $varianMap[$oldVarianId];
+                    $v->stok = (int)($v->stok ?? 0) - $oldQty;
+                    $v->save();
+                }
+                return;
             }
 
-            // 4) Transisi lain (draft/dipesan/dikirim/diterima_sebagian/dibatalkan/dikembalikan_ke_supplier)
-            //     -> Tidak ada perubahan stok di sini (sesuaikan jika perlu).
+            // (D) antar status non-selesai: stok tidak berubah
         });
 
-        return redirect()->route('pembelian.index')
+        return redirect()
+            ->route('pembelian.index')
             ->with('success', 'Pembelian berhasil diperbarui & stok disesuaikan.');
     }
 
@@ -180,36 +265,57 @@ class PembelianVarianProdukController extends Controller
             ->with('success', 'Pembelian berhasil dihapus.');
     }
 
-    public function downloadPo(PembelianVarianProduk $pembelian)
+    public function downloadPoByCode(string $po_code)
     {
-        // Ambil relasi untuk isi PO
-        $pembelian->load(['varian.produk']);
+        // Ambil semua item untuk po_code ini
+        $items = PembelianVarianProduk::with(['varian.produk', 'distributor'])
+            ->where('po_code', $po_code)
+            ->orderBy('tanggal_beli')
+            ->get();
 
-        $produk    = optional($pembelian->varian->produk)->nama_produk ?? '-';
-        $kodePo    = 'PO-' . str_pad((string)$pembelian->id, 6, '0', STR_PAD_LEFT);
-        $fileName  = $kodePo . '-' . Str::slug($produk, '-') . '.pdf';
-
-        // Cek apakah dompdf tersedia
-        $dompdfFacade = 'Barryvdh\\DomPDF\\Facade\\Pdf';
-
-        if (class_exists($dompdfFacade)) {
-            /** @var \Barryvdh\DomPDF\PDF $pdf */
-            $pdf = $dompdfFacade::loadView('admin.pembelian.po', [
-                'pembelian' => $pembelian,
-                'kodePo'    => $kodePo,
-            ])->setPaper('A4', 'portrait');
-
-            // STREAM (preview di browser), bukan download
-            return $pdf->stream($fileName); // tampil inline (user bisa klik download dari viewer)
+        if ($items->isEmpty()) {
+            abort(404, 'PO tidak ditemukan atau belum memiliki item.');
         }
 
-        // Fallback: tampilkan HTML (tanpa attachment)
-        $html = view('admin.pembelian.po', [
-            'pembelian' => $pembelian,
-            'kodePo'    => $kodePo,
-        ])->render();
+        // Supplier (distributor) — asumsi 1 PO = 1 distributor
+        $supplier = optional($items->first())->distributor;
 
-        return response($html, 200)
-            ->header('Content-Type', 'text/html; charset=utf-8');
+        // Ringkasan
+        $grandTotal = (int) $items->sum('total_harga');
+        $totalQty   = (int) $items->sum('qty');
+
+        // Rentang tanggal
+        $firstDate = $items->min('tanggal_beli');
+        $lastDate  = $items->max('tanggal_beli');
+
+        $fileName = $po_code . '-' . Str::slug(optional($supplier)->name_pt ?? 'po', '-') . '.pdf';
+
+        if (class_exists(Pdf::class)) {
+            $pdf = Pdf::loadView('admin.pembelian.po', [
+                'po_code'    => $po_code,
+                'items'      => $items,
+                'supplier'   => $supplier,
+                'grandTotal' => $grandTotal,
+                'totalQty'   => $totalQty,
+                'firstDate'  => $firstDate,
+                'lastDate'   => $lastDate,
+            ])->setPaper('A4', 'portrait');
+
+            return $pdf->stream($fileName);  // tampil inline
+        }
+
+        // Fallback HTML bila dompdf belum tersedia
+        return response(
+            view('admin.pembelian.po', [
+                'po_code'    => $po_code,
+                'items'      => $items,
+                'supplier'   => $supplier,
+                'grandTotal' => $grandTotal,
+                'totalQty'   => $totalQty,
+                'firstDate'  => $firstDate,
+                'lastDate'   => $lastDate,
+            ])->render(),
+            200
+        )->header('Content-Type', 'text/html; charset=utf-8');
     }
 }

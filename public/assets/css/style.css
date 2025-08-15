@@ -507,6 +507,7 @@ nav.scrolled {
 
 .produk-card {
   flex: 0 0 auto;
+  height: 400px; /* tinggi fix desktop */
   width: 260px;
   background: #fff;
   border-radius: 12px;

@@ -99,7 +99,7 @@ Route::middleware(['auth'])->group(function () {
 
         // =========== KELOLA PEMBELIAN VARIAN PRODUK ADMIN ===========
         Route::resource('/admin/pembelian', PembelianVarianProdukController::class);
-        Route::get('/admin/pembelian-produk/{pembelian}/download-po', [PembelianVarianProdukController::class, 'downloadPo'])->name('pembelian.produk.downloadPo');
+        Route::get('/admin/pembelian/po/{po_code}', [PembelianVarianProdukController::class, 'downloadPoByCode'])->name('pembelian.produk.downloadPo');
         // ============ BATAS =============
 
 

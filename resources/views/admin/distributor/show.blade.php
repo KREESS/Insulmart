@@ -95,7 +95,7 @@
     <div class="row g-3">
       <div class="col-lg-8 d-flex align-items-center gap-3">
         <div class="rounded-circle d-inline-flex align-items-center justify-content-center"
-             style="width:54px;height:54px;background:var(--maroon-light);color:var(--maroon)">
+            style="width:54px;height:54px;background:var(--maroon-light);color:var(--maroon)">
           <i class="bi bi-building fs-4"></i>
         </div>
         <div>
@@ -104,7 +104,12 @@
             {!! $badge !!}
           </div>
           <div class="text-muted small">
-            <i class="bi bi-person-badge me-1"></i> PIC: <span class="fw-semibold">{{ $distributor->contact_person ?? '—' }}</span>
+            <i class="bi bi-person-badge me-1"></i> PIC:
+            <span class="fw-semibold">{{ $distributor->contact_person ?? '—' }}</span>
+          </div>
+          <div class="text-muted small">
+            <i class="bi bi-receipt me-1"></i> NPWP:
+            <span class="fw-semibold">{{ $distributor->npwp ?? '—' }}</span>
           </div>
         </div>
       </div>

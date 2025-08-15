@@ -82,99 +82,132 @@
       @csrf
       @method('PUT')
 
-      <div class="row g-3">
-        <div class="col-md-6">
-          <label class="form-label">Nama PT <span class="text-danger">*</span></label>
-          <input type="text" name="name_pt" class="form-control"
-                 value="{{ old('name_pt', $distributor->name_pt) }}" required>
-        </div>
-        <div class="col-md-6">
-          <label class="form-label">PIC / Contact Person</label>
-          <input type="text" name="contact_person" class="form-control"
-                 value="{{ old('contact_person', $distributor->contact_person) }}">
-        </div>
+      {{-- Bagian: Informasi Perusahaan --}}
+      <div class="mb-3">
+        <h6 class="mb-3 text-merah d-flex align-items-center">
+          <i class="bi bi-building me-2"></i> Informasi Perusahaan
+        </h6>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">Nama PT <span class="text-danger">*</span></label>
+            <input type="text" name="name_pt"
+                  class="form-control @error('name_pt') is-invalid @enderror"
+                  value="{{ old('name_pt', $distributor->name_pt) }}" required>
+            @error('name_pt') <div class="invalid-feedback">{{ $message }}</div> @enderror
+          </div>
 
-        <div class="col-md-4">
-          <label class="form-label">Telepon</label>
-          <input type="text" name="phone" class="form-control"
-                 value="{{ old('phone', $distributor->phone) }}">
-        </div>
-        <div class="col-md-4">
-          <label class="form-label">Email</label>
-          <input type="email" name="email" class="form-control"
-                 value="{{ old('email', $distributor->email) }}">
-        </div>
-        <div class="col-md-4">
-          <label class="form-label">Status</label>
-          <select name="is_active" class="form-select">
-            <option value="1" {{ old('is_active', (int)$distributor->is_active) === 1 ? 'selected' : '' }}>Aktif</option>
-            <option value="0" {{ old('is_active', (int)$distributor->is_active) === 0 ? 'selected' : '' }}>Tidak Aktif</option>
-          </select>
-        </div>
-
-        {{-- Wilayah: pakai JSON bertingkat --}}
-        <div class="col-md-6">
-          <label class="form-label">Provinsi</label>
-          <select id="province" name="province" class="form-select" disabled>
-            <option value="">Pilih Provinsi…</option>
-          </select>
-          <input type="hidden" name="province_name" id="province_name">
-        </div>
-        <div class="col-md-6">
-          <label class="form-label">Kab/Kota</label>
-          <select id="regency" name="regency" class="form-select" disabled>
-            <option value="">Pilih Kabupaten/Kota…</option>
-          </select>
-          <input type="hidden" name="regency_name" id="regency_name">
-        </div>
-        <div class="col-md-6">
-          <label class="form-label">Kecamatan</label>
-          <select id="district" name="district" class="form-select" disabled>
-            <option value="">Pilih Kecamatan…</option>
-          </select>
-          <input type="hidden" name="district_name" id="district_name">
-        </div>
-        <div class="col-md-6">
-          <label class="form-label">Kel/Desa</label>
-          <select id="village" name="village" class="form-select" disabled>
-            <option value="">Pilih Desa/Kelurahan…</option>
-          </select>
-          <input type="hidden" name="village_name" id="village_name">
-        </div>
-
-        <div class="col-md-2">
-          <label class="form-label">RT</label>
-          <input type="text" name="rt" class="form-control"
-                 value="{{ old('rt', $distributor->rt) }}" placeholder="001">
-        </div>
-        <div class="col-md-2">
-          <label class="form-label">RW</label>
-          <input type="text" name="rw" class="form-control"
-                 value="{{ old('rw', $distributor->rw) }}" placeholder="002">
-        </div>
-        <div class="col-md-3">
-          <label class="form-label">Kode Pos</label>
-          <input type="text" name="kode_pos" class="form-control"
-                 value="{{ old('kode_pos', $distributor->kode_pos) }}" placeholder="12345">
-        </div>
-        <div class="col-md-5">
-          <label class="form-label">Koordinat (Lat,Lng)</label>
-          <input type="text" name="coordinate" class="form-control"
-                 value="{{ old('coordinate', $distributor->coordinate) }}" placeholder="-6.2, 106.81">
-        </div>
-
-        <div class="col-12">
-          <label class="form-label">Alamat Lengkap</label>
-          <textarea name="alamat_lengkap" class="form-control" rows="2" placeholder="Nama jalan, nomor, patokan...">{{ old('alamat_lengkap', $distributor->alamat_lengkap) }}</textarea>
-        </div>
-        <div class="col-12">
-          <label class="form-label">Catatan</label>
-          <textarea name="notes" class="form-control" rows="2">{{ old('notes', $distributor->notes) }}</textarea>
+          <div class="col-md-6">
+            <label class="form-label">NPWP</label>
+            <input type="text" name="npwp"
+                  class="form-control @error('npwp') is-invalid @enderror"
+                  value="{{ old('npwp', $distributor->npwp) }}"
+                  placeholder="12.345.678.9-012.345">
+            @error('npwp') <div class="invalid-feedback">{{ $message }}</div> @enderror
+          </div>
         </div>
       </div>
 
-      <div class="divider"></div>
-      <div class="d-flex justify-content-between">
+      <hr class="my-4">
+
+      {{-- Bagian: Kontak & Status --}}
+      <div class="mb-3">
+        <h6 class="mb-3 text-merah d-flex align-items-center">
+          <i class="bi bi-person-lines-fill me-2"></i> Kontak & Status
+        </h6>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">PIC / Contact Person</label>
+            <input type="text" name="contact_person" class="form-control"
+                  value="{{ old('contact_person', $distributor->contact_person) }}">
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Telepon</label>
+            <input type="text" name="phone" class="form-control"
+                  value="{{ old('phone', $distributor->phone) }}">
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Email</label>
+            <input type="email" name="email" class="form-control"
+                  value="{{ old('email', $distributor->email) }}">
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Status</label>
+            <select name="is_active" class="form-select">
+              <option value="1" {{ (string)old('is_active', (int)$distributor->is_active) === '1' ? 'selected' : '' }}>Aktif</option>
+              <option value="0" {{ (string)old('is_active', (int)$distributor->is_active) === '0' ? 'selected' : '' }}>Tidak Aktif</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <hr class="my-4">
+
+      {{-- Bagian: Alamat --}}
+      <div class="mb-3">
+        <h6 class="mb-3 text-merah d-flex align-items-center">
+          <i class="bi bi-geo-alt-fill me-2"></i> Alamat
+        </h6>
+
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">Provinsi</label>
+            <select id="province" name="province" class="form-select" disabled>
+              <option value="">Pilih Provinsi…</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Kab/Kota</label>
+            <select id="regency" name="regency" class="form-select" disabled>
+              <option value="">Pilih Kabupaten/Kota…</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Kecamatan</label>
+            <select id="district" name="district" class="form-select" disabled>
+              <option value="">Pilih Kecamatan…</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Kel/Desa</label>
+            <select id="village" name="village" class="form-select" disabled>
+              <option value="">Pilih Desa/Kelurahan…</option>
+            </select>
+          </div>
+
+          <div class="col-md-2">
+            <label class="form-label">RT</label>
+            <input type="text" name="rt" class="form-control"
+                  value="{{ old('rt', $distributor->rt) }}" placeholder="001">
+          </div>
+          <div class="col-md-2">
+            <label class="form-label">RW</label>
+            <input type="text" name="rw" class="form-control"
+                  value="{{ old('rw', $distributor->rw) }}" placeholder="002">
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Kode Pos</label>
+            <input type="text" name="kode_pos" class="form-control"
+                  value="{{ old('kode_pos', $distributor->kode_pos) }}" placeholder="12345">
+          </div>
+          <div class="col-md-5">
+            <label class="form-label">Koordinat (Lat,Lng)</label>
+            <input type="text" name="coordinate" class="form-control"
+                  value="{{ old('coordinate', $distributor->coordinate) }}" placeholder="-6.2, 106.81">
+          </div>
+
+          <div class="col-12">
+            <label class="form-label">Alamat Lengkap</label>
+            <textarea name="alamat_lengkap" class="form-control" rows="2" placeholder="Nama jalan, nomor, patokan...">{{ old('alamat_lengkap', $distributor->alamat_lengkap) }}</textarea>
+          </div>
+
+          <div class="col-12">
+            <label class="form-label">Catatan</label>
+            <textarea name="notes" class="form-control" rows="2">{{ old('notes', $distributor->notes) }}</textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-between pt-2">
         <a href="{{ route('distributor.index') }}" class="btn btn-outline-maroon">
           <i class="bi bi-x-circle me-1"></i> Batal
         </a>

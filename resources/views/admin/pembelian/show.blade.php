@@ -106,9 +106,9 @@
                   <div class="text-muted small">
                     {{ data_get($pembelian, 'varian.tipe', '-') }}
                   </div>
-                  <a href="{{ route('pembelian.produk.downloadPo', $pembelian->id) }}" class="btn btn-po-gradient mt-2">
+                  {{-- <a href="{{ route('pembelian.produk.downloadPo', $pembelian->id) }}" class="btn btn-po-gradient mt-2">
                     <i class="bi bi-download me-1"></i> Download PO
-                  </a>
+                  </a> --}}
                 </div>
               </div>
 
@@ -241,6 +241,11 @@
                   <div class="info-label">Telepon</div>
                   <div class="info-value">{{ $d->phone ?? '—' }}</div>
                 </div>
+              </div>
+
+              <div class="mb-3">
+                <div class="info-label">NPWP</div>
+                <div class="info-value">{{ $d->npwp ?? '-' }}</div>
               </div>
 
               <div class="mb-3">

@@ -14,6 +14,7 @@ class Distributor extends Model
         'contact_person',
         'phone',
         'email',
+        'npwp',
         'province',
         'regency',
         'district',

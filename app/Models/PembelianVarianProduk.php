@@ -9,6 +9,7 @@ class PembelianVarianProduk extends Model
     protected $table = 'pembelian_varian_produks';
 
     protected $fillable = [
+        'po_code',
         'varian_id',
         'distributor_id',
         'qty',
