@@ -493,6 +493,7 @@ nav.scrolled {
     background: #5f0000;
 }
 
+
 /* === Produk Unggulan Scroll Horizontal === */
 .produk-scroll-wrapper {
   display: flex;
@@ -507,7 +508,7 @@ nav.scrolled {
 
 .produk-card {
   flex: 0 0 auto;
-  height: 400px; /* tinggi fix desktop */
+  height: 410px; /* tinggi fix desktop */
   width: 260px;
   background: #fff;
   border-radius: 12px;
@@ -594,6 +595,7 @@ nav.scrolled {
         max-width: 164px;
         padding: 0.5rem 0.55rem;
         border-radius: 10px;
+        height: 450px; /* tinggi fix desktop */
     }
     .produk-nama {
         font-size: 0.93rem;
