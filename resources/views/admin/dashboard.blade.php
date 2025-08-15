@@ -59,7 +59,7 @@
                 border-radius: 50%;
                 background: #fff3;
                 display: flex; align-items: center; justify-content: center;
-                font-size: 2.1rem;
+                font-size: 2rem;
                 margin-left: 8px;
                 box-shadow: 0 4px 14px -6px #fff;
             }
@@ -88,6 +88,7 @@
                 align-items: center;
                 justify-content: start;
             }
+
             .quick-link {
                 display: flex;
                 align-items: center;
@@ -102,12 +103,14 @@
                 font-size: 1.07rem;
                 transition: background .18s, color .15s, box-shadow .16s;
             }
+
             .quick-link:hover {
                 background: var(--maroon);
                 color: #fff;
                 transform: translateY(-2px) scale(1.03);
             }
-            .quick-link .bi, .quick-link .emoji { font-size: 1.19rem; }
+
+            .quick-link .bi, .quick-link .emoji { font-size: 1rem; }
 
             /* Notif */
             .notif-bar {
@@ -121,6 +124,7 @@
                 margin-bottom: 1.8rem;
                 display: flex; align-items: center; gap: 9px;
             }
+
             .notif-bar .bi { font-size: 1.16rem; }
             .notif-bar .badge { background: #F7971E; color: #fff; margin-left: 6px; }
 
@@ -319,51 +323,78 @@
 
                 {{-- Statistik Card --}}
                 <div class="row g-4 mb-1">
-                    <div class="col-lg-4 col-md-6 col-12">
+                    {{-- ========== Baris 1: Produk, Pesanan, Pembelian, Pelanggan (1 baris) ========== --}}
+                    <div class="row g-3 mb-1 align-items-stretch">
+                    <div class="col-12 col-md-6 col-lg-3">
                         <div class="card stat-card bg-produk h-100 shadow">
-                            <div class="card-body d-flex align-items-center justify-content-between">
-                                <div>
-                                    <div class="stat-title">Total Produk</div>
-                                    <div class="stat-value">{{ $totalProduk }}</div>
-                                    <div class="stat-foot">+{{ rand(1,4) }} hari ini</div>
-                                </div>
-                                <span class="stat-icon">📦</span>
+                        <div class="card-body d-flex align-items-center justify-content-between">
+                            <div>
+                            <div class="stat-title">Total Produk</div>
+                            <div class="stat-value" style="font-size:1.5em;">{{ $totalProduk }}</div>
+                            <div class="stat-foot small">+{{ rand(1,4) }} hari ini</div>
                             </div>
+                            <span class="stat-icon">📦</span>
+                        </div>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-md-6 col-12">
+
+                    <div class="col-12 col-md-6 col-lg-3">
                         <div class="card stat-card bg-pesanan h-100 shadow">
-                            <div class="card-body d-flex align-items-center justify-content-between">
-                                <div>
-                                    <div class="stat-title">Total Pesanan Aktif</div>
-                                    <div class="stat-value">{{ $totalPesananAktif }}</div>
-                                    <div class="stat-foot">
-                                        <span class="badge bg-success me-2" style="font-size: .96em;">✔️ Selesai: {{ $totalPesananSelesai }}</span>
-                                        <span class="badge bg-danger" style="font-size: .96em;">❌ Dibatalkan: {{ $totalPesananBatal }}</span>
-                                    </div>
-                                </div>
-                                <span class="stat-icon">🛒</span>
+                        <div class="card-body d-flex align-items-center justify-content-between">
+                            <div>
+                            <div class="stat-title">Total Pesanan Aktif</div>
+                            <div class="stat-value" style="font-size:1.5em;">{{ $totalPesananAktif }}</div>
+                            <div class="stat-foot">
+                                <span class="badge bg-success me-1" style="font-size:.9em;">✔️ Selesai: {{ $totalPesananSelesai }}</span>
+                                <span class="badge bg-danger" style="font-size:.9em;">❌ Dibatalkan: {{ $totalPesananBatal }}</span>
                             </div>
+                            </div>
+                            <span class="stat-icon">🛒</span>
+                        </div>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-md-6 col-12">
+
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <div class="card stat-card bg-pesanan h-100 shadow">
+                        <div class="card-body d-flex align-items-center justify-content-between">
+                            <div>
+                            <div class="stat-title">Total Pembelian Aktif</div>
+                            <div class="stat-value" style="font-size:1.5em;">{{ $totalPembelianAktif }}</div>
+                            <div class="stat-foot">
+                                <span class="badge bg-success me-1" style="font-size:.9em;">✔️ Selesai: {{ $totalPembelianSelesai }}</span>
+                                <span class="badge bg-danger me-1" style="font-size:.9em;">❌ Dibatalkan: {{ $totalPembelianDibatalkan }}</span>
+                                <span class="badge bg-secondary" style="font-size:.9em;">↩️ Retur: {{ $totalPembelianRetur }}</span>
+                            </div>
+                            </div>
+                            <span class="stat-icon">🧾</span>
+                        </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-6 col-lg-3">
                         <div class="card stat-card bg-pelanggan h-100 shadow">
-                            <div class="card-body d-flex align-items-center justify-content-between">
-                                <div>
-                                    <div class="stat-title">Total Pelanggan</div>
-                                    <div class="stat-value">{{ $totalPelanggan }}</div>
-                                    <div class="stat-foot">+{{ rand(2,7) }} pelanggan baru</div>
-                                </div>
-                                <span class="stat-icon">👥</span>
+                        <div class="card-body d-flex align-items-center justify-content-between">
+                            <div>
+                            <div class="stat-title">Total Pelanggan</div>
+                            <div class="stat-value" style="font-size:1.5em;">{{ $totalPelanggan }}</div>
+                            <div class="stat-foot small">+{{ rand(2,7) }} pelanggan baru</div>
                             </div>
+                            <span class="stat-icon">👥</span>
+                        </div>
                         </div>
                     </div>
-                        <div class="col-lg-4 col-md-6 col-12">
+                    </div>
+
+                    {{-- ========== Baris 2: Pendapatan ========== --}}
+                    <div class="row g-4 mb-1">
+                        <div class="col-lg-3 col-md-6 col-12">
                             <div class="card stat-card bg-pendapatan h-100 shadow">
                                 <div class="card-body d-flex align-items-center justify-content-between">
                                     <div>
                                         <div class="stat-title">Pendapatan Hari Ini</div>
-                                        <div class="stat-value" style="font-size: 2em;">Rp {{ number_format($pendapatanHarian, 0, ',', '.') }}</div>
+                                        <div class="stat-value" style="font-size: 1.1em;">
+                                            Rp {{ number_format($pendapatanHarian, 0, ',', '.') }}
+                                        </div>
                                         <div class="stat-foot">
                                             <span class="badge bg-info text-dark" style="font-size:.96em;">
                                                 {{ \Carbon\Carbon::today()->translatedFormat('l, d M Y') }}
@@ -374,12 +405,15 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-4 col-md-6 col-12">
+
+                        <div class="col-lg-3 col-md-6 col-12">
                             <div class="card stat-card bg-pendapatan h-100 shadow">
                                 <div class="card-body d-flex align-items-center justify-content-between">
                                     <div>
                                         <div class="stat-title">Pendapatan Minggu Ini</div>
-                                        <div class="stat-value" style="font-size: 2em;">Rp {{ number_format($pendapatanMingguan, 0, ',', '.') }}</div>
+                                        <div class="stat-value" style="font-size: 1.1em;">
+                                            Rp {{ number_format($pendapatanMingguan, 0, ',', '.') }}
+                                        </div>
                                         <div class="stat-foot">
                                             <span class="badge bg-info text-dark" style="font-size:.96em;">
                                                 Minggu ke-{{ \Carbon\Carbon::now()->weekOfYear }}
@@ -390,12 +424,15 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-4 col-md-6 col-12">
+
+                        <div class="col-lg-3 col-md-6 col-12">
                             <div class="card stat-card bg-pendapatan h-100 shadow">
                                 <div class="card-body d-flex align-items-center justify-content-between">
                                     <div>
                                         <div class="stat-title">Pendapatan Bulan Ini</div>
-                                        <div class="stat-value" style="font-size: 2em;">Rp {{ number_format($pendapatanBulanan, 0, ',', '.') }}</div>
+                                        <div class="stat-value" style="font-size: 1.1em;">
+                                            Rp {{ number_format($pendapatanBulanan, 0, ',', '.') }}
+                                        </div>
                                         <div class="stat-foot">
                                             <span class="badge bg-info text-dark" style="font-size:.96em;">
                                                 {{ \Carbon\Carbon::now()->translatedFormat('F Y') }}
@@ -406,7 +443,199 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="col-lg-3 col-md-6 col-12">
+                            <div class="card stat-card bg-pendapatan h-100 shadow">
+                                <div class="card-body d-flex align-items-center justify-content-between">
+                                    <div>
+                                        <div class="stat-title">Pendapatan Tahun Ini</div>
+                                        <div class="stat-value" style="font-size: 1.1em;">
+                                            Rp {{ number_format($pendapatanTahunan, 0, ',', '.') }}
+                                        </div>
+                                        <div class="stat-foot">
+                                            <span class="badge bg-info text-dark" style="font-size:.96em;">
+                                                {{ date('Y') }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <span class="stat-icon">📈</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- ========== Baris 3: Pengeluaran ========== --}}
+                    <div class="row g-4 mb-1">
+                        <div class="col-lg-3 col-md-6 col-12">
+                            <div class="card stat-card bg-pengeluaran h-100 shadow">
+                                <div class="card-body d-flex align-items-center justify-content-between">
+                                    <div>
+                                        <div class="stat-title">Pengeluaran Hari Ini</div>
+                                        <div class="stat-value" style="font-size: 1.1em;">
+                                            Rp {{ number_format($pengeluaranHarian, 0, ',', '.') }}
+                                        </div>
+                                        <div class="stat-foot">
+                                            <span class="badge bg-warning text-dark" style="font-size:.96em;">
+                                                {{ \Carbon\Carbon::now()->timezone('Asia/Jakarta')->translatedFormat('l, d M Y') }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <span class="stat-icon">💸</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-6 col-12">
+                            <div class="card stat-card bg-pengeluaran h-100 shadow">
+                                <div class="card-body d-flex align-items-center justify-content-between">
+                                    <div>
+                                        <div class="stat-title">Pengeluaran Minggu Ini</div>
+                                        <div class="stat-value" style="font-size: 1.1em;">
+                                            Rp {{ number_format($pengeluaranMingguan, 0, ',', '.') }}
+                                        </div>
+                                        <div class="stat-foot">
+                                            <span class="badge bg-warning text-dark" style="font-size:.96em;">
+                                                Minggu ke-{{ \Carbon\Carbon::now()->weekOfYear }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <span class="stat-icon">🗓️</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-6 col-12">
+                            <div class="card stat-card bg-pengeluaran h-100 shadow">
+                                <div class="card-body d-flex align-items-center justify-content-between">
+                                    <div>
+                                        <div class="stat-title">Pengeluaran Bulan Ini</div>
+                                        <div class="stat-value" style="font-size: 1.1em;">
+                                            Rp {{ number_format($pengeluaranBulanan, 0, ',', '.') }}
+                                        </div>
+                                        <div class="stat-foot">
+                                            <span class="badge bg-warning text-dark" style="font-size:.96em;">
+                                                {{ \Carbon\Carbon::now()->translatedFormat('F Y') }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <span class="stat-icon">🧾</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-6 col-12">
+                            <div class="card stat-card bg-pengeluaran h-100 shadow">
+                                <div class="card-body d-flex align-items-center justify-content-between">
+                                    <div>
+                                        <div class="stat-title">Pengeluaran Tahun Ini</div>
+                                        <div class="stat-value" style="font-size: 1.1em;">
+                                            Rp {{ number_format($pengeluaranTahunan, 0, ',', '.') }}
+                                        </div>
+                                        <div class="stat-foot">
+                                            <span class="badge bg-warning text-dark" style="font-size:.96em;">
+                                                {{ date('Y') }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <span class="stat-icon">📉</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- ========== Baris 4: Overall (Pendapatan - Pengeluaran) ========== --}}
+                    <div class="row g-4 mb-1">
+                    <div class="col-lg-3 col-md-6 col-12">
+                        <div class="card stat-card {{ ($labaRugiHarian ?? 0) >= 0 ? 'bg-pendapatan' : 'bg-pengeluaran' }} h-100 shadow">
+                        <div class="card-body d-flex align-items-center justify-content-between">
+                            <div>
+                            <div class="stat-title">Overall Hari Ini</div>
+                            <div class="stat-value" style="font-size: 1.1em;">
+                                Rp {{ number_format($labaRugiHarian, 0, ',', '.') }}
+                            </div>
+                            <div class="stat-foot">
+                                <span class="badge {{ ($labaRugiHarian ?? 0) >= 0 ? 'bg-success' : 'bg-danger' }} text-white" style="font-size:.96em;">
+                                {{ ($labaRugiHarian ?? 0) >= 0 ? 'Laba' : 'Rugi' }}
+                                </span>
+                                <span class="badge bg-secondary" style="font-size:.96em;">
+                                {{ \Carbon\Carbon::today()->translatedFormat('l, d M Y') }}
+                                </span>
+                            </div>
+                            </div>
+                            <span class="stat-icon">⚖️</span>
+                        </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6 col-12">
+                        <div class="card stat-card {{ ($labaRugiMingguan ?? 0) >= 0 ? 'bg-pendapatan' : 'bg-pengeluaran' }} h-100 shadow">
+                        <div class="card-body d-flex align-items-center justify-content-between">
+                            <div>
+                            <div class="stat-title">Overall Minggu Ini</div>
+                            <div class="stat-value" style="font-size: 1.1em;">
+                                Rp {{ number_format($labaRugiMingguan, 0, ',', '.') }}
+                            </div>
+                            <div class="stat-foot">
+                                <span class="badge {{ ($labaRugiMingguan ?? 0) >= 0 ? 'bg-success' : 'bg-danger' }} text-white" style="font-size:.96em;">
+                                {{ ($labaRugiMingguan ?? 0) >= 0 ? 'Laba' : 'Rugi' }}
+                                </span>
+                                <span class="badge bg-secondary" style="font-size:.96em;">
+                                Minggu ke-{{ \Carbon\Carbon::now()->weekOfYear }}
+                                </span>
+                            </div>
+                            </div>
+                            <span class="stat-icon">🧮</span>
+                        </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6 col-12">
+                        <div class="card stat-card {{ ($labaRugiBulanan ?? 0) >= 0 ? 'bg-pendapatan' : 'bg-pengeluaran' }} h-100 shadow">
+                        <div class="card-body d-flex align-items-center justify-content-between">
+                            <div>
+                            <div class="stat-title">Overall Bulan Ini</div>
+                            <div class="stat-value" style="font-size: 1.1em;">
+                                Rp {{ number_format($labaRugiBulanan, 0, ',', '.') }}
+                            </div>
+                            <div class="stat-foot">
+                                <span class="badge {{ ($labaRugiBulanan ?? 0) >= 0 ? 'bg-success' : 'bg-danger' }} text-white" style="font-size:.96em;">
+                                {{ ($labaRugiBulanan ?? 0) >= 0 ? 'Laba' : 'Rugi' }}
+                                </span>
+                                <span class="badge bg-secondary" style="font-size:.96em;">
+                                {{ \Carbon\Carbon::now()->translatedFormat('F Y') }}
+                                </span>
+                            </div>
+                            </div>
+                            <span class="stat-icon">💹</span>
+                        </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6 col-12">
+                        <div class="card stat-card {{ ($labaRugiTahunan ?? 0) >= 0 ? 'bg-pendapatan' : 'bg-pengeluaran' }} h-100 shadow">
+                        <div class="card-body d-flex align-items-center justify-content-between">
+                            <div>
+                            <div class="stat-title">Overall Tahun Ini</div>
+                            <div class="stat-value" style="font-size: 1.1em;">
+                                Rp {{ number_format($labaRugiTahunan, 0, ',', '.') }}
+                            </div>
+                            <div class="stat-foot">
+                                <span class="badge {{ ($labaRugiTahunan ?? 0) >= 0 ? 'bg-success' : 'bg-danger' }} text-white" style="font-size:.96em;">
+                                {{ ($labaRugiTahunan ?? 0) >= 0 ? 'Laba' : 'Rugi' }}
+                                </span>
+                                <span class="badge bg-secondary" style="font-size:.96em;">
+                                {{ date('Y') }}
+                                </span>
+                            </div>
+                            </div>
+                            <span class="stat-icon">📊</span>
+                        </div>
+                        </div>
+                    </div>
+                    </div>
                 </div>
+
+                <br>
 
                 {{-- QUICK LINK --}}
                 <div class="quick-links-box">
@@ -414,23 +643,42 @@
                     <a href="/admin/dashboard" class="quick-link"><span class="emoji">📊</span> Dashboard Admin</a>
                     <a href="/admin/produk" class="quick-link"><span class="emoji">🗂️</span> Kelola Produk Admin</a>
                     <a href="/admin/produk/tambah" class="quick-link"><span class="emoji">➕</span> Tambah Produk</a>
-                    <a href="#" class="quick-link"><span class="emoji">📑</span> Lihat Semua Pesanan</a>
+                    <a href="/admin/pesanan" class="quick-link"><span class="emoji">📑</span> Lihat Semua Pesanan</a>
                     <a href="/admin/pengguna" class="quick-link"><span class="emoji">👤</span> Data Pelanggan</a>
-                    {{-- <a href="#" class="quick-link"><span class="emoji">⚙️</span> Pengaturan</a> --}}
+                    <a href="/admin/chat" class="quick-link"><span class="emoji">💬</span> Layanan Chat</a>
+                    <a href="/admin/armada" class="quick-link"><span class="emoji">🚚</span> Armada Pengiriman</a>
+                    <a href="/admin/distributor" class="quick-link"><span class="emoji">🏢</span> Kelola Distributor</a>
+                    <a href="/admin/pembelian" class="quick-link"><span class="emoji">🛍️</span> Pembelian Produk</a>
                 </div>
 
-                {{-- DUMMY CHART --}}
+                <!-- Row: MINGGUAN -->
                 <div class="row">
                     <div class="col-md-6 mb-4">
                         <div class="chart-card">
-                            <div class="chart-title">Statistik Pesanan Selesai (Mingguan)</div>
-                            <canvas id="ordersChart" height="220"></canvas>
+                        <div class="chart-title">Pesanan vs Pembelian Selesai (Mingguan)</div>
+                        <canvas id="ordersPurchasesWeeklyChart" height="220"></canvas>
                         </div>
                     </div>
                     <div class="col-md-6 mb-4">
                         <div class="chart-card">
-                            <div class="chart-title">Total Pendapatan (Mingguan)</div>
-                            <canvas id="incomeChart" height="220"></canvas>
+                        <div class="chart-title">Pendapatan vs Pengeluaran (Mingguan)</div>
+                        <canvas id="incomeExpenseWeeklyChart" height="220"></canvas>
+                        </div>
+                    </div>
+                    </div>
+
+                    <!-- Row: BULANAN -->
+                    <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <div class="chart-card">
+                        <div class="chart-title">Pesanan vs Pembelian Selesai (Bulanan)</div>
+                        <canvas id="ordersPurchasesMonthlyChart" height="220"></canvas>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <div class="chart-card">
+                        <div class="chart-title">Pendapatan vs Pengeluaran (Bulanan)</div>
+                        <canvas id="incomeExpenseMonthlyChart" height="220"></canvas>
                         </div>
                     </div>
                 </div>
@@ -537,102 +785,153 @@
             });
         </script>
         <!-- CDN Chart.js (minimal build) -->
+
+        <!-- CDN Chart.js -->
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script>
-            const ctx = document.getElementById('salesChart').getContext('2d');
-            const salesChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: @json($labels),
-                    datasets: [{
-                        label: 'Pesanan Selesai',
-                        data: @json($data),
-                        borderRadius: 8,
-                        backgroundColor: 'rgba(139,0,0,0.65)',
-                        maxBarThickness: 52,
-                    }]
+        // ==== Data dari PHP ====
+        const labelsWeeks           = @json($labelsWeeks ?? []);
+        const weeklyOrderCounts     = @json($weeklyOrderCounts ?? []);
+        const weeklyPurchaseCounts  = @json($weeklyPurchaseCounts ?? []);
+        const weeklyIncomes         = @json($weeklyIncomes ?? []);
+        const weeklyExpenses        = @json($weeklyExpenses ?? []);
+
+        const labelsMonths          = @json($labelsMonths ?? []);
+        const monthlyOrderCounts    = @json($monthlyOrderCounts ?? []);
+        const monthlyPurchaseCounts = @json($monthlyPurchaseCounts ?? []);
+        const monthlyIncomes        = @json($monthlyIncomes ?? []);
+        const monthlyExpenses       = @json($monthlyExpenses ?? []);
+
+        // Utils
+        const rupiah = (n) => 'Rp ' + (Number(n||0)).toLocaleString('id-ID');
+        const yMoneyAxis = { beginAtZero: true, ticks: { callback: (v) => rupiah(v) } };
+        const yCountAxis = { beginAtZero: true, precision: 0 };
+
+        // ==== MINGGUAN: Pesanan vs Pembelian (COUNT, BAR GROUPED) ====
+        new Chart(document.getElementById('ordersPurchasesWeeklyChart').getContext('2d'), {
+            type: 'bar',
+            data: {
+            labels: labelsWeeks,
+            datasets: [
+                {
+                label: 'Pesanan Selesai',
+                data: weeklyOrderCounts,
+                backgroundColor: 'rgba(139,0,0,0.75)',
+                borderRadius: 10
                 },
-                options: {
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: {
-                            backgroundColor: '#8B0000',
-                            titleColor: '#fff',
-                            bodyColor: '#fff'
-                        }
-                    },
-                    scales: {
-                        x: {
-                            grid: { display: false },
-                            ticks: { font: { weight: 'bold', size: 13 }, color: '#8B0000' }
-                        },
-                        y: {
-                            beginAtZero: true,
-                            ticks: { font: { weight: 'bold', size: 13 }, color: '#8B0000', stepSize: 1 },
-                            grid: { color: '#f8e5e5' }
-                        }
-                    },
-                    responsive: true,
-                    maintainAspectRatio: false,
+                {
+                label: 'Pembelian Selesai',
+                data: weeklyPurchaseCounts,
+                backgroundColor: 'rgba(54,162,235,0.75)',
+                borderRadius: 10
                 }
-            });
+            ]
+            },
+            options: {
+            responsive: true,
+            scales: { y: yCountAxis }
+            }
+        });
+
+        // ==== MINGGUAN: Pendapatan vs Pengeluaran (MONEY, LINE) ====
+        new Chart(document.getElementById('incomeExpenseWeeklyChart').getContext('2d'), {
+            type: 'line',
+            data: {
+            labels: labelsWeeks,
+            datasets: [
+                {
+                label: 'Pendapatan (Rp)',
+                data: weeklyIncomes,
+                backgroundColor: 'rgba(139,0,0,0.12)',
+                borderColor: 'rgba(139,0,0,1)',
+                pointBackgroundColor: 'rgba(139,0,0,1)',
+                borderWidth: 3,
+                tension: 0.3,
+                fill: true
+                },
+                {
+                label: 'Pengeluaran (Rp)',
+                data: weeklyExpenses,
+                backgroundColor: 'rgba(54,162,235,0.12)',
+                borderColor: 'rgba(54,162,235,1)',
+                pointBackgroundColor: 'rgba(54,162,235,1)',
+                borderWidth: 3,
+                tension: 0.3,
+                fill: true
+                }
+            ]
+            },
+            options: {
+            responsive: true,
+            scales: { y: yMoneyAxis },
+            plugins: {
+                tooltip: { callbacks: { label: (ctx) => rupiah(ctx.parsed.y) } }
+            }
+            }
+        });
+
+        // ==== BULANAN: Pesanan vs Pembelian (COUNT, BAR GROUPED) ====
+        new Chart(document.getElementById('ordersPurchasesMonthlyChart').getContext('2d'), {
+            type: 'bar',
+            data: {
+            labels: labelsMonths,
+            datasets: [
+                {
+                label: 'Pesanan Selesai',
+                data: monthlyOrderCounts,
+                backgroundColor: 'rgba(139,0,0,0.75)',
+                borderRadius: 10
+                },
+                {
+                label: 'Pembelian Selesai',
+                data: monthlyPurchaseCounts,
+                backgroundColor: 'rgba(54,162,235,0.75)',
+                borderRadius: 10
+                }
+            ]
+            },
+            options: {
+            responsive: true,
+            scales: { y: yCountAxis }
+            }
+        });
+
+        // ==== BULANAN: Pendapatan vs Pengeluaran (MONEY, LINE) ====
+        new Chart(document.getElementById('incomeExpenseMonthlyChart').getContext('2d'), {
+            type: 'line',
+            data: {
+            labels: labelsMonths,
+            datasets: [
+                {
+                label: 'Pendapatan (Rp)',
+                data: monthlyIncomes,
+                backgroundColor: 'rgba(139,0,0,0.12)',
+                borderColor: 'rgba(139,0,0,1)',
+                pointBackgroundColor: 'rgba(139,0,0,1)',
+                borderWidth: 3,
+                tension: 0.3,
+                fill: true
+                },
+                {
+                label: 'Pengeluaran (Rp)',
+                data: monthlyExpenses,
+                backgroundColor: 'rgba(54,162,235,0.12)',
+                borderColor: 'rgba(54,162,235,1)',
+                pointBackgroundColor: 'rgba(54,162,235,1)',
+                borderWidth: 3,
+                tension: 0.3,
+                fill: true
+                }
+            ]
+            },
+            options: {
+            responsive: true,
+            scales: { y: yMoneyAxis },
+            plugins: {
+                tooltip: { callbacks: { label: (ctx) => rupiah(ctx.parsed.y) } }
+            }
+            }
+        });
         </script>
 
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <script>
-            const labels = @json($labels ?? []);
-            const orderCounts = @json($orderCounts ?? []);
-            const incomes = @json($incomes ?? []);
-
-            // Grafik Jumlah Pesanan
-            const ctxOrders = document.getElementById('ordersChart').getContext('2d');
-            const ordersChart = new Chart(ctxOrders, {
-                type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Jumlah Pesanan',
-                        data: orderCounts,
-                        backgroundColor: 'rgba(139,0,0,0.7)',
-                        borderRadius: 10
-                    }]
-                },
-                options: {
-                    scales: { y: { beginAtZero: true } }
-                }
-            });
-
-            // Grafik Total Pendapatan
-            const ctxIncome = document.getElementById('incomeChart').getContext('2d');
-            const incomeChart = new Chart(ctxIncome, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Total Pendapatan (Rp)',
-                        data: incomes,
-                        backgroundColor: 'rgba(255,99,132,0.12)',
-                        borderColor: 'rgba(139,0,0,1)',
-                        pointBackgroundColor: 'rgba(139,0,0,1)',
-                        fill: true,
-                        tension: 0.3,
-                        borderWidth: 3
-                    }]
-                },
-                options: {
-                    scales: { y: { beginAtZero: true } },
-                    plugins: {
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    let value = context.parsed.y;
-                                    // Format Rupiah
-                                    return 'Rp ' + value.toLocaleString('id-ID');
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-        </script>
 @endsection

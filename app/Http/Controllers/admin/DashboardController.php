@@ -10,119 +10,211 @@ use App\Models\User;
 use App\Models\DetailPemesanan;
 use App\Models\PembayaranPemesanan;
 use Carbon\Carbon;
+use App\Models\PembelianVarianProduk;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        $totalProduk = Produk::count();
-        $totalPesanan = Pemesanan::count();
-        $totalPelanggan = User::role('pelanggan')->count();
-        $totalPesanan = Pemesanan::count();
-        $totalPesananSelesai = Pemesanan::where('status_pemesanan', 'selesai')->count();
-        $totalPesananBatal   = Pemesanan::where('status_pemesanan', 'dibatalkan')->count();
-        $totalPesananMenunggu = Pemesanan::where('status_pemesanan', 'menunggu')->count();
+        $tz  = 'Asia/Jakarta';
+        $now = Carbon::now($tz);
 
+        // ==== Agg utama ====
+        $totalProduk           = Produk::count();
+        $totalPesanan          = Pemesanan::count();
+        $totalPelanggan        = User::role('pelanggan')->count();
+        $totalPesananSelesai   = Pemesanan::where('status_pemesanan', 'selesai')->count();
+        $totalPesananBatal     = Pemesanan::where('status_pemesanan', 'dibatalkan')->count();
+        $totalPesananMenunggu  = Pemesanan::where('status_pemesanan', 'menunggu')->count();
+        $totalPesananAktif     = $totalPesanan - ($totalPesananSelesai + $totalPesananBatal);
 
-        $totalPesananAktif = $totalPesanan - ($totalPesananSelesai + $totalPesananBatal);
-
-        // Ambil aktivitas terbaru
-        $recentOrders = Pemesanan::latest()->limit(5)->get();
+        // Aktivitas terbaru
+        $recentOrders   = Pemesanan::latest()->limit(5)->get();
         $recentProducts = Produk::latest()->limit(3)->get();
         $recentPayments = PembayaranPemesanan::latest()->limit(3)->get();
 
-        // Hitung pendapatan bulan ini (status selesai)
-        $pendapatanBulanIni = \App\Models\Pemesanan::where('status_pemesanan', 'selesai')
-            ->whereMonth('updated_at', Carbon::now()->month)
-            ->whereYear('updated_at', Carbon::now()->year)
-            ->sum('total_harga');
-
-        $today      = Carbon::today();
-        $startOfWeek = Carbon::now()->startOfWeek(); // Senin, bisa diganti Minggu pakai ->locale('id')->startOfWeek(Carbon::SUNDAY)
-        $now        = Carbon::now();
-
-        // Pendapatan hari ini
+        // ==== Ringkasan pendapatan/pengeluaran ====
+        // Pendapatan (pakai updated_at & status selesai)
         $pendapatanHarian = Pemesanan::where('status_pemesanan', 'selesai')
-            ->whereDate('updated_at', $today)
+            ->whereDate('updated_at', $now->toDateString())
             ->sum('total_harga');
 
-        // Pendapatan minggu ini
         $pendapatanMingguan = Pemesanan::where('status_pemesanan', 'selesai')
-            ->whereBetween('updated_at', [$startOfWeek, $now])
+            ->whereBetween('updated_at', [$now->copy()->startOfWeek(Carbon::MONDAY), $now->copy()->endOfWeek(Carbon::SUNDAY)])
             ->sum('total_harga');
 
-        // Pendapatan bulan ini
         $pendapatanBulanan = Pemesanan::where('status_pemesanan', 'selesai')
             ->whereMonth('updated_at', $now->month)
             ->whereYear('updated_at', $now->year)
             ->sum('total_harga');
 
-        // Hitung label minggu & jumlah pesanan selesai per minggu (bulan ini)
-        $startOfMonth = Carbon::now()->startOfMonth();
-        $now = Carbon::now();
+        $pendapatanTahunan = Pemesanan::where('status_pemesanan', 'selesai')
+            ->whereYear('updated_at', $now->year)
+            ->sum('total_harga');
 
-        $weeks = [];
-        $labels = [];
-        $data = [];
+        $pendapatanBulanIni = $pendapatanBulanan;
 
-        $temp = $startOfMonth->copy();
-        while ($temp->lt($now)) {
-            $weekLabel = 'Minggu ' . $temp->weekOfMonth;
-            $labels[] = $weekLabel;
+        // Pengeluaran (pakai tanggal_beli & status selesai)
+        $pengeluaranHarian = PembelianVarianProduk::where('status', 'selesai')
+            ->whereDate('tanggal_beli', $now->toDateString())
+            ->sum('total_harga');
 
-            $start = $temp->copy()->startOfWeek();
-            $end = $temp->copy()->endOfWeek();
+        $pengeluaranMingguan = PembelianVarianProduk::where('status', 'selesai')
+            ->whereBetween('tanggal_beli', [$now->copy()->startOfWeek(Carbon::MONDAY), $now->copy()->endOfWeek(Carbon::SUNDAY)])
+            ->sum('total_harga');
 
-            $count = Pemesanan::where('status_pemesanan', 'selesai')
-                ->whereBetween('created_at', [$start, $end])
+        $pengeluaranBulanan = PembelianVarianProduk::where('status', 'selesai')
+            ->whereMonth('tanggal_beli', $now->month)
+            ->whereYear('tanggal_beli', $now->year)
+            ->sum('total_harga');
+
+        $pengeluaranTahunan = PembelianVarianProduk::where('status', 'selesai')
+            ->whereYear('tanggal_beli', $now->year)
+            ->sum('total_harga');
+
+        // ==== Data MINGGUAN (bulan berjalan, dipotong per minggu) ====
+        $labelsWeeks            = [];
+        $weeklyOrderCounts      = []; // Pesanan selesai (count)
+        $weeklyPurchaseCounts   = []; // Pembelian selesai (count)
+        $weeklyIncomes          = []; // Pendapatan (sum)
+        $weeklyExpenses         = []; // Pengeluaran (sum)
+
+        $startOfMonth = $now->copy()->startOfMonth();
+        $endOfMonth   = $now->copy()->endOfMonth();
+
+        for ($i = 0; $i < 6; $i++) {
+            $startWeek = $startOfMonth->copy()->addWeeks($i)->startOfWeek(Carbon::MONDAY);
+            $endWeek   = $startWeek->copy()->endOfWeek(Carbon::SUNDAY);
+
+            if ($startWeek->gt($endOfMonth)) break;
+            if ($endWeek->gt($endOfMonth)) $endWeek = $endOfMonth;
+
+            $labelsWeeks[] = 'Minggu ' . (count($labelsWeeks) + 1);
+
+            // Pesanan selesai (count) — pakai updated_at
+            $weeklyOrderCounts[] = Pemesanan::where('status_pemesanan', 'selesai')
+                ->whereBetween('updated_at', [$startWeek, $endWeek])
                 ->count();
 
-            $data[] = $count;
-
-            $temp->addWeek();
-        }
-
-        $start = Carbon::now()->startOfMonth();
-        $now = Carbon::now();
-
-        $labels = [];
-        $orderCounts = [];
-        $incomes = [];
-
-        for ($i = 1; $i <= 5; $i++) {
-            $startWeek = $start->copy()->addWeeks($i - 1)->startOfWeek();
-            $endWeek = $start->copy()->addWeeks($i - 1)->endOfWeek();
-
-            $labels[] = 'Minggu ' . $i;
-            // Jumlah pesanan selesai
-            $orderCounts[] = Pemesanan::where('status_pemesanan', 'selesai')
-                ->whereBetween('created_at', [$startWeek, $endWeek])
+            // Pembelian selesai (count) — pakai tanggal_beli
+            $weeklyPurchaseCounts[] = PembelianVarianProduk::where('status', 'selesai')
+                ->whereBetween('tanggal_beli', [$startWeek, $endWeek])
                 ->count();
-            // Total pendapatan (sum total_harga pesanan selesai)
-            $incomes[] = Pemesanan::where('status_pemesanan', 'selesai')
-                ->whereBetween('created_at', [$startWeek, $endWeek])
+
+            // Pendapatan (sum)
+            $weeklyIncomes[] = Pemesanan::where('status_pemesanan', 'selesai')
+                ->whereBetween('updated_at', [$startWeek, $endWeek])
+                ->sum('total_harga');
+
+            // Pengeluaran (sum)
+            $weeklyExpenses[] = PembelianVarianProduk::where('status', 'selesai')
+                ->whereBetween('tanggal_beli', [$startWeek, $endWeek])
                 ->sum('total_harga');
         }
 
+        // ==== Data BULANAN (tahun berjalan, Jan..bulan ini) ====
+        Carbon::setLocale('id');
+        $labelsMonths           = [];
+        $monthlyOrderCounts     = [];
+        $monthlyPurchaseCounts  = [];
+        $monthlyIncomes         = [];
+        $monthlyExpenses        = [];
+
+        for ($m = 1; $m <= $now->month; $m++) {
+            $startM = Carbon::create($now->year, $m, 1, 0, 0, 0, $tz)->startOfMonth();
+            $endM   = $startM->copy()->endOfMonth();
+
+            $labelsMonths[] = $startM->translatedFormat('M Y'); // contoh: "Jan 2025"
+
+            // Pesanan selesai (count)
+            $monthlyOrderCounts[] = Pemesanan::where('status_pemesanan', 'selesai')
+                ->whereBetween('updated_at', [$startM, $endM])
+                ->count();
+
+            // Pembelian selesai (count)
+            $monthlyPurchaseCounts[] = PembelianVarianProduk::where('status', 'selesai')
+                ->whereBetween('tanggal_beli', [$startM, $endM])
+                ->count();
+
+            // Pendapatan (sum)
+            $monthlyIncomes[] = Pemesanan::where('status_pemesanan', 'selesai')
+                ->whereBetween('updated_at', [$startM, $endM])
+                ->sum('total_harga');
+
+            // Pengeluaran (sum)
+            $monthlyExpenses[] = PembelianVarianProduk::where('status', 'selesai')
+                ->whereBetween('tanggal_beli', [$startM, $endM])
+                ->sum('total_harga');
+        }
+        // === Overall (Pendapatan - Pengeluaran) ===
+        $labaRugiHarian   = $pendapatanHarian  - $pengeluaranHarian;
+        $labaRugiMingguan = $pendapatanMingguan - $pengeluaranMingguan;
+        $labaRugiBulanan  = $pendapatanBulanan - $pengeluaranBulanan;
+        $labaRugiTahunan  = $pendapatanTahunan - $pengeluaranTahunan;
+
+        // === Ringkasan Pembelian ===
+        $totalPembelian            = PembelianVarianProduk::count();
+        $totalPembelianSelesai     = PembelianVarianProduk::where('status', 'selesai')->count();
+        $totalPembelianDibatalkan  = PembelianVarianProduk::where('status', 'dibatalkan')->count();
+        $totalPembelianRetur       = PembelianVarianProduk::where('status', 'dikembalikan_ke_supplier')->count();
+
+        // Aktif = selain status terminal
+        $totalPembelianAktif = PembelianVarianProduk::whereNotIn('status', [
+            'selesai',
+            'dibatalkan',
+            'dikembalikan_ke_supplier'
+        ])->count();
+
+
+
         return view('admin.dashboard', compact(
+            // ringkasan & aktivitas
             'totalProduk',
             'totalPesanan',
             'totalPelanggan',
             'recentOrders',
             'recentProducts',
             'recentPayments',
-            'labels',
-            'data',
-            'orderCounts',
-            'incomes',
             'totalPesananSelesai',
             'totalPesananBatal',
             'totalPesananAktif',
-            'pendapatanBulanIni',
+            'totalPesananMenunggu',
             'pendapatanHarian',
             'pendapatanMingguan',
             'pendapatanBulanan',
-            'totalPesananMenunggu',
+            'pendapatanTahunan',
+            'pendapatanBulanIni',
+            'pengeluaranHarian',
+            'pengeluaranMingguan',
+            'pengeluaranBulanan',
+            'pengeluaranTahunan',
+
+            // MINGGUAN
+            'labelsWeeks',
+            'weeklyOrderCounts',
+            'weeklyPurchaseCounts',
+            'weeklyIncomes',
+            'weeklyExpenses',
+
+            // BULANAN
+            'labelsMonths',
+            'monthlyOrderCounts',
+            'monthlyPurchaseCounts',
+            'monthlyIncomes',
+            'monthlyExpenses',
+
+            // HASIL OVERALL
+            'labaRugiHarian',
+            'labaRugiMingguan',
+            'labaRugiBulanan',
+            'labaRugiTahunan',
+
+            // Hasil Pembelian Produk
+            'totalPembelian',
+            'totalPembelianAktif',
+            'totalPembelianSelesai',
+            'totalPembelianDibatalkan',
+            'totalPembelianRetur'
         ));
     }
 }

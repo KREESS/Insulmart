@@ -26,9 +26,223 @@
   .collapse-row{background:#fff}
   .inner-table thead th{background:#faf5f5}
   .badge{border-radius:2em}
+/* ====== STAT CARDS: Merah Gradient Elegan ====== */
+:root{
+  --merah:#8B0000;
+  --merah-2:#a41515;
+  --grad:linear-gradient(90deg,#8B0000 0%,#a41515 100%);
+  --maroon-soft:#fbeaec;
+  --maroon-soft-2:#fde9eb;
+}
+
+.stat-grid .stat-card{
+  position: relative;
+  border: none;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 10px 24px rgba(139,0,0,.12);
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+.stat-grid .stat-card:hover{
+  transform: translateY(-3px);
+  box-shadow: 0 14px 28px rgba(139,0,0,.16);
+}
+
+/* Border gradient tipis mengelilingi kartu */
+.stat-card::before{
+  content:"";
+  position:absolute; inset:0;
+  padding:1.5px; /* ketebalan border */
+  border-radius: 16px;
+  background: var(--grad);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  pointer-events:none;
+}
+
+/* Ribbon kecil di atas */
+.stat-card::after{
+  content:"";
+  position:absolute; left:0; right:0; top:0;
+  height:6px; background:var(--grad);
+}
+
+/* Isi kartu */
+.stat-body{ padding: 16px 16px 14px; }
+.stat-label{
+  display:flex; align-items:center; gap:.55rem;
+  color:#7a4d4d; font-size:.85rem; letter-spacing:.2px;
+}
+.stat-icon{
+  width:36px; height:36px; min-width:36px;
+  border-radius:10px;
+  background: linear-gradient(180deg, var(--maroon-soft) 0%, var(--maroon-soft-2) 100%);
+  display:grid; place-items:center;
+  color:var(--merah);
+  box-shadow: inset 0 0 0 1.5px rgba(139,0,0,.08);
+}
+
+/* Angka utama gradient */
+.stat-value{
+  margin-top:.25rem;
+  font-weight:800;
+  font-size:1.45rem;
+  line-height:1.1;
+  background: var(--grad);
+  -webkit-background-clip: text;
+          background-clip: text;
+  color: transparent;
+}
+
+/* Judul blok & keterangan */
+.stat-header .title{
+  color: var(--color-merah-tua, #8B0000);
+  font-weight: 700;
+}
+.stat-header .desc{
+  color:#7f7f7f;
+}
+
+/* Responsif */
+@media (min-width: 768px){
+  .stat-value{ font-size:1.6rem; }
+}
+@media (max-width: 576px){
+  .stat-body{ padding:14px; }
+  .stat-value{ font-size:1.3rem; }
+}
+
 </style>
 
 <main class="main-content p-4 bg-light" id="mainContent">
+@php
+  // Warna badge untuk setiap status
+  $statusColors = [
+    'draft'                   => 'secondary',
+    'dipesan'                 => 'info',
+    'dikirim'                 => 'primary',
+    'diterima_sebagian'       => 'warning',
+    'selesai'                 => 'success',
+    'dibatalkan'              => 'danger',
+    'dikembalikan_ke_supplier'=> 'dark',
+  ];
+  // helper rupiah
+  $fmtRp = fn($n) => 'Rp '.number_format((int)$n,0,',','.');
+@endphp
+
+{{-- Ringkasan Pengeluaran (Selesai) --}}
+<div class="row g-3 mb-4 stat-grid">
+  <div class="col-12 stat-header d-flex align-items-center justify-content-between">
+    <h5 class="mb-0 title">Ringkasan Pengeluaran (Status: selesai)</h5>
+    <div class="small desc">
+      Dihitung per hari/minggu/bulan/tahun dari <strong>tanggal_beli</strong>.
+    </div>
+  </div>
+
+  <div class="col-6 col-md-3">
+    <div class="card stat-card h-100">
+      <div class="stat-body">
+        <div class="stat-label">
+          <span class="stat-icon"><i class="bi bi-calendar-day"></i></span>
+          <span>Harian</span>
+        </div>
+        <div class="stat-value">{{ $fmtRp($pengeluaran['harian'] ?? 0) }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-6 col-md-3">
+    <div class="card stat-card h-100">
+      <div class="stat-body">
+        <div class="stat-label">
+          <span class="stat-icon"><i class="bi bi-calendar-week"></i></span>
+          <span>Mingguan</span>
+        </div>
+        <div class="stat-value">{{ $fmtRp($pengeluaran['mingguan'] ?? 0) }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-6 col-md-3">
+    <div class="card stat-card h-100">
+      <div class="stat-body">
+        <div class="stat-label">
+          <span class="stat-icon"><i class="bi bi-calendar-month"></i></span>
+          <span>Bulanan</span>
+        </div>
+        <div class="stat-value">{{ $fmtRp($pengeluaran['bulanan'] ?? 0) }}</div>
+      </div>
+    </div>
+  </div>
+
+<div class="col-6 col-md-3">
+  <div class="card stat-card h-100">
+    <div class="stat-body">
+      <div class="stat-label">
+        <span class="stat-icon">
+          <i class="bi bi-calendar2"></i>
+        </span>
+        <span>{{ date('Y') }}</span>
+      </div>
+      <div class="stat-value">{{ $fmtRp($pengeluaran['tahunan'] ?? 0) }}</div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+
+
+{{-- Ringkasan Status Order --}}
+<div class="row g-3 mb-4">
+  <div class="col-lg-8">
+    <div class="card card-custom">
+      <div class="card-body">
+        <div class="d-flex align-items-center justify-content-between mb-2">
+          <h6 class="mb-0 fw-semibold">Status Order (Total)</h6>
+          <div class="small text-muted">
+            Selesai: <strong>{{ $selesaiCount }}</strong> • Sedang Berjalan: <strong>{{ $sedangBerjalanCount }}</strong>
+          </div>
+        </div>
+
+        <div class="d-flex flex-wrap gap-2">
+          @foreach($statusColors as $st => $color)
+            <span class="badge bg-{{ $color }}">
+              {{ str_replace('_',' ', ucfirst($st)) }}:
+              {{ (int)($statusCounts[$st] ?? 0) }}
+            </span>
+          @endforeach
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {{-- Mini angka besar untuk "Selesai" & "Sedang Berjalan" --}}
+  <div class="col-lg-4">
+    <div class="row g-3">
+      <div class="col-6 col-lg-12">
+        <div class="card card-custom h-100">
+          <div class="card-body d-flex flex-column">
+            <div class="text-muted small mb-1">Order Selesai</div>
+            <div class="display-6 fw-bold text-success">{{ $selesaiCount }}</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-lg-12">
+        <div class="card card-custom h-100">
+          <div class="card-body d-flex flex-column">
+            <div class="text-muted small mb-1">Sedang Berjalan</div>
+            <div class="display-6 fw-bold text-primary">{{ $sedangBerjalanCount }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
   <div class="mb-4 border-bottom pb-3 d-flex justify-content-between align-items-center">
     <div>

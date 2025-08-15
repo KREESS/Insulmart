@@ -43,9 +43,54 @@ class PembelianVarianProdukController extends Controller
             ->get()
             ->groupBy('po_code');
 
+        // === Ringkasan Pengeluaran (hanya status selesai) ===
+        $tz = 'Asia/Jakarta';
+        $now = Carbon::now($tz);
+
+        $todayStart = $now->copy()->startOfDay();
+        $todayEnd   = $now->copy()->endOfDay();
+
+        $weekStart  = $now->copy()->startOfWeek(Carbon::MONDAY);
+        $weekEnd    = $now->copy()->endOfWeek(Carbon::SUNDAY);
+
+        $monthStart = $now->copy()->startOfMonth();
+        $monthEnd   = $now->copy()->endOfMonth();
+
+        $yearStart  = $now->copy()->startOfYear();
+        $yearEnd    = $now->copy()->endOfYear();
+
+        $pengeluaran = [
+            'harian'   => PembelianVarianProduk::where('status', 'selesai')
+                ->whereBetween('tanggal_beli', [$todayStart, $todayEnd])
+                ->sum('total_harga'),
+            'mingguan' => PembelianVarianProduk::where('status', 'selesai')
+                ->whereBetween('tanggal_beli', [$weekStart, $weekEnd])
+                ->sum('total_harga'),
+            'bulanan'  => PembelianVarianProduk::where('status', 'selesai')
+                ->whereBetween('tanggal_beli', [$monthStart, $monthEnd])
+                ->sum('total_harga'),
+            'tahunan'  => PembelianVarianProduk::where('status', 'selesai')
+                ->whereBetween('tanggal_beli', [$yearStart, $yearEnd])
+                ->sum('total_harga'),
+        ];
+
+        // === Counter order per status ===
+        $statusCounts = PembelianVarianProduk::select('status', DB::raw('COUNT(*) as total'))
+            ->groupBy('status')
+            ->pluck('total', 'status'); // hasil: ['draft'=>x, 'dipesan'=>y, ...]
+
+        // Tambahan ringkasan "sedang berjalan" (opsional)
+        $runningStatuses = ['draft', 'dipesan', 'dikirim', 'diterima_sebagian'];
+        $sedangBerjalanCount = PembelianVarianProduk::whereIn('status', $runningStatuses)->count();
+        $selesaiCount = (int) ($statusCounts['selesai'] ?? 0);
+
         return view('admin.pembelian.index', [
-            'groups'    => $groups,
-            'itemsByPo' => $itemsByPo,
+            'groups'             => $groups,
+            'itemsByPo'          => $itemsByPo,
+            'pengeluaran'        => $pengeluaran,
+            'statusCounts'       => $statusCounts,
+            'selesaiCount'       => $selesaiCount,
+            'sedangBerjalanCount' => $sedangBerjalanCount,
         ]);
     }
 
