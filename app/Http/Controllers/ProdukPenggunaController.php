@@ -8,6 +8,7 @@ use App\Models\Produk;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Cart;
+use Illuminate\Support\Facades\Schema;
 
 class ProdukPenggunaController extends Controller
 {
@@ -42,21 +43,34 @@ class ProdukPenggunaController extends Controller
                 $produkQuery->whereRaw('LOWER(TRIM(jenis_produk)) = ?', [$qLower]);
             } else {
                 // MODE PENCARIAN UMUM: nama/sku/deskripsi/jenis (LIKE & exact) + varian
+                // MODE PENCARIAN UMUM: nama/deskripsi/jenis (LIKE & exact) + varian yg ada di DB
                 $produkQuery->where(function ($root) use ($needle, $qLower) {
+                    // Kolom di tabel produks (tanpa sku)
                     $root->where(function ($w) use ($needle, $qLower) {
                         $w->where('nama_produk', 'like', $needle)
-                            ->orWhere('sku', 'like', $needle)
                             ->orWhere('deskripsi', 'like', $needle)
                             ->orWhere('jenis_produk', 'like', $needle)
                             ->orWhereRaw('LOWER(TRIM(jenis_produk)) = ?', [$qLower]);
                     })
+
+                        // Relasi varians -> pakai kolom yang ada di VarianProduk
                         ->orWhereHas('varians', function ($v) use ($needle) {
-                            $v->where('nama_varian', 'like', $needle)
-                                ->orWhere('kode_varian', 'like', $needle);
+                            $v->where('tipe', 'like', $needle)
+                                ->orWhere('ukuran', 'like', $needle)
+                                ->orWhere('ketebalan', 'like', $needle)
+                                ->orWhere('densitas', 'like', $needle)
+                                ->orWhere('status_ketersediaan', 'like', $needle)
+                                ->orWhereRaw('CAST(harga AS CHAR) LIKE ?', [$needle]);
                         })
+
+                        // (Opsional) kalau masih mau cari lewat alias varianProduks juga
                         ->orWhereHas('varianProduks', function ($v) use ($needle) {
-                            $v->where('nama_varian', 'like', $needle)
-                                ->orWhere('kode_varian', 'like', $needle);
+                            $v->where('tipe', 'like', $needle)
+                                ->orWhere('ukuran', 'like', $needle)
+                                ->orWhere('ketebalan', 'like', $needle)
+                                ->orWhere('densitas', 'like', $needle)
+                                ->orWhere('status_ketersediaan', 'like', $needle)
+                                ->orWhereRaw('CAST(harga AS CHAR) LIKE ?', [$needle]);
                         });
                 });
             }

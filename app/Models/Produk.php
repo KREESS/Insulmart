@@ -38,4 +38,10 @@ class Produk extends Model
         // Buat slug dari hasil bersih
         return Str::slug($cleaned, '-');
     }
+
+    // ➜ tambahkan relasi ini agar whereHas('varianProduks') tidak error
+    public function varianProduks()
+    {
+        return $this->hasMany(VarianProduk::class, 'produk_id'); // sesuaikan fk kalau beda
+    }
 }
