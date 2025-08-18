@@ -63,77 +63,82 @@
       border-radius: 16px;
       padding: 12px;
     }
+
     .btn-grad-danger{
       border: 0;
       background-image: linear-gradient(135deg, var(--grad-merah-2), var(--grad-merah-3));
       color:#fff;
     }
+
     .btn-grad-danger:hover{ opacity:.95; }
     .chip{
       display:inline-flex; align-items:center; gap:.35rem;
       padding:.35rem .6rem; border-radius:999px; background:#fff; border:1px solid #eee; font-size:.8rem;
     }
+
     .chip .x{ text-decoration:none; color:#999; }
     .chip .x:hover{ color:#333; }
-  
-/* === SEARCH UI PRO === */
-.search-wrap{
-  background: linear-gradient(90deg, rgba(139,0,0,.06), rgba(255,77,77,.05));
-  border: 1px solid rgba(139,0,0,.15);
-  border-radius: 18px;
-  padding: 16px;
-  box-shadow: 0 10px 30px rgba(139,0,0,.06);
-}
 
-.search-pill{
-  position: relative;
-  border-radius: 999px;
-  padding: 4px;
-  background:
-    radial-gradient(80% 180% at 0% 0%, rgba(255,77,77,.35), transparent 40%),
-    radial-gradient(60% 160% at 100% 100%, rgba(194,29,29,.25), transparent 40%),
-    linear-gradient(135deg, rgba(139,0,0,.55), rgba(194,29,29,.55));
-}
+    /* === SEARCH UI PRO === */
+    .search-wrap{
+      background: linear-gradient(90deg, rgba(139,0,0,.06), rgba(255,77,77,.05));
+      border: 1px solid rgba(139,0,0,.15);
+      border-radius: 18px;
+      padding: 16px;
+      box-shadow: 0 10px 30px rgba(139,0,0,.06);
+    }
 
-.search-inner{
-  display: flex; align-items: center; gap: 10px;
-  background: #fff; border-radius: 999px; padding: 10px 12px 10px 14px;
-}
+    .search-pill{
+      position: relative;
+      border-radius: 999px;
+      padding: 4px;
+      background:
+        radial-gradient(80% 180% at 0% 0%, rgba(255,77,77,.35), transparent 40%),
+        radial-gradient(60% 160% at 100% 100%, rgba(194,29,29,.25), transparent 40%),
+        linear-gradient(135deg, rgba(139,0,0,.55), rgba(194,29,29,.55));
+    }
 
-.search-icon{
-  width: 28px; height: 28px; display: grid; place-items: center;
-  border-radius: 999px; background: rgba(139,0,0,.08);
-}
+    .search-inner{
+      display: flex; align-items: center; gap: 10px;
+      background: #fff; border-radius: 999px; padding: 10px 12px 10px 14px;
+    }
 
-.search-input{
-  border: 0; outline: none; flex: 1; font-size: 1.05rem; padding: 8px 6px;
-}
-.search-input::placeholder{ color:#a8a8a8; }
-.search-btn{
-  border:0; padding:10px 18px; border-radius:999px; font-weight:600; color:#fff;
-  background-image: linear-gradient(135deg, #C21D1D, #FF4D4D);
-}
-.search-btn:hover{ opacity:.95; }
+    .search-icon{
+      width: 28px; height: 28px; display: grid; place-items: center;
+      border-radius: 999px; background: rgba(139,0,0,.08);
+    }
 
-.search-clear{
-  display:none; border:0; background:#f3f3f4; color:#555; border-radius:999px;
-  width:36px; height:36px; line-height:36px; text-align:center;
-}
-.search-clear:hover{ background:#ececee; }
+    .search-input{
+      border: 0; outline: none; flex: 1; font-size: 1.05rem; padding: 8px 6px;
+    }
+    .search-input::placeholder{ color:#a8a8a8; }
+    .search-btn{
+      border:0; padding:10px 18px; border-radius:999px; font-weight:600; color:#fff;
+      background-image: linear-gradient(135deg, #C21D1D, #FF4D4D);
+    }
+    .search-btn:hover{ opacity:.95; }
 
-.quick-tags{ display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
+    .search-clear{
+      display:none; border:0; background:#f3f3f4; color:#555; border-radius:999px;
+      width:36px; height:36px; line-height:36px; text-align:center;
+    }
 
-.quick-tags a{
-  text-decoration:none; font-size:.85rem; color:#8B0000; background:#fff;
-  border:1px solid rgba(139,0,0,.18); padding:.35rem .7rem; border-radius:999px;
-}
-.quick-tags a:hover{ background:rgba(139,0,0,.06); }
+    .search-clear:hover{ background:#ececee; }
 
-.kbd{
-  font: 500 11px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
-  color:#666; background:#f2f2f3; border:1px solid #e6e6e7;
-  border-bottom-width:2px; padding:2px 6px; border-radius:6px;
-}
+    .quick-tags{ display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
+
+    .quick-tags a{
+      text-decoration:none; font-size:.85rem; color:#8B0000; background:#fff;
+      border:1px solid rgba(139,0,0,.18); padding:.35rem .7rem; border-radius:999px;
+    }
+
+    .quick-tags a:hover{ background:rgba(139,0,0,.06); }
+
+    .kbd{
+      font: 500 11px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      color:#666; background:#f2f2f3; border:1px solid #e6e6e7;
+      border-bottom-width:2px; padding:2px 6px; border-radius:6px;
+    }
 
   </style>
 
@@ -353,52 +358,51 @@
   {{-- Bootstrap JS Carousel --}}
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   @include('components.back-to-top')
-<script>
-  (function(){
-    const input = document.getElementById('q');
-    const clearBtn = document.getElementById('btnClearQ');
+  <script>
+    (function(){
+      const input = document.getElementById('q');
+      const clearBtn = document.getElementById('btnClearQ');
 
-    function syncClear(){
-      if(!clearBtn) return;
-      clearBtn.style.display = (input && input.value.trim().length) ? 'inline-block' : 'none';
-    }
-    if (input) {
-      input.addEventListener('input', syncClear);
-      syncClear();
-
-      // shortcut "/" untuk fokus
-      window.addEventListener('keydown', function(e){
-        if (e.key === '/' && document.activeElement !== input) {
-          e.preventDefault();
-          input.focus();
-          input.select();
-        }
-      });
-    }
-    if (clearBtn && input) {
-      clearBtn.addEventListener('click', function(){
-        input.value = '';
+      function syncClear(){
+        if(!clearBtn) return;
+        clearBtn.style.display = (input && input.value.trim().length) ? 'inline-block' : 'none';
+      }
+      if (input) {
+        input.addEventListener('input', syncClear);
         syncClear();
-        input.focus();
-      });
-    }
-  })();
-</script>
 
-<script>
-  (function(){
-    const input = document.getElementById('q');
-    const clearBtn = document.getElementById('btnClearQ');
-    function syncClear(){ if(!clearBtn) return; clearBtn.style.display = (input && input.value.trim().length) ? 'inline-block' : 'none'; }
-    if (input) {
-      input.addEventListener('input', syncClear);
-      syncClear();
-      window.addEventListener('keydown', function(e){
-        if (e.key === '/' && document.activeElement !== input) { e.preventDefault(); input.focus(); input.select(); }
-      });
-    }
-    if (clearBtn && input) { clearBtn.addEventListener('click', function(){ input.value = ''; syncClear(); input.focus(); }); }
-  })();
-</script>
+        // shortcut "/" untuk fokus
+        window.addEventListener('keydown', function(e){
+          if (e.key === '/' && document.activeElement !== input) {
+            e.preventDefault();
+            input.focus();
+            input.select();
+          }
+        });
+      }
+      if (clearBtn && input) {
+        clearBtn.addEventListener('click', function(){
+          input.value = '';
+          syncClear();
+          input.focus();
+        });
+      }
+    })();
+  </script>
 
+  <script>
+    (function(){
+      const input = document.getElementById('q');
+      const clearBtn = document.getElementById('btnClearQ');
+      function syncClear(){ if(!clearBtn) return; clearBtn.style.display = (input && input.value.trim().length) ? 'inline-block' : 'none'; }
+      if (input) {
+        input.addEventListener('input', syncClear);
+        syncClear();
+        window.addEventListener('keydown', function(e){
+          if (e.key === '/' && document.activeElement !== input) { e.preventDefault(); input.focus(); input.select(); }
+        });
+      }
+      if (clearBtn && input) { clearBtn.addEventListener('click', function(){ input.value = ''; syncClear(); input.focus(); }); }
+    })();
+  </script>
 @endsection

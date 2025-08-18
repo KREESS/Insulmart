@@ -304,50 +304,50 @@
     </style>
 
     <script>
-    let proyekCurrentIndex = 0;
-    const proyekSlides = document.querySelectorAll('.proyek-slide');
-    const proyekDots = document.querySelectorAll('.proyek-dot');
-    let proyekInterval;
+        let proyekCurrentIndex = 0;
+        const proyekSlides = document.querySelectorAll('.proyek-slide');
+        const proyekDots = document.querySelectorAll('.proyek-dot');
+        let proyekInterval;
 
-    function showProyekSlide(index) {
-        proyekSlides.forEach((slide, i) => {
-        slide.classList.remove('active');
-        proyekDots[i].classList.remove('active');
-        });
+        function showProyekSlide(index) {
+            proyekSlides.forEach((slide, i) => {
+            slide.classList.remove('active');
+            proyekDots[i].classList.remove('active');
+            });
 
-        proyekSlides[index].classList.add('active');
-        proyekDots[index].classList.add('active');
-        proyekCurrentIndex = index;
-    }
-
-    function moveProyekSlide(step) {
-        const nextIndex = (proyekCurrentIndex + step + proyekSlides.length) % proyekSlides.length;
-        showProyekSlide(nextIndex);
-        resetProyekAutoSlide();
-    }
-
-    function goToProyekSlide(index) {
-        if (index !== proyekCurrentIndex) {
-        showProyekSlide(index);
-        resetProyekAutoSlide();
+            proyekSlides[index].classList.add('active');
+            proyekDots[index].classList.add('active');
+            proyekCurrentIndex = index;
         }
-    }
 
-    function startProyekAutoSlide() {
-        proyekInterval = setInterval(() => {
-        moveProyekSlide(1);
-        }, 5000);
-    }
+        function moveProyekSlide(step) {
+            const nextIndex = (proyekCurrentIndex + step + proyekSlides.length) % proyekSlides.length;
+            showProyekSlide(nextIndex);
+            resetProyekAutoSlide();
+        }
 
-    function resetProyekAutoSlide() {
-        clearInterval(proyekInterval);
-        startProyekAutoSlide();
-    }
+        function goToProyekSlide(index) {
+            if (index !== proyekCurrentIndex) {
+            showProyekSlide(index);
+            resetProyekAutoSlide();
+            }
+        }
 
-    document.addEventListener('DOMContentLoaded', () => {
-        showProyekSlide(proyekCurrentIndex);
-        startProyekAutoSlide();
-    });
+        function startProyekAutoSlide() {
+            proyekInterval = setInterval(() => {
+            moveProyekSlide(1);
+            }, 5000);
+        }
+
+        function resetProyekAutoSlide() {
+            clearInterval(proyekInterval);
+            startProyekAutoSlide();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            showProyekSlide(proyekCurrentIndex);
+            startProyekAutoSlide();
+        });
     </script>
 
     <script>
@@ -512,9 +512,4 @@
 
         });
     </script>
-
-
-
-
-
 @endsection

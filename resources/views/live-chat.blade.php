@@ -186,48 +186,48 @@
 
             chatBody.innerHTML = '';
 
-messages.forEach(msg => {
-    const bubble = document.createElement("div");
-    const time = new Date(msg.created_at).toLocaleTimeString('id-ID', {
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: false
-    });
+            messages.forEach(msg => {
+                const bubble = document.createElement("div");
+                const time = new Date(msg.created_at).toLocaleTimeString('id-ID', {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: false
+                });
 
-    let checkmark = "";
-    if (msg.sender === "user" || msg.sender === "admin") {
-        checkmark = msg.is_read
-            ? `<span class="tick-double"></span>`
-            : `<span class="tick-single"></span>`;
-    }
+                let checkmark = "";
+                if (msg.sender === "user" || msg.sender === "admin") {
+                    checkmark = msg.is_read
+                        ? `<span class="tick-double"></span>`
+                        : `<span class="tick-single"></span>`;
+                }
 
-    const isUser = msg.sender === 'user';
+                const isUser = msg.sender === 'user';
 
-    bubble.innerHTML = `
-        <div style="font-size: 14px;">${msg.message}</div>
-        <div style="font-size: 11px; display: flex; justify-content: flex-end; align-items: center; gap: 4px; margin-top: 4px; color: ${isUser ? '#777' : 'rgba(255,255,255,0.7)'}">
-            <span>${time}</span> ${checkmark}
-        </div>
-    `;
+                bubble.innerHTML = `
+                    <div style="font-size: 14px;">${msg.message}</div>
+                    <div style="font-size: 11px; display: flex; justify-content: flex-end; align-items: center; gap: 4px; margin-top: 4px; color: ${isUser ? '#777' : 'rgba(255,255,255,0.7)'}">
+                        <span>${time}</span> ${checkmark}
+                    </div>
+                `;
 
-    bubble.style.cssText = `
-        background: ${isUser ? '#eeeeee' : '#8B0000'};
-        color: ${isUser ? 'black' : 'white'};
-        border-radius: 12px;
-        padding: 10px 14px;
-        max-width: 85%;
-        margin-bottom: 12px;
-        align-self: ${isUser ? 'flex-end' : 'flex-start'};
-    `;
+                bubble.style.cssText = `
+                    background: ${isUser ? '#eeeeee' : '#8B0000'};
+                    color: ${isUser ? 'black' : 'white'};
+                    border-radius: 12px;
+                    padding: 10px 14px;
+                    max-width: 85%;
+                    margin-bottom: 12px;
+                    align-self: ${isUser ? 'flex-end' : 'flex-start'};
+                `;
 
-    const wrapper = document.createElement("div");
-    wrapper.style.display = "flex";
-    wrapper.style.flexDirection = "column";
-    wrapper.style.alignItems = isUser ? "flex-end" : "flex-start";
-    wrapper.appendChild(bubble);
+                const wrapper = document.createElement("div");
+                wrapper.style.display = "flex";
+                wrapper.style.flexDirection = "column";
+                wrapper.style.alignItems = isUser ? "flex-end" : "flex-start";
+                wrapper.appendChild(bubble);
 
-    chatBody.appendChild(wrapper);
-});
+                chatBody.appendChild(wrapper);
+            });
 
 
             chatBody.scrollTop = chatBody.scrollHeight;
@@ -279,8 +279,6 @@ messages.forEach(msg => {
     }, 3000);
 </script>
 
-
-
 <style>
     .tick-single {
         display: inline-block;
@@ -298,4 +296,3 @@ messages.forEach(msg => {
         background-size: contain;
     }
 </style>
-
