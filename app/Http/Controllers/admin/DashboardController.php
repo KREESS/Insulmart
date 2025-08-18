@@ -33,8 +33,8 @@ class DashboardController extends Controller
         $recentProducts = Produk::latest()->limit(3)->get();
         $recentPayments = PembayaranPemesanan::latest()->limit(3)->get();
 
-        // ==== Ringkasan pendapatan/pengeluaran ====
-        // Pendapatan (pakai updated_at & status selesai)
+        // ==== Ringkasan pendapatan/pengeluaran (PAKAI updated_at) ====
+        // Pendapatan (order selesai) → updated_at
         $pendapatanHarian = Pemesanan::where('status_pemesanan', 'selesai')
             ->whereDate('updated_at', $now->toDateString())
             ->sum('total_harga');
@@ -54,25 +54,25 @@ class DashboardController extends Controller
 
         $pendapatanBulanIni = $pendapatanBulanan;
 
-        // Pengeluaran (pakai tanggal_beli & status selesai)
+        // Pengeluaran (pembelian selesai) → **GANTI ke updated_at**
         $pengeluaranHarian = PembelianVarianProduk::where('status', 'selesai')
-            ->whereDate('tanggal_beli', $now->toDateString())
+            ->whereDate('updated_at', $now->toDateString())
             ->sum('total_harga');
 
         $pengeluaranMingguan = PembelianVarianProduk::where('status', 'selesai')
-            ->whereBetween('tanggal_beli', [$now->copy()->startOfWeek(Carbon::MONDAY), $now->copy()->endOfWeek(Carbon::SUNDAY)])
+            ->whereBetween('updated_at', [$now->copy()->startOfWeek(Carbon::MONDAY), $now->copy()->endOfWeek(Carbon::SUNDAY)])
             ->sum('total_harga');
 
         $pengeluaranBulanan = PembelianVarianProduk::where('status', 'selesai')
-            ->whereMonth('tanggal_beli', $now->month)
-            ->whereYear('tanggal_beli', $now->year)
+            ->whereMonth('updated_at', $now->month)
+            ->whereYear('updated_at', $now->year)
             ->sum('total_harga');
 
         $pengeluaranTahunan = PembelianVarianProduk::where('status', 'selesai')
-            ->whereYear('tanggal_beli', $now->year)
+            ->whereYear('updated_at', $now->year)
             ->sum('total_harga');
 
-        // ==== Data MINGGUAN (bulan berjalan, dipotong per minggu) ====
+        // ==== Data MINGGUAN (bulan berjalan, pakai updated_at semuanya) ====
         $labelsWeeks            = [];
         $weeklyOrderCounts      = []; // Pesanan selesai (count)
         $weeklyPurchaseCounts   = []; // Pembelian selesai (count)
@@ -91,28 +91,28 @@ class DashboardController extends Controller
 
             $labelsWeeks[] = 'Minggu ' . (count($labelsWeeks) + 1);
 
-            // Pesanan selesai (count) — pakai updated_at
+            // Pesanan selesai (count) — updated_at
             $weeklyOrderCounts[] = Pemesanan::where('status_pemesanan', 'selesai')
                 ->whereBetween('updated_at', [$startWeek, $endWeek])
                 ->count();
 
-            // Pembelian selesai (count) — pakai tanggal_beli
+            // Pembelian selesai (count) — **updated_at**
             $weeklyPurchaseCounts[] = PembelianVarianProduk::where('status', 'selesai')
-                ->whereBetween('tanggal_beli', [$startWeek, $endWeek])
+                ->whereBetween('updated_at', [$startWeek, $endWeek])
                 ->count();
 
-            // Pendapatan (sum)
+            // Pendapatan (sum) — updated_at
             $weeklyIncomes[] = Pemesanan::where('status_pemesanan', 'selesai')
                 ->whereBetween('updated_at', [$startWeek, $endWeek])
                 ->sum('total_harga');
 
-            // Pengeluaran (sum)
+            // Pengeluaran (sum) — **updated_at**
             $weeklyExpenses[] = PembelianVarianProduk::where('status', 'selesai')
-                ->whereBetween('tanggal_beli', [$startWeek, $endWeek])
+                ->whereBetween('updated_at', [$startWeek, $endWeek])
                 ->sum('total_harga');
         }
 
-        // ==== Data BULANAN (tahun berjalan, Jan..bulan ini) ====
+        // ==== Data BULANAN (tahun berjalan, pakai updated_at semuanya) ====
         Carbon::setLocale('id');
         $labelsMonths           = [];
         $monthlyOrderCounts     = [];
@@ -126,39 +126,39 @@ class DashboardController extends Controller
 
             $labelsMonths[] = $startM->translatedFormat('M Y'); // contoh: "Jan 2025"
 
-            // Pesanan selesai (count)
+            // Pesanan selesai (count) — updated_at
             $monthlyOrderCounts[] = Pemesanan::where('status_pemesanan', 'selesai')
                 ->whereBetween('updated_at', [$startM, $endM])
                 ->count();
 
-            // Pembelian selesai (count)
+            // Pembelian selesai (count) — **updated_at**
             $monthlyPurchaseCounts[] = PembelianVarianProduk::where('status', 'selesai')
-                ->whereBetween('tanggal_beli', [$startM, $endM])
+                ->whereBetween('updated_at', [$startM, $endM])
                 ->count();
 
-            // Pendapatan (sum)
+            // Pendapatan (sum) — updated_at
             $monthlyIncomes[] = Pemesanan::where('status_pemesanan', 'selesai')
                 ->whereBetween('updated_at', [$startM, $endM])
                 ->sum('total_harga');
 
-            // Pengeluaran (sum)
+            // Pengeluaran (sum) — **updated_at**
             $monthlyExpenses[] = PembelianVarianProduk::where('status', 'selesai')
-                ->whereBetween('tanggal_beli', [$startM, $endM])
+                ->whereBetween('updated_at', [$startM, $endM])
                 ->sum('total_harga');
         }
-        // === Overall (Pendapatan - Pengeluaran) ===
-        $labaRugiHarian   = $pendapatanHarian  - $pengeluaranHarian;
-        $labaRugiMingguan = $pendapatanMingguan - $pengeluaranMingguan;
-        $labaRugiBulanan  = $pendapatanBulanan - $pengeluaranBulanan;
-        $labaRugiTahunan  = $pendapatanTahunan - $pengeluaranTahunan;
 
-        // === Ringkasan Pembelian ===
+        // === Overall (Pendapatan - Pengeluaran) ===
+        $labaRugiHarian   = $pendapatanHarian   - $pengeluaranHarian;
+        $labaRugiMingguan = $pendapatanMingguan - $pengeluaranMingguan;
+        $labaRugiBulanan  = $pendapatanBulanan  - $pengeluaranBulanan;
+        $labaRugiTahunan  = $pendapatanTahunan  - $pengeluaranTahunan;
+
+        // === Ringkasan Pembelian (tanpa waktu) ===
         $totalPembelian            = PembelianVarianProduk::count();
         $totalPembelianSelesai     = PembelianVarianProduk::where('status', 'selesai')->count();
         $totalPembelianDibatalkan  = PembelianVarianProduk::where('status', 'dibatalkan')->count();
         $totalPembelianRetur       = PembelianVarianProduk::where('status', 'dikembalikan_ke_supplier')->count();
 
-        // Aktif = selain status terminal
         $totalPembelianAktif = PembelianVarianProduk::whereNotIn('status', [
             'selesai',
             'dibatalkan',
@@ -169,9 +169,8 @@ class DashboardController extends Controller
         $recentOrders      = Pemesanan::latest()->limit(5)->get();
         $recentProducts    = Produk::latest()->limit(3)->get();
         $recentPayments    = PembayaranPemesanan::latest()->limit(3)->get();
-        $recentPurchases   = PembelianVarianProduk::latest()->limit(5)->get(); // << tambah pembelian
+        $recentPurchases   = PembelianVarianProduk::latest()->limit(5)->get();
 
-        // Opsional: kalau model ada, tampilkan juga
         $recentDistributors = class_exists(\App\Models\Distributor::class)
             ? \App\Models\Distributor::latest()->limit(3)->get()
             : collect();
@@ -182,12 +181,9 @@ class DashboardController extends Controller
             ? \App\Models\ArmadaPengiriman::latest()->limit(3)->get()
             : collect();
 
-        // Chat terbaru (opsional kalau model ada)
         $recentChats = \App\Models\ChatMessage::orderByDesc('created_at')->limit(10)->get();
 
-
         return view('admin.dashboard', compact(
-            // ringkasan & aktivitas
             'totalProduk',
             'totalPesanan',
             'totalPelanggan',
@@ -208,37 +204,34 @@ class DashboardController extends Controller
             'pengeluaranBulanan',
             'pengeluaranTahunan',
 
-            // MINGGUAN
+            // Mingguan
             'labelsWeeks',
             'weeklyOrderCounts',
             'weeklyPurchaseCounts',
             'weeklyIncomes',
             'weeklyExpenses',
 
-            // BULANAN
+            // Bulanan
             'labelsMonths',
             'monthlyOrderCounts',
             'monthlyPurchaseCounts',
             'monthlyIncomes',
             'monthlyExpenses',
 
-            // HASIL OVERALL
+            // Overall
             'labaRugiHarian',
             'labaRugiMingguan',
             'labaRugiBulanan',
             'labaRugiTahunan',
 
-            // Hasil Pembelian Produk
+            // Pembelian
             'totalPembelian',
             'totalPembelianAktif',
             'totalPembelianSelesai',
             'totalPembelianDibatalkan',
             'totalPembelianRetur',
 
-            // angain
-            'recentOrders',
-            'recentProducts',
-            'recentPayments',
+            // Recent
             'recentPurchases',
             'recentDistributors',
             'recentCustomers',
