@@ -146,16 +146,18 @@ nav.scrolled {
     color: #8B0000;
 }
 
-.btn-daftar {
-    background-color: #ffe082;
-    color: #8B0000;
-    border: 1px solid #ffe082;
+.btn-daftar{
+  background-color:#F59E0B;  /* amber (masih “yellow family”) */
+  color:#fff;
+  border:1px solid #F59E0B;
+}
+.btn-daftar:hover,
+.btn-daftar:focus{
+  background-color:#D97706;  /* hover lebih gelap */
+  border-color:#D97706;
+  color:#fff;
 }
 
-.btn-daftar:hover {
-    background-color: #ffca28;
-    color: #8B0000;
-}
 
 /* === Responsive: Letakkan Icons di Bawah saat Mobile === */
 @media (max-width: 768px) {
@@ -239,6 +241,9 @@ nav.scrolled {
         border-bottom: none;
     }
 }
+
+
+
 
 /* === Header / Slider === */
 #beranda {
@@ -374,6 +379,9 @@ nav.scrolled {
     font-weight: 500;
     margin-bottom: 10px;
 }
+
+
+
 
 /* === Container & Sections === */
 /* Section Title (sudah ada di CSS sebelumnya) */

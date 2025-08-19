@@ -134,7 +134,7 @@
   <section class="position-relative text-center text-white fade-up" style="
     height: 260px;
     background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.6)),
-                url('{{ asset('assets/img/landing/7.png') }}') center center / cover no-repeat;">
+                url('{{ asset('assets/img/landing/7.jpg') }}') center center / cover no-repeat;">
     <div class="position-relative h-100 d-flex flex-column justify-content-center align-items-center">
       <h2 class="fw-bold mb-1">Galeri Proyek Kami</h2>
       <p class="text-white-50 small mb-0">Dokumentasi proyek-proyek yang telah kami kerjakan</p>
@@ -159,42 +159,42 @@
           [
             'title' => 'Proyek Bambulogy Mansion',
             'desc' => 'Proyek pemasangan material insulasi untuk Bambulogy Mansion yang berlokasi di Jakasampurna, Bekasi. Insulmart dipercaya untuk mensuplai kebutuhan insulasi dinding menggunakan rockwool density 40 serta material plafon demi menjaga kenyamanan termal di seluruh ruangan hunian. Seluruh pekerjaan dilakukan dengan standar mutu tinggi untuk memastikan hasil maksimal.',
-            'images' => ['galeri/done1 (1).png', 'galeri/done1 (2).png']
+            'images' => ['galeri/done1 (1).jpg', 'galeri/done1 (2).jpg']
           ],
           [
             'title' => 'PT Dohsung Indonesia',
             'desc' => 'Proyek insulasi boiler di PT Dohsung Indonesia (Serang - Banten) meliputi pengadaan dan pemasangan material insulasi berkualitas tinggi, yaitu rockwool pipa cover tombo, rockwool wired blanket, dan pelapisan plat aluminium jacketing. Insulmart dipercaya untuk meningkatkan efisiensi termal dan keamanan instalasi industri melalui solusi insulasi yang andal dan profesional.',
-            'images' => ['galeri/done2 (1).png', 'galeri/done2 (2).png']
+            'images' => ['galeri/done2 (1).jpg', 'galeri/done2 (2).jpg']
           ],
           [
             'title' => 'PT Nikomas Gemilang',
             'desc' => 'PT Nikomas Gemilang di Serang memilih Insulmart untuk penyediaan material insulasi atap pada bangunan industri mereka. Pekerjaan meliputi pengiriman dan pemasangan aluminium bubble foil dan roofmesh 3315, yang berfungsi meningkatkan perlindungan termal serta menciptakan lingkungan kerja yang lebih nyaman dan efisien.',
-            'images' => ['galeri/done3 (1).png', 'galeri/done3 (2).png']
+            'images' => ['galeri/done3 (1).jpg', 'galeri/done3 (2).jpg']
           ],
           [
             'title' => 'PT Data Centre',
             'desc' => 'Proyek insulasi ruang genset di PT Data Centre, Cikarang, mempercayakan Insulmart dalam penyediaan dan pemasangan material insulasi khusus, seperti rockwool tombo, kawat loket, serta spindle pin. Proyek ini bertujuan untuk meningkatkan isolasi termal dan akustik ruang mesin genset, menjaga performa alat serta kenyamanan lingkungan sekitar.',
-            'images' => ['galeri/done4 (1).png', 'galeri/done4 (2).png']
+            'images' => ['galeri/done4 (1).jpg', 'galeri/done4 (2).jpg']
           ],
           [
             'title' => 'Proyek Ainul Hayat Sejahtera',
             'desc' => 'Insulmart dipercaya untuk menangani proyek pemasangan insulasi boiler pada PT Ainul Hayat Sejahtera, dengan supply material utama berupa rockwool pipa cover tombo, rockwool wired blanket, dan plat aluminium jacketing. Solusi insulasi ini bertujuan meningkatkan efisiensi energi serta menjaga keamanan operasional boiler pada fasilitas industri.',
-            'images' => ['galeri/done5 (1).png', 'galeri/done5 (2).png']
+            'images' => ['galeri/done5 (1).jpg', 'galeri/done5 (2).jpg']
           ],
           [
             'title' => 'Proyek Bandara Dhoho',
             'desc' => 'Insulmart berperan dalam penyediaan material insulasi untuk Proyek Bandara Dhoho, dengan supply utama berupa aluminium coil. Material ini digunakan untuk berbagai aplikasi insulasi serta pelapisan pada area bandara, mendukung daya tahan dan efisiensi termal fasilitas bandara secara keseluruhan.',
-            'images' => ['galeri/done7 (1).png', 'galeri/done7 (2).png']
+            'images' => ['galeri/done7 (1).jpg', 'galeri/done7 (2).jpg']
           ],
           [
             'title' => 'Proyek Peredam Genset',
             'desc' => 'Proyek instalasi sistem peredaman suara pada mesin genset untuk area komersial dan pabrik. Insulmart menyediakan solusi peredam suara terintegrasi untuk memastikan tingkat kebisingan tetap terkendali, mendukung kenyamanan lingkungan kerja serta operasional mesin yang lebih optimal.',
-            'images' => ['galeri/done6 (1).png', 'galeri/done6 (2).png']
+            'images' => ['galeri/done6 (1).jpg', 'galeri/done6 (2).jpg']
           ],
           [
             'title' => 'Wika Palu PLTU',
             'desc' => 'Insulmart dipercaya untuk pemasangan insulasi termal pada proyek Pembangkit Listrik Tenaga Uap (PLTU) Palu oleh WIKA. Pekerjaan ini mencakup supply dan instalasi material insulasi berkualitas guna menjaga kestabilan suhu serta efisiensi proses pada sistem pembangkit listrik skala besar.',
-            'images' => ['galeri/done7 (3).png', 'galeri/done7 (4).png']
+            'images' => ['galeri/done7 (3).jpg', 'galeri/done7 (4).jpg']
           ],
         ];
       @endphp

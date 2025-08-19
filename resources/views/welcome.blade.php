@@ -66,9 +66,9 @@
 
         <header id="beranda" class="snap-section">
             <div class="slider-container">
-                <div class="slider-slide slider-active" style="background-image: url('{{ asset('assets/img/landing/7.png') }}');"></div>
-                <div class="slider-slide" style="background-image: url('{{ asset('assets/img/landing/8.png') }}');"></div>
-                <div class="slider-slide" style="background-image: url('{{ asset('assets/img/landing/9.png') }}');"></div>
+                <div class="slider-slide slider-active" style="background-image: url('{{ asset('assets/img/landing/7.jpg') }}');"></div>
+                <div class="slider-slide" style="background-image: url('{{ asset('assets/img/landing/8.jpg') }}');"></div>
+                <div class="slider-slide" style="background-image: url('{{ asset('assets/img/landing/9.jpg') }}');"></div>
             </div>
 
             <div class="slider-content text-center">
@@ -304,62 +304,62 @@
     </style>
 
     <script>
-        let proyekCurrentIndex = 0;
-        const proyekSlides = document.querySelectorAll('.proyek-slide');
-        const proyekDots = document.querySelectorAll('.proyek-dot');
-        let proyekInterval;
+    let proyekCurrentIndex = 0;
+    const proyekSlides = document.querySelectorAll('.proyek-slide');
+    const proyekDots = document.querySelectorAll('.proyek-dot');
+    let proyekInterval;
 
-        function showProyekSlide(index) {
-            proyekSlides.forEach((slide, i) => {
-            slide.classList.remove('active');
-            proyekDots[i].classList.remove('active');
-            });
-
-            proyekSlides[index].classList.add('active');
-            proyekDots[index].classList.add('active');
-            proyekCurrentIndex = index;
-        }
-
-        function moveProyekSlide(step) {
-            const nextIndex = (proyekCurrentIndex + step + proyekSlides.length) % proyekSlides.length;
-            showProyekSlide(nextIndex);
-            resetProyekAutoSlide();
-        }
-
-        function goToProyekSlide(index) {
-            if (index !== proyekCurrentIndex) {
-            showProyekSlide(index);
-            resetProyekAutoSlide();
-            }
-        }
-
-        function startProyekAutoSlide() {
-            proyekInterval = setInterval(() => {
-            moveProyekSlide(1);
-            }, 5000);
-        }
-
-        function resetProyekAutoSlide() {
-            clearInterval(proyekInterval);
-            startProyekAutoSlide();
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            showProyekSlide(proyekCurrentIndex);
-            startProyekAutoSlide();
+    function showProyekSlide(index) {
+        proyekSlides.forEach((slide, i) => {
+        slide.classList.remove('active');
+        proyekDots[i].classList.remove('active');
         });
+
+        proyekSlides[index].classList.add('active');
+        proyekDots[index].classList.add('active');
+        proyekCurrentIndex = index;
+    }
+
+    function moveProyekSlide(step) {
+        const nextIndex = (proyekCurrentIndex + step + proyekSlides.length) % proyekSlides.length;
+        showProyekSlide(nextIndex);
+        resetProyekAutoSlide();
+    }
+
+    function goToProyekSlide(index) {
+        if (index !== proyekCurrentIndex) {
+        showProyekSlide(index);
+        resetProyekAutoSlide();
+        }
+    }
+
+    function startProyekAutoSlide() {
+        proyekInterval = setInterval(() => {
+        moveProyekSlide(1);
+        }, 5000);
+    }
+
+    function resetProyekAutoSlide() {
+        clearInterval(proyekInterval);
+        startProyekAutoSlide();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        showProyekSlide(proyekCurrentIndex);
+        startProyekAutoSlide();
+    });
     </script>
 
     <script>
         const data = [
-        ['done7 (3).png', 'Wika Palu PLTU'],
-        ['done3 (1).png', 'Nikomas Gemilang'],
-        ['done2 (1).png', 'PT Dohsung Indonesia'],
-        ['done4 (1).png', 'PT DATA CENTRE'],
-        ['done1 (1).png', 'PROYEK BAMBULOGY MENSION'],
-        ['done6 (1).png', 'PROYEK PEREDAM GENSET'],
-        ['done5 (1).png', 'PROYEK AINUL HAYAT SEJAHTERA'],
-        ['done7 (1).png', 'PROYEK BANDARA DHOHO'],
+        ['done7 (3).jpg', 'Wika Palu PLTU'],
+        ['done3 (1).jpg', 'Nikomas Gemilang'],
+        ['done2 (1).jpg', 'PT Dohsung Indonesia'],
+        ['done4 (1).jpg', 'PT DATA CENTRE'],
+        ['done1 (1).jpg', 'PROYEK BAMBULOGY MENSION'],
+        ['done6 (1).jpg', 'PROYEK PEREDAM GENSET'],
+        ['done5 (1).jpg', 'PROYEK AINUL HAYAT SEJAHTERA'],
+        ['done7 (1).jpg', 'PROYEK BANDARA DHOHO'],
         ];
 
         const track = document.getElementById('sliderTrack');
@@ -512,4 +512,21 @@
 
         });
     </script>
+
+
+    <script defer>
+    window.addEventListener('load', () => {
+        const loadRest = () => {
+        document.querySelectorAll('.slider-slide:not(.slider-active)').forEach(el => {
+            const bg = el.getAttribute('data-bg');
+            if (bg) el.style.backgroundImage = `url('${bg}')`;
+        });
+        setTimeout(initSliderSafely, 80); // panggil init slider kamu di sini
+        };
+        (window.requestIdleCallback ? requestIdleCallback(loadRest) : setTimeout(loadRest, 150));
+    });
+    </script>
+
+
+
 @endsection

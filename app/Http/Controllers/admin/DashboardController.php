@@ -11,6 +11,9 @@ use App\Models\DetailPemesanan;
 use App\Models\PembayaranPemesanan;
 use Carbon\Carbon;
 use App\Models\PembelianVarianProduk;
+use App\Models\Distributor;
+use App\Models\ArmadaPengiriman;
+use App\Models\ChatMessage;
 
 class DashboardController extends Controller
 {
@@ -171,17 +174,17 @@ class DashboardController extends Controller
         $recentPayments    = PembayaranPemesanan::latest()->limit(3)->get();
         $recentPurchases   = PembelianVarianProduk::latest()->limit(5)->get();
 
-        $recentDistributors = class_exists(\App\Models\Distributor::class)
-            ? \App\Models\Distributor::latest()->limit(3)->get()
+        $recentDistributors = class_exists(Distributor::class)
+            ? Distributor::latest()->limit(3)->get()
             : collect();
 
         $recentCustomers = User::role('pelanggan')->latest()->limit(3)->get();
 
-        $recentArmadas = class_exists(\App\Models\ArmadaPengiriman::class)
-            ? \App\Models\ArmadaPengiriman::latest()->limit(3)->get()
+        $recentArmadas = class_exists(ArmadaPengiriman::class)
+            ? ArmadaPengiriman::latest()->limit(3)->get()
             : collect();
 
-        $recentChats = \App\Models\ChatMessage::orderByDesc('created_at')->limit(10)->get();
+        $recentChats = ChatMessage::orderByDesc('created_at')->limit(10)->get();
 
         return view('admin.dashboard', compact(
             'totalProduk',

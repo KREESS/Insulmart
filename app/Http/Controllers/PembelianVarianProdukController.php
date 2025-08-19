@@ -61,16 +61,16 @@ class PembelianVarianProdukController extends Controller
 
         $pengeluaran = [
             'harian'   => PembelianVarianProduk::where('status', 'selesai')
-                ->whereBetween('tanggal_beli', [$todayStart, $todayEnd])
+                ->whereBetween('updated_at', [$todayStart, $todayEnd])
                 ->sum('total_harga'),
             'mingguan' => PembelianVarianProduk::where('status', 'selesai')
-                ->whereBetween('tanggal_beli', [$weekStart, $weekEnd])
+                ->whereBetween('updated_at', [$weekStart, $weekEnd])
                 ->sum('total_harga'),
             'bulanan'  => PembelianVarianProduk::where('status', 'selesai')
-                ->whereBetween('tanggal_beli', [$monthStart, $monthEnd])
+                ->whereBetween('updated_at', [$monthStart, $monthEnd])
                 ->sum('total_harga'),
             'tahunan'  => PembelianVarianProduk::where('status', 'selesai')
-                ->whereBetween('tanggal_beli', [$yearStart, $yearEnd])
+                ->whereBetween('updated_at', [$yearStart, $yearEnd])
                 ->sum('total_harga'),
         ];
 
