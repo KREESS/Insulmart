@@ -158,6 +158,10 @@ nav.scrolled {
   color:#fff;
 }
 
+.btn-daftar:active { transform: translateY(1px); }
+.btn-daftar:focus-visible { outline:2px solid #1D4ED8; outline-offset:2px; }
+.btn-daftar:disabled { opacity:.6; cursor:not-allowed; }
+
 
 /* === Responsive: Letakkan Icons di Bawah saat Mobile === */
 @media (max-width: 768px) {
