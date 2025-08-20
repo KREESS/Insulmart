@@ -1,6 +1,6 @@
 /* Alternatif jika menggunakan scroll snap atau smooth scrolling */
 html {
-    scroll-padding-top: 70px; /* Pastikan scroll anchor tidak tertutup navbar */
+    scroll-padding-top: 70px;
 }
 
 body {
@@ -42,8 +42,8 @@ section {
 
 .navbar-menu a:hover,
 .navbar-menu a.active {
-  color: #ffca28; /* Warna merah tua sesuai tema */
-  border-bottom: 2px solid #ffca28; /* Atau ubah jadi background jika perlu */
+  color: #ffca28;
+  border-bottom: 2px solid #ffca28;
 }
 
 nav {
@@ -104,8 +104,8 @@ nav {
 }
 
 nav.scrolled {
-    background: rgba(139, 0, 0, 0.7); /* merah tua semi-transparan */
-    backdrop-filter: blur(5px); /* efek blur elegan */
+    background: rgba(139, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
     transition: background 0s ease, backdrop-filter 0.3s ease;
 }
 
@@ -147,13 +147,13 @@ nav.scrolled {
 }
 
 .btn-daftar{
-  background-color:#F59E0B;  /* amber (masih “yellow family”) */
+  background-color:#F59E0B;
   color:#fff;
   border:1px solid #F59E0B;
 }
 .btn-daftar:hover,
 .btn-daftar:focus{
-  background-color:#D97706;  /* hover lebih gelap */
+  background-color:#D97706;
   border-color:#D97706;
   color:#fff;
 }
@@ -312,7 +312,7 @@ nav.scrolled {
 @keyframes fadeInUp {
     0% {
     opacity: 0;
-    transform: translateY(100px); /* LEBIH JAUH agar terasa */
+    transform: translateY(100px);
   }
   100% {
     opacity: 1;
@@ -324,7 +324,7 @@ nav.scrolled {
 @keyframes fadeInLeft {
 0% {
     opacity: 0;
-    transform: translateX(-100px); /* LEBIH JAUH dari kiri */
+    transform: translateX(-100px);
 }
 100% {
     opacity: 1;
@@ -336,7 +336,7 @@ nav.scrolled {
 @keyframes fadeInRight {
 0% {
     opacity: 0;
-    transform: translateX(100px); /* dari kanan */
+    transform: translateX(100px);
 }
 100% {
     opacity: 1;
@@ -753,7 +753,7 @@ nav.scrolled {
 @media (max-width: 768px) {
   .testimoni-wrapper {
     grid-template-columns: 1fr;
-    margin-top: 40px; /* Tambahkan margin atas untuk jarak dengan elemen sebelumnya */
+    margin-top: 40px;
   }
 
   .testimoni-card {
@@ -793,7 +793,7 @@ nav.scrolled {
   position: relative;
   width: 100%;
   margin: 0 0;
-  overflow: visible; /* tetap visible agar efek scale tidak terpotong */
+  overflow: visible;
 }
 
 .slider-track {
@@ -818,7 +818,7 @@ nav.scrolled {
   transform: scale(0.95);
   display: flex;
   flex-direction: column;
-  cursor: default; /* Tidak ada kursor interaktif */
+  cursor: default;
 }
 
 .slider-item.active {
@@ -828,7 +828,7 @@ nav.scrolled {
 }
 
 .slider-wrapper {
-  overflow: visible; /* penting */
+  overflow: visible;
   position: relative;
   width: 100%;
   margin: 0 auto;
@@ -913,7 +913,7 @@ nav.scrolled {
 
 .brand-slider-track {
   display: flex;
-  width: fit-content; /* penting untuk loop mulus */
+  width: fit-content;
   animation: scroll-brand 40s linear infinite;
 }
 
