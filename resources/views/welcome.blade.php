@@ -117,48 +117,62 @@
 
                 <div class="produk-scroll-wrapper">
                     @forelse ($produks as $produk)
-                    <a href="{{ route('produk.detail', $produk->slugified_nama) }}" class="produk-link">
-                        <div class="produk-card">
-                            {{-- Carousel Gambar Produk --}}
-                            @if ($produk->gambars->count() > 0)
-                            <div id="carouselProduk{{ $produk->id }}" class="carousel slide produk-img-wrapper" data-bs-ride="carousel" data-bs-interval="3000">
-                                <div class="carousel-inner">
-                                    @foreach ($produk->gambars as $index => $gambar)
-                                    <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
-                                        <img src="{{ asset('storage/' . $gambar->path) }}" class="d-block w-100 produk-img" alt="Gambar {{ $index + 1 }}">
+                        <a href="{{ route('produk.detail', $produk->slugified_nama) }}" class="produk-link" aria-label="Lihat detail {{ $produk->nama_produk }}">
+                            <div class="produk-card">
+                                {{-- Carousel Gambar Produk --}}
+                                @if ($produk->gambars->count() > 0)
+                                    <div id="carouselProduk{{ $produk->id }}"
+                                        class="carousel slide produk-img-wrapper"
+                                        data-bs-ride="carousel"
+                                        data-bs-interval="3000">
+                                        <div class="carousel-inner">
+                                            @foreach ($produk->gambars as $index => $gambar)
+                                                <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
+                                                    <img src="{{ asset('storage/' . $gambar->path) }}"
+                                                        class="d-block w-100 produk-img"
+                                                        alt="Gambar {{ $index + 1 }} {{ $produk->nama_produk }}">
+                                                </div>
+                                            @endforeach
+                                        </div>
                                     </div>
-                                    @endforeach
+                                @else
+                                    <div class="produk-img-wrapper">
+                                        <img src="{{ asset('assets/img/no-image.png') }}"
+                                            class="produk-img d-block w-100"
+                                            alt="{{ $produk->nama_produk }}">
+                                    </div>
+                                @endif
+
+                                <div class="produk-body">
+                                    <h5 class="produk-nama">{{ $produk->nama_produk }}</h5>
+                                    <p class="text-muted small mb-1">
+                                        <i class="bi bi-tag-fill me-1 text-danger"></i>{{ ucfirst($produk->jenis_produk) }}
+                                    </p>
+
+                                    @php
+                                        $min = $produk->varians->min('harga');
+                                        $max = $produk->varians->max('harga');
+                                    @endphp
+                                    <p class="text-success mb-1 fw-bold">
+                                        Rp{{ number_format($min, 0, ',', '.') }}
+                                        @if ($min != $max)
+                                            ~ Rp{{ number_format($max, 0, ',', '.') }}
+                                        @endif
+                                    </p>
+
+                                    @php
+                                        // HILANGKAN SEMUA TAG HTML AGAR TIDAK MERUSAK LAYOUT
+                                        $plain = strip_tags($produk->deskripsi ?? '');
+                                        // BATASI PANJANG TEKS (bisa sesuaikan 120/140)
+                                        $ringkas = \Illuminate\Support\Str::limit($plain, 140);
+                                    @endphp
+                                    {{-- Gunakan {{ }} agar aman (auto-escape) --}}
+                                    <p class="produk-deskripsi" title="{{ $plain }}">{{ $ringkas }}</p>
                                 </div>
                             </div>
-                            @else
-                            <div class="produk-img-wrapper">
-                                <img src="{{ asset('assets/img/no-image.png') }}" class="produk-img d-block w-100" alt="{{ $produk->nama_produk }}">
-                            </div>
-                            @endif
-
-                            <div class="produk-body">
-                                <h5 class="produk-nama">{{ $produk->nama_produk }}</h5>
-                                <p class="text-muted small mb-1">
-                                    <i class="bi bi-tag-fill me-1 text-danger"></i>{{ ucfirst($produk->jenis_produk) }}
-                                </p>
-
-                                @php
-                                    $min = $produk->varians->min('harga');
-                                    $max = $produk->varians->max('harga');
-                                @endphp
-                                <p class="text-success mb-1 fw-bold">
-                                    Rp{{ number_format($min, 0, ',', '.') }}
-                                    @if ($min != $max)
-                                    ~ Rp{{ number_format($max, 0, ',', '.') }}
-                                    @endif
-                                </p>
-
-                                <p class="produk-deskripsi">{!! \Illuminate\Support\Str::limit($produk->deskripsi, 80) !!}</p>
-                            </div>
-                        </div>
-                    </a>
+                        </a>
                     @empty
-                    <p class="text-muted">Belum ada produk tersedia.</p>
+                        <p class="text-muted">Belum ada produk tersedia.</p>
                     @endforelse
                 </div>
             </section>
@@ -290,19 +304,6 @@
     @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     @endpush
-    <style>
-        .produk-link {
-        text-decoration: none !important;
-        color: inherit; /* Ikuti warna default anaknya */
-        display: block;
-        }
-
-        .produk-link:hover {
-        text-decoration: none !important;
-        color: inherit;
-        }
-    </style>
-
     <script>
     let proyekCurrentIndex = 0;
     const proyekSlides = document.querySelectorAll('.proyek-slide');

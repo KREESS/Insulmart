@@ -514,8 +514,11 @@ nav.scrolled {
   padding: 8px 30px;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-
+  scrollbar-width: none;
+}
+.produk-scroll-wrapper::-webkit-scrollbar { height: 6px; display: none; }
+.produk-scroll-wrapper::-webkit-scrollbar-thumb {
+  background-color: #ccc; border-radius: 4px;
 }
 
 .produk-card {
@@ -530,26 +533,21 @@ nav.scrolled {
   transition: all 0.3s ease-in-out;
   padding: 0 10px 15px 10px;
 }
+.produk-card:hover { transform: translateY(-5px); }
 
-.produk-card:hover {
-  transform: translateY(-5px);
-}
-
-.carousel-inner {
+/* Gambar/Carousel */
+.produk-img-wrapper {
   height: 160px;
   background: #f8f8f8;
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
   overflow: hidden;
+  margin-bottom: 8px;
 }
-
+.carousel-inner, .carousel-item { height: 100%; }
 .carousel-item {
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: flex; justify-content: center; align-items: center;
 }
-
 .produk-img {
   max-height: 100%;
   max-width: 100%;
@@ -557,98 +555,109 @@ nav.scrolled {
   padding: 10px;
 }
 
-.produk-body {
-  padding-top: 10px;
-}
-
+/* Body */
+.produk-body { padding-top: 10px; }
 .produk-nama {
   color: #8B0000;
   font-size: 1.1rem;
   font-weight: 600;
+  margin-bottom: 0.25rem;
 }
 
+/* Deskripsi: aman karena teks polos (tanpa HTML).
+   Tambahkan line-clamp agar rapi dan tidak merusak tinggi kartu. */
 .produk-deskripsi {
   font-size: 0.9rem;
   color: #555;
   line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;           /* jumlah baris */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-word;
+  min-height: calc(1.4em * 3);     /* tinggi minimum agar stabil */
 }
 
-/* Scrollbar Optional Styling */
-.produk-scroll-wrapper::-webkit-scrollbar {
-  height: 6px;
-    display: none;
-
+/* Link kartu */
+.produk-link {
+  text-decoration: none !important;
+  color: inherit;
+  display: block;
 }
-.produk-scroll-wrapper::-webkit-scrollbar-thumb {
-  background-color: #ccc;
-  border-radius: 4px;
+.produk-link:hover {
+  text-decoration: none !important;
+  color: inherit;
 }
 
 /* Responsive */
 @media (max-width: 576px) {
-  .produk-card {
-    width: 80%;
-  }
+  .produk-card { width: 80%; }
 }
 
 @media (max-width: 768px) {
-    .section-title {
-        font-size: 1.15rem;
-        margin-bottom: 1.2rem;
-        margin-left: 6px;
-    }
-    .produk-scroll-wrapper {
-        gap: 0.7rem;
-        padding-left: 2px;
-        padding-right: 2px;
-    }
-    .produk-card {
-        min-width: 162px;
-        max-width: 164px;
-        padding: 0.5rem 0.55rem;
-        border-radius: 10px;
-        height: 450px;
-    }
-    .produk-nama {
-        font-size: 0.93rem;
-        margin-bottom: 0.35rem;
-    }
-    .produk-deskripsi {
-        font-size: 0.84rem;
-        min-height: 18px;
-    }
-    .produk-img-wrapper {
-        aspect-ratio: 1/1;
-        border-radius: 7px;
-        margin-bottom: 8px;
-    }
+  .section-title {
+    font-size: 1.15rem;
+    margin-bottom: 1.2rem;
+    margin-left: 6px;
+  }
+  .produk-scroll-wrapper {
+    gap: 0.7rem;
+    padding-left: 2px;
+    padding-right: 2px;
+  }
+  .produk-card {
+    min-width: 162px;
+    max-width: 164px;
+    padding: 0.5rem 0.55rem;
+    border-radius: 10px;
+    height: 450px;
+  }
+  .produk-nama {
+    font-size: 0.93rem;
+    margin-bottom: 0.35rem;
+  }
+  .produk-deskripsi {
+    font-size: 0.84rem;
+    -webkit-line-clamp: 4;              /* beri 4 baris di layar sedang */
+    min-height: calc(1.4em * 4);
+  }
+  .produk-img-wrapper {
+    aspect-ratio: 1/1;
+    border-radius: 7px;
+    margin-bottom: 8px;
+    height: auto;                       /* gunakan aspect-ratio */
+  }
 }
 
 @media (max-width: 480px) {
-    .produk-scroll-wrapper {
-        gap: 0.5rem;
-        padding-left: 0;
-        padding-right: 0;
-    }
-    .produk-card {
-        min-width: 127px;
-        max-width: 128px;
-        padding: 0.33rem 0.33rem;
-        border-radius: 7px;
-    }
-    .produk-nama {
-        font-size: 0.82rem;
-        margin-bottom: 0.23rem;
-    }
-    .produk-deskripsi {
-        font-size: 0.73rem;
-        min-height: 7px;
-    }
-    .section-title {
-        font-size: 1rem;
-        margin-left: 3px;
-    }
+  .produk-scroll-wrapper {
+    gap: 0.5rem;
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .produk-card {
+    min-width: 127px;
+    max-width: 128px;
+    padding: 0.33rem 0.33rem;
+    border-radius: 7px;
+  }
+  .produk-nama {
+    font-size: 0.82rem;
+    margin-bottom: 0.23rem;
+  }
+  .produk-deskripsi {
+    font-size: 0.73rem;
+    -webkit-line-clamp: 5;              /* layar kecil bisa lebih banyak baris */
+    min-height: calc(1.4em * 5);
+  }
+  .section-title {
+    font-size: 1rem;
+    margin-left: 3px;
+  }
 }
+
+
 
 
 
