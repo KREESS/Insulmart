@@ -742,7 +742,7 @@
             const combo = getTermurahCombo(totalBal);
             if (!combo || combo.length === 0) {
                 elOngkirDisplay.textContent = fmtRp(0);
-                elOngkirDetail.innerHTML = `<span class="text-danger">Tidak ada armada yang mampu mengangkut <strong>${totalBal} bal</strong>.</span>`;
+                elOngkirDetail.innerHTML = `<span class="text-danger">Tidak ada armada yang mampu mengangkut <strong>${totalBal} ball/pack</strong>.</span>`;
                 if (elArmadaNama) elArmadaNama.textContent = '';
                 setHidden('biaya_ongkir', 0);
                 setHidden('armada_list', '[]');
@@ -768,9 +768,9 @@
                 <div class="small text-muted mb-2">(Jarak ${km.toFixed(2)} km ≤ ${FREE_MAX_KM} km &amp; Subtotal ≥ ${fmtRp(FREE_MIN_SUBTOTAL)})</div>
                 <div><strong>Armada:</strong></div>
                 <ul style="padding-left:18px; margin-bottom:4px">
-                    ${combo.map(a => `<li>${a.jumlah} × ${a.nama} <span class="text-muted">(kapasitas ${a.kapasitas_pack} bal)</span></li>`).join('')}
+                    ${combo.map(a => `<li>${a.jumlah} × ${a.nama} <span class="text-muted">(kapasitas ${a.kapasitas_pack} ball/pack)</span></li>`).join('')}
                 </ul>
-                <div class="mt-1">Estimasi muatan: <strong>${totalBal} bal</strong></div>
+                <div class="mt-1">Estimasi muatan: <strong>${totalBal} ball/pack</strong></div>
                 `;
                 if (elArmadaNama) elArmadaNama.textContent = combo.map(a => `${a.jumlah}×${a.nama}`).join(', ');
                 setHidden('biaya_ongkir', 0);
@@ -783,7 +783,7 @@
                 // Bayar penuh
                 const rows = combo.map(a => `
                 <tr>
-                    <td>${a.jumlah} × ${a.nama} <span class="text-muted">(kapasitas ${a.kapasitas_pack} bal)</span></td>
+                    <td>${a.jumlah} × ${a.nama} <span class="text-muted">(kapasitas ${a.kapasitas_pack} ball/pack)</span></td>
                     <td>Rp${toNum(a.tarif_per_km).toLocaleString('id-ID')}/km</td>
                     <td>Subtotal: <strong>${fmtRp(Math.ceil(toNum(a.tarif_per_km) * km * toNum(a.jumlah)))}</strong></td>
                 </tr>
@@ -793,7 +793,7 @@
                 elOngkirDetail.innerHTML = `
                 <div><strong>Armada:</strong></div>
                 <table style="width:100%; font-size:0.96em; margin-bottom:4px;"><tbody>${rows}</tbody></table>
-                <div class="mt-1">Total muatan: <strong>${totalBal} bal</strong></div>
+                <div class="mt-1">Total muatan: <strong>${totalBal} ball/pack</strong></div>
                 <div class="mt-1">Total ongkir: <strong>${fmtRp(ongkir)}</strong> <span class="text-muted">±(${km.toFixed(2)} km)</span></div>
                 `;
                 if (elArmadaNama) elArmadaNama.textContent = combo.map(a => `${a.jumlah}×${a.nama}`).join(', ');
