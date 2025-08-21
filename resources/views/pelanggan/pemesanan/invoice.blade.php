@@ -18,22 +18,22 @@
                 max-width: 800px; 
                 margin: 0 auto; 
                 background: #fff; 
-                padding: 16px 16px 16px;
+                padding: 14px 14px 16px;
                 box-shadow: 0 0 20px rgba(0,0,0,0.03);
             }
 
             /* Info Table Styles */
             .info-table { 
                 width: 100%; 
-                margin: 16px 0 20px;
+                margin: 10px 0 16px;
                 border-spacing: 0;
                 border-collapse: separate;
             }
 
             .info-table td { 
                 padding: 4px 8px; 
-                font-size: 12px;
-                line-height: 1.4;
+                font-size: 10.5px;
+                line-height: 1.35;
                 vertical-align: top;
             }
 
@@ -48,9 +48,9 @@
             .section-title { 
                 color: #800000; 
                 font-weight: 700; 
-                font-size: 14px; 
-                margin: 24px 0 12px;
-                letter-spacing: 0.5px;
+                font-size: 13px; 
+                margin: 18px 0 10px;
+                letter-spacing: 0.3px;
                 padding-bottom: 6px;
                 border-bottom: 1px solid rgba(128,0,0,0.1);
             }
@@ -135,13 +135,14 @@
                 display: flex;
                 align-items: center;
                 margin-bottom: 8px;
+                gap: 12px;
+                flex-wrap: wrap;
             }
 
             .nominal-label {
                 color: #800000;
                 font-weight: 700;
                 font-size: 12px;
-                margin-right: 12px;
                 white-space: nowrap;
             }
 
@@ -156,6 +157,7 @@
                 color: #800000;
                 text-align: right;
                 flex: 1;
+                min-width: 240px;
             }
 
             /* Signature Box */
@@ -166,7 +168,7 @@
             }
 
             .ttd-img {
-                width: 75px;
+                width: 100px;
                 height: auto;
                 display: block;
                 margin: 4px auto;
@@ -191,38 +193,208 @@
                 color: #666;
             }
 
+            /* === Compact Header & Customer Card === */
+            .header-card {
+                background: #fff; 
+                border-radius: 4px; 
+                box-shadow: 0 1px 3px rgba(128,0,0,0.08); 
+                margin-bottom: 10px; 
+                overflow: hidden; 
+                border: none;
+                border-bottom: 3px solid #800000;
+            }
+
+            .header-table {
+                width: 100%;
+                border-collapse: separate; 
+                border-spacing: 0;
+            }
+            .header-logo-cell {
+                width: 75px; 
+                text-align: center; 
+                vertical-align: middle; 
+                padding: 6px; 
+                border-right: none;          /* <-- HILANGKAN GARIS KANAN CELL LOGO */
+            }
+            .header-logo {
+                height: 60px;                /* <-- LOGO DIBESARKAN SEDIKIT (50px -> 60px) */
+                width: auto; 
+                display: block; 
+                object-fit: contain; 
+                margin: 0 auto 2px;
+            }
+            .header-url {
+                text-align: center; 
+                font-size: 7px; 
+                color: #800000; 
+                font-weight: 500;
+            }
+            .header-info-cell {
+                vertical-align: middle; 
+                padding: 6px 10px;
+            }
+            /* === DIPERKECIL LAGI SESUAI PERMINTAAN === */
+            .header-title {
+                font-size: 12px; /* 14px -> 12px */
+                color: #800000; 
+                font-weight: 700; 
+                letter-spacing: 0.3px; 
+                margin-bottom: 2px;
+            }
+            .header-meta {
+                font-size: 8.5px; /* 9px -> 8.5px */
+                color: #800000; 
+                display: flex; 
+                align-items: center; 
+                gap: 4px;
+            }
+            .company-name {
+                font-size: 10.5px; /* 12px -> 10.5px */
+                color: #800000; 
+                font-weight: 700; 
+                margin-bottom: 2px;
+            }
+            .company-text, .company-tax {
+                font-size: 9.5px; /* 10px -> 9.5px */
+                color: #666; 
+                line-height: 1.3;
+            }
+
+            /* === Kolom Kanan: Info Kontak === */
+            .header-contact-cell{
+                width: 240px; 
+                border-left: none;           /* <-- HILANGKAN GARIS KIRI CELL KONTAK */
+                padding: 6px 10px;
+                vertical-align: middle;
+            }
+            .contact-title{
+                font-size: 9.5px;
+                font-weight: 700;
+                color: #800000;
+                letter-spacing: .3px;
+                margin: 0 0 4px 0;
+                text-transform: uppercase;
+            }
+            .contact-line{
+                font-size: 9px;
+                color: #555;
+                line-height: 1.35;
+                margin: 0;
+            }
+
+            .customer-card {
+                border: 1px solid #e9dede;
+                border-radius: 6px;
+                padding: 8px 10px;
+                background: #fff;
+                box-shadow: 0 1px 3px rgba(128,0,0,0.05);
+            }
+            .customer-title {
+                font-size: 11.5px;
+                font-weight: 700;
+                color: #800000;
+                margin: 0 0 6px;
+                display: flex;
+                align-items: center;
+                gap: 6px;
+            }
+            .customer-grid {
+                display: grid;
+                grid-template-columns: 150px 1fr;
+                gap: 4px 10px;
+                font-size: 10.5px;
+            }
+            .customer-label {
+                color: #800000;
+                font-weight: 600;
+            }
+            .customer-value {
+                color: #333;
+            }
+
+            .customer-card {
+                border: 1px solid #e9dede;
+                border-radius: 6px;
+                padding: 6px 10px;
+                background: #fff;
+                box-shadow: 0 1px 3px rgba(128,0,0,0.05);
+                margin-bottom: 14px;
+            }
+            .customer-title {
+                font-size: 11.5px;
+                font-weight: 700;
+                color: #800000;
+                margin: 0 0 6px;
+            }
+            .customer-label {
+                font-weight: 600;
+                color: #800000;
+                margin-right: 4px;
+            }
+
+            .customer-card {
+                border: 1px solid #e9dede;
+                border-radius: 6px;
+                padding: 8px 10px;
+                background: #fff;
+                box-shadow: 0 1px 3px rgba(128,0,0,0.05);
+                margin-bottom: 14px;
+            }
+            .customer-title {
+                font-size: 11.5px;
+                font-weight: 700;
+                color: #800000;
+                margin: 0 0 8px;
+            }
+            .customer-table {
+                width: 100%;
+                border-collapse: collapse;
+                font-size: 10.5px;
+            }
+            .customer-table td {
+                border: 1px solid #eee;
+                padding: 6px 8px;
+                vertical-align: top;
+            }
+            .customer-table .label {
+                font-weight: 600;
+                color: #800000;
+                width: 120px;
+                background: #fafafa;
+            }
+
             @media print {
                 body { background: #fff; }
                 .wrapper { 
                     box-shadow: none;
-                    padding: 20px;
+                    padding: 16px 18px;
                 }
                 .table { box-shadow: 0 0 0 1px #e4dada; }
-                .nominal-box, .ttd-box {
+                .nominal-box, .ttd-box, .customer-card, .header-card {
                     box-shadow: none;
-                    border: 1px solid rgba(128,0,0,0.1);
+                    border: 1px solid rgba(128,0,0,0.12);
                 }
             }
         </style>
     </head>
     <body>
         <div class="wrapper">
-            <!-- Header dengan logo dan informasi perusahaan -->
-            <div style="background: #fff; border-radius: 4px; box-shadow: 0 1px 3px rgba(128,0,0,0.08); margin-bottom: 12px; overflow: hidden; border: 1px solid #f0f0f0; border-bottom: 2px solid #800000;">
-                <table width="100%" style="border-collapse: separate; border-spacing: 0;">
+            <!-- Header dengan ukuran diperkecil + kolom kontak kanan -->
+            <div class="header-card">
+                <table class="header-table">
                     <tr>
-                        <td style="width: 80px; text-align: center; vertical-align: middle; padding: 8px; border-right: 1px solid #f5f5f5;">
+                        <td class="header-logo-cell">
                             <img src="{{ public_path('/assets/img/icon-logo.png') }}"
                                 alt="Logo PT"
-                                style="height: 65px; width: auto; display: block; object-fit: contain; margin: 0 auto 2px;">
-                            <div style="text-align: center; font-size: 8px; color: #800000; font-weight: 500;">www.insulmart.co.id</div>
+                                class="header-logo">
+                            <div class="header-url">www.insulmart.co.id</div>
                         </td>
-                        <td style="vertical-align: middle; padding: 8px 12px;">
-                            <div style="border-bottom: 1px solid #f0f0f0; padding-bottom: 6px; margin-bottom: 6px;">
-                                <div style="font-size: 16px; color: #800000; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 3px;">
+                        <td class="header-info-cell">
+                            <div style="border-bottom: 1px solid #f0f0f0; padding-bottom: 4px; margin-bottom: 4px;">
+                                <div class="header-title">
                                     INVOICE TERMIN {{ $termin->termin_ke }}
                                 </div>
-                                <div style="font-size: 10px; color: #800000; display: flex; align-items: center; gap: 6px;">
+                                <div class="header-meta">
                                     <span style="font-weight: 600;">No.:</span>
                                     <span style="font-weight: 500;">INV-{{ $pemesanan->kode_pemesanan }}</span>
                                     <span style="color: #ddd;">|</span>
@@ -230,40 +402,44 @@
                                     <span style="font-weight: 500;">{{ \Carbon\Carbon::parse($pemesanan->created_at)->timezone('Asia/Jakarta')->locale('id')->translatedFormat('d F Y - H:i') }} WIB</span>
                                 </div>
                             </div>
-                            <div style="font-size: 14px; color: #800000; font-weight: 700; margin-bottom: 4px;">
-                                CV. INSULMART INDONESIA
-                            </div>
-                            <div style="font-size: 11px; color: #666; line-height: 1.3;">
+                            <div class="company-name">CV. INSULMART INDONESIA</div>
+                            <div class="company-text">
                                 JL. RAYA TARUMAJAYA NO. 13 RT 001 RW 029 DESA SETIA ASIH,
                                 Kec. Tarumajaya, Kab. Bekasi 17215
                             </div>
-                            <div style="font-size: 11px; color: #666; margin-top: 2px;">
+                            <div class="company-tax" style="margin-top: 2px;">
                                 <span style="font-weight: 600;">NPWP:</span> 1000-0000-0424-4481
                             </div>
+                        </td>
+                        <!-- Kolom kanan: informasi kontak -->
+                        <td class="header-contact-cell">
+                            <div class="contact-title">SOUND PROOFING &amp; INSULATION SPECIALIST</div>
+                            <p class="contact-line">Telp. : (021) 29470622</p>
+                            <p class="contact-line">Fax  : (021) 29470622</p>
+                            <p class="contact-line">Email: insulmartindonesia@gmail.com</p>
                         </td>
                     </tr>
                 </table>
             </div>
 
-            <!-- === SISA TIDAK BERUBAH === -->
-            <table class="info-table borderless">
-                <tr>
-                    <td class="label">Nama Customer</td>
-                    <td>: {{ $pemesanan->pengguna->name }}</td>
-                </tr>
-                <tr>
-                    <td class="label">Nama Perusahaan</td>
-                    <td>: {{ $pemesanan->pengguna->perusahaan }}</td>
-                </tr>                
-                <tr>
-                    <td class="label">Email</td>
-                    <td>: {{ $pemesanan->pengguna->email }}</td>
-                </tr>
-                <tr>
-                    <td class="label">No. Telepon</td>
-                    <td>: {{ $pemesanan->pengguna->nomor_telepon ?? '-' }}</td>
-                </tr>
-            </table>
+            <!-- Informasi Customer dengan tabel 2x2 -->
+            <div class="customer-card">
+                <div class="customer-title">Informasi Customer</div>
+                <table class="customer-table">
+                    <tr>
+                        <td class="label">Nama Customer</td>
+                        <td>{{ $pemesanan->pengguna->name }}</td>
+                        <td class="label">Perusahaan</td>
+                        <td>{{ $pemesanan->pengguna->perusahaan }}</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Email</td>
+                        <td>{{ $pemesanan->pengguna->email }}</td>
+                        <td class="label">No. Telepon</td>
+                        <td>{{ $pemesanan->pengguna->nomor_telepon ?? '-' }}</td>
+                    </tr>
+                </table>
+            </div>
 
             <div class="section-title">Rincian Pesanan</div>
             <table class="table">
@@ -299,11 +475,10 @@
                     </tr>
                 </tfoot>
             </table>
-            <div class="note-PPN" style="font-size: 11px; color: #555; margin-top: 6px;">
-                *Harga Diatas Sudah Temasuk PPN
+            <div class="note-PPN" style="font-size: 10px; color: #555; margin-top: 6px;">
+                *Harga di atas sudah termasuk PPN
             </div>
 
-            <!-- ... (table produk di atas) -->
             <div class="section-title">Rincian Ongkos Kirim</div>
             <table class="table">
                 <thead>
@@ -338,17 +513,14 @@
                 </tfoot>
             </table>
 
-            <div style="margin-top: 24px;">
+            <div style="margin-top: 20px;">
                 <div class="nominal-section">
                     <div class="nominal-label">Nominal Pembayaran Termin {{ $termin->termin_ke }}:</div>
                     <div class="nominal-box">
                         Rp{{ number_format($termin->jumlah_dibayar, 0, ',', '.') }}
                     </div>
-                    <div class="note-rekening" style="margin-top: 8px;">
-                        Pembayaran dapat ditransfer melalui Bank <b>BCA</b><br> 
-                        No. Rek: <b>066-3059367</b> a/n <b>PT TALI REJEKI</b>
-                    </div>
-                    <div class="ttd-box" style="margin-left: 24px;">
+
+                    <div class="ttd-box" style="margin-left: auto;">
                         <div class="ttd-label">Hormat Kami,</div>
                         <img src="{{ public_path('/assets/img/ttd.png') }}" alt="Tanda Tangan" class="ttd-img">
                         <div class="ttd-nama">YUDHISTIRA JALU</div>
@@ -356,6 +528,10 @@
                     </div>
                 </div>
 
+                <div class="note-rekening" style="margin-top: 6px;">
+                    Pembayaran dapat ditransfer melalui Bank <b>BCA</b><br> 
+                    No. Rek: <b>066-3059367</b> a/n <b>PT TALI REJEKI</b>
+                </div>
             </div>
         </div>
     </body>

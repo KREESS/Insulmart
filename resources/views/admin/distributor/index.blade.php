@@ -102,7 +102,7 @@
     <div class="d-flex justify-content-between align-items-center">
       <div>
         <h3 class="fw-bold text-merah mb-1" style="font-size:2rem;letter-spacing:.5px">
-          <i class="bi bi-building-gear me-2"></i> Kelola Distributor
+          <i class="bi bi-building-gear me-2"></i> Kelola Distributor / Pemasok
         </h3>
         <p class="text-muted mb-0">Data pemasok untuk kebutuhan pembelian & pengisian gudang</p>
       </div>

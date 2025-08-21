@@ -43,7 +43,7 @@
   <div class="mb-4 border-bottom pb-3 d-flex justify-content-between align-items-center">
     <div>
       <h3 class="fw-bold text-maroon mb-1" style="letter-spacing:.5px">
-        <i class="bi bi-truck me-2"></i> Detail Distributor
+        <i class="bi bi-truck me-2"></i> Detail Distributor / Pemasok
       </h3>
       <p class="text-muted mb-0">Informasi lengkap pemasok / mitra distribusi</p>
     </div>

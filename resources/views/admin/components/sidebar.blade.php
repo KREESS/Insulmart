@@ -29,7 +29,7 @@
         class="nav-link text-white d-flex align-items-center w-100 {{ request()->is('admin/distributor*') ? 'active fw-bold' : '' }}">
         <span class="d-inline-flex align-items-center text-truncate">
           <i class="bi bi-shop me-2"></i>
-          <span class="text-truncate">Kelola Distributor</span>
+          <span class="text-truncate">Kelola Pemasok</span>
         </span>
       </a>
     </li>

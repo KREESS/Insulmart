@@ -4,72 +4,115 @@
   <meta charset="utf-8">
   <title>{{ $po_code }} — CV. INSULMART INDONESIA</title>
   <style>
-    /* ====== Reset ringan & token ====== */
+    /* ====== Reset & token ====== */
     * { box-sizing: border-box; }
-    body { font-family: DejaVu Sans, Arial, sans-serif; font-size: 12px; color: #111; margin: 24px; }
+    body {
+      font-family: DejaVu Sans, Arial, sans-serif;
+      font-size: 10px;                 /* 12 -> 10: lebih hemat */
+      color: #111;
+      margin: 12px;                    /* 24 -> 12 */
+      line-height: 1.25;               /* 1.3 -> 1.25 */
+    }
     .muted { color:#666; }
     .right { text-align:right; }
     .center { text-align:center; }
+    .nowrap { white-space:nowrap; }
 
     /* ====== Branding / warna ====== */
-    .brand { color:#8B0000; } /* maroon tua */
+    .brand { color:#8B0000; }
     .chip {
       display:inline-block; background:#fbeaec; color:#8B0000; border:1px solid #f0cfd2;
-      padding:4px 8px; border-radius:12px; font-weight:bold; letter-spacing:.3px;
+      padding:2px 6px;                 /* 4x8 -> 2x6 */
+      border-radius:10px;
+      font-weight:700; letter-spacing:.2px;
+      font-size: 9px;                  /* 12 -> 9 */
     }
 
     /* ====== Blocks & box ====== */
-    .section { margin-bottom: 14px; }
-    .box { border:1px solid #e5d7da; border-radius:8px; padding:12px; background:#fff; }
-    .box-title { font-weight:bold; text-transform:uppercase; font-size:12px; margin:0 0 8px 0; color:#8B0000; }
-    .divider { height:1px; background:#eee; margin:10px 0; }
+    .section { margin-bottom: 10px; }   /* 14 -> 10 */
+    .box {
+      border:1px solid #e5d7da;
+      border-radius:4px;               /* 8 -> 4 */
+      padding:8px;                     /* 12 -> 8 */
+      background:#fff;
+    }
+    .box-title {
+      font-weight:700; text-transform:uppercase;
+      font-size:10px;                  /* 12 -> 10 */
+      margin:0 0 6px 0;                /* 8 -> 6 */
+      color:#8B0000;
+      letter-spacing:.2px;
+    }
+    .divider { height:1px; background:#eee; margin:8px 0; } /* 10 -> 8 */
 
     /* ====== Header ====== */
-    .header-table { width:100%; border-collapse:collapse; margin-bottom: 12px; }
+    .header-table { width:100%; border-collapse:collapse; margin-bottom: 8px; } /* 12 -> 8 */
     .header-table td { vertical-align:top; }
-    .head-po { border:1px solid #e5d7da; background:#fbeaec; border-radius:8px; padding:10px; }
-    .title { font-size:18px; font-weight:bold; text-transform:uppercase; margin:0 0 6px 0; }
-    .meta { font-size:12px; color:#555; }
-    .subtitle { font-size:11px; color:#444; }
+    .head-po { border:1px solid #e5d7da; background:#fbeaec; border-radius:4px; padding:6px; } /* 10 -> 6 */
+    .title { font-size:14px; font-weight:700; text-transform:uppercase; margin:0 0 4px 0; } /* 18 -> 14 */
+    .meta { font-size:9px; color:#444; } /* 12 -> 9 */
+    .subtitle { font-size:9.5px; color:#444; } /* 11 -> 9.5 */
 
-    /* ====== Two columns table (buyer / supplier) ====== */
-    .twocol { width:100%; border-collapse:separate; border-spacing:12px 0; }
+    /* ====== Two columns compact (buyer / supplier) ====== */
+    .twocol { width:100%; border-collapse:separate; border-spacing:8px 0; } /* 12 -> 8 */
     .twocol td { width:50%; vertical-align:top; padding:0; }
 
-    /* ====== Key-value mini table ====== */
+    /* ====== Key-value mini table (padat) ====== */
     table.kv { width:100%; border-collapse:collapse; }
-    table.kv td { padding:2px 0; vertical-align:top; }
-    table.kv .k { width:90px; color:#555; }
+    table.kv td { padding:1px 0; vertical-align:top; }        /* 2px -> 1px */
+    table.kv .k { width:72px; color:#555; }                   /* 90 -> 72 */
     table.kv .v { }
 
-    /* ====== Items table ====== */
+    /* ====== Items table (padat) ====== */
     table.items { width:100%; border-collapse:collapse; }
-    table.items th, table.items td { border: 1px solid #e5e5e5; padding:8px; vertical-align:top; }
-    table.items th { background:#faf5f6; color:#7b0f0f; font-weight:bold; }
-    .w-desc { width:58%; }
+    table.items th, table.items td {
+      border: 1px solid #e5e5e5;
+      padding:4px 6px;                                       /* 8 -> 4x6 */
+      vertical-align:top;
+      line-height: 1.2;
+      font-size: 9.5px;                                      /* 10 -> 9.5 */
+    }
+    table.items th {
+      background:#faf5f6; color:#7b0f0f; font-weight:700;
+    }
+    .w-desc { width:56%; }   /* 58 -> 56 */
     .w-qty  { width:10%; }
     .w-price{ width:16%; }
-    .w-total{ width:16%; }
+    .w-total{ width:18%; }   /* 16 -> 18 agar ruang angka cukup */
 
-    /* ====== Totals box ====== */
-    .totals { width:100%; border-collapse:separate; border-spacing:0; margin-top:10px; }
-    .totals td { padding:6px 8px; }
-    .totals .label { text-align:right; color:#333; }
-    .totals .value { text-align:right; font-weight:bold; }
+    /* ====== Totals box (ringkas) ====== */
+    .totals-wrap { width:100%; border-collapse:collapse; margin-top:8px; } /* 12 -> 8 */
+    .summary {
+      display:inline-table; width:320px;                      /* 360 -> 320 */
+      border-collapse:separate; border-spacing:0;
+      border:1px solid #e5d7da; border-radius:4px; overflow:hidden;
+      background:#fff; font-size:9.5px;
+    }
+    .summary td { padding:6px 8px; }                          /* 8-10 -> 6-8 */
+    .summary .head { background:#faf5f6; border-bottom:1px solid #e5d7da; color:#333; }
+    .summary .label { text-align:right; color:#8B0000; font-weight:700; }
+    .summary .value { text-align:right; font-weight:700; color:#8B0000; white-space:nowrap; }
 
-    /* ====== Signatures ====== */
-    .sign { width:100%; margin-top:24px; border-collapse:collapse; }
-    .sign td { vertical-align:top; padding-top:6px; }
-    .sign .line { margin-top:70px; border-top:1px solid #777; height:1px; }
-    .small { font-size:11px; color: #555; }
+    /* ====== Signatures (hemat) ====== */
+    .sign { width:100%; margin-top:16px; border-collapse:collapse; } /* 24 -> 16 */
+    .sign td { vertical-align:top; padding-top:4px; }
+    .sign .line { margin-top:52px; width:200px; border-top:1px solid #777; height:1px; } /* lebih pendek */
+    .small { font-size:9px; color:#555; }                     /* 11 -> 9 */
 
-    /* Hindari page-break di blok penting */
-    .avoid-break { page-break-inside: avoid; }
+    /* ====== Cetak ====== */
+    @media print {
+      body { margin: 8mm; font-size: 9.5px; }                 /* sedikit lebih kecil saat print */
+      .section { margin-bottom: 8px; }
+      .box, .head-po { border-radius: 0; }
+      .summary { width: 300px; }                              /* lebih hemat ruang di print */
+      /* Biarkan tabel item boleh terpotong halaman untuk efisiensi */
+      .avoid-break { page-break-inside: avoid; }
+    }
   </style>
 </head>
 <body>
 
-  {{-- ===== HEADER ===== --}}
+  {{-- ===== HEADER (ringkas) ===== --}}
   <table class="header-table">
     <tr>
       <td>
@@ -79,7 +122,7 @@
       <td class="right">
         <div class="head-po">
           <div class="chip">No. PO: {{ $po_code }}</div>
-          <div class="meta" style="margin-top:6px;">
+          <div class="meta" style="margin-top:4px;">
             <strong>Tanggal:</strong>
             @php
               $firstWIB = isset($firstDate) && $firstDate ? \Carbon\Carbon::parse($firstDate)->timezone('Asia/Jakarta') : null;
@@ -100,7 +143,7 @@
     </tr>
   </table>
 
-  {{-- ===== BUYER & SUPPLIER ===== --}}
+  {{-- ===== BUYER & SUPPLIER (ringkas & efisien) ===== --}}
   @php
     // Supplier detail (Distributor model)
     $namaSupplier   = optional($supplier)->name_pt ?? '-';
@@ -134,17 +177,15 @@
     if ($coord !== '') { $alamatBlock[] = 'Koordinat: '.$coord; }
   @endphp
 
-  <div class="section avoid-break">
+  <div class="section">
     <table class="twocol">
       <tr>
         <td>
           <div class="box">
             <div class="box-title">Pembeli (Buyer)</div>
-            <strong>CV. INSULMART INDONESIA</strong><br>
-            Telp: 021-29470622, 021-22889956<br>
-            Email: insulmartindonesia@gmail.com<br>
-            NPWP: 1000-0000-0424-4481
-            <div class="divider"></div>
+            <div style="font-weight:700; margin-bottom:2px;">CV. INSULMART INDONESIA</div>
+            <div class="muted">Telp: 021-29470622, 021-22889956 <br> Email: insulmartindonesia@gmail.com <br> NPWP: 1000-0000-0424-4481</div>
+            <div class="divider" style="margin:6px 0;"></div>
             <table class="kv">
               <tr>
                 <td class="k">Ship To</td>
@@ -163,21 +204,20 @@
         <td>
           <div class="box">
             <div class="box-title">Pemasok (Supplier)</div>
-            <div style="font-size:14px; font-weight:bold; margin-bottom:2px;">
+            <div style="font-weight:700; margin-bottom:2px;">
               {{ $namaSupplier }}
-              @if($cp)<span class="muted" style="font-weight:normal;"> <br> PIC: {{ $cp }}</span>@endif
+              @if($cp)<span class="muted" style="font-weight:400;"> · PIC: {{ $cp }}</span>@endif
             </div>
 
-            {{-- Alamat lengkap tersusun dari bawah --}}
+            {{-- Alamat lengkap tersusun dari bawah (disatukan bila pendek) --}}
             @if(count($alamatBlock))
-              @foreach($alamatBlock as $line)
-                {{ $line }}<br>
-              @endforeach
+              @php $lines = implode(' · ', $alamatBlock); @endphp
+              <div>{{ $lines }}</div>
             @else
-              —<br>
+              <div>—</div>
             @endif
 
-            <div class="divider"></div>
+            <div class="divider" style="margin:6px 0;"></div>
             <table class="kv">
               <tr>
                 <td class="k">Telepon</td><td class="v">{{ $telepon }}</td>
@@ -195,8 +235,8 @@
     </table>
   </div>
 
-  {{-- ===== ITEMS TABLE ===== --}}
-  <div class="section avoid-break">
+  {{-- ===== ITEMS TABLE (padat) ===== --}}
+  <div class="section">
     <table class="items">
       <thead>
         <tr>
@@ -211,75 +251,56 @@
           <tr>
             <td>
               <div><strong>{{ optional($it->varian->produk)->nama_produk ?? '-' }}</strong></div>
-              <div class="muted">Varian: {{ $it->varian->tipe ?? '-' }}</div>
-              @if($it->catatan)
-                <div class="muted">Catatan: {{ $it->catatan }}</div>
-              @endif
+              <div class="muted">Varian: {{ $it->varian->tipe ?? '-' }}@if($it->catatan) · Catatan: {{ $it->catatan }}@endif</div>
             </td>
-            <td class="right">{{ number_format((int)$it->qty, 0, ',', '.') }}</td>
-            <td class="right">{{ number_format((int)$it->harga_satuan, 0, ',', '.') }}</td>
-            <td class="right">{{ number_format((int)$it->total_harga, 0, ',', '.') }}</td>
+            <td class="right nowrap">{{ number_format((int)$it->qty, 0, ',', '.') }}</td>
+            <td class="right nowrap">{{ number_format((int)$it->harga_satuan, 0, ',', '.') }}</td>
+            <td class="right nowrap">{{ number_format((int)$it->total_harga, 0, ',', '.') }}</td>
           </tr>
         @endforeach
       </tbody>
     </table>
 
-    {{-- ===== TOTALS BOX (inline styles) ===== --}}
-    <table style="width:100%; border-collapse:collapse; margin-top:12px;">
+    {{-- ===== TOTALS BOX (ringkas) ===== --}}
+    <table class="totals-wrap">
       <tr>
         <td style="border:0; padding:0; text-align:right;">
-          <!-- Kotak ringkasan di kanan -->
-          <table style="
-            display:inline-table; width:360px;
-            border-collapse:separate; border-spacing:0;
-            border:1px solid #e5d7da; border-radius:8px; overflow:hidden;
-            background:#fff;
-          ">
-            <tr style="background:#faf5f6;">
-              <td style="padding:8px 10px; text-align:right; color:#333; border-bottom:1px solid #e5d7da;">
-                Subtotal Qty
-              </td>
-              <td style="padding:8px 10px; text-align:right; font-weight:bold; border-bottom:1px solid #e5d7da;">
+          <table class="summary">
+            <tr class="head">
+              <td class="right">Subtotal Qty</td>
+              <td class="right nowrap" style="font-weight:700;">
                 {{ number_format((int) $totalQty, 0, ',', '.') }}
               </td>
             </tr>
             <tr>
-              <td style="padding:10px; text-align:right; color:#8B0000; font-weight:bold;">
-                Grand Total
-              </td>
-              <td style="padding:10px; text-align:right; font-weight:bold; color:#8B0000;">
-                Rp {{ number_format((int) $grandTotal, 0, ',', '.') }}
-              </td>
+              <td class="label">Grand Total</td>
+              <td class="value nowrap">Rp {{ number_format((int) $grandTotal, 0, ',', '.') }}</td>
             </tr>
           </table>
-          <!-- /Kotak ringkasan -->
         </td>
       </tr>
     </table>
   </div>
 
-  {{-- ===== SIGNATURES ===== --}}
-  <table class="sign avoid-break">
+  {{-- ===== SIGNATURES (hemat ruang) ===== --}}
+  <table class="sign">
     <tr>
       <td style="width:50%; vertical-align:top;">
         <div><strong>Disetujui oleh (Pemasok),</strong></div>
-
-        {{-- Garis tanda tangan: lebih pendek + jarak atas lebih besar --}}
-        <div style="margin-top: 95px; width: 220px; border-top: 1px solid #777;"></div>
-
-        <div style="font-weight:bold; margin-top:8px;">{{ $namaSupplier }}</div>
+        <div class="line" style="margin-top:75px;"></div>
+        <div style="font-weight:700; margin-top:6px;">{{ $namaSupplier }}</div>
         <div class="small">Tanda tangan &amp; stempel</div>
       </td>
 
       <td style="width:50%; text-align:right;">
         <div><strong>Hormat Kami,</strong></div>
         @if(file_exists(public_path('/assets/img/ttd.png')))
-          <img src="{{ public_path('/assets/img/ttd.png') }}" alt="Tanda Tangan" style="height:72px; margin: 6px 0;">
+          <img src="{{ public_path('/assets/img/ttd.png') }}" alt="Tanda Tangan" style="height:60px; margin: 4px 0;">
         @else
-          <div class="line"></div>
+          <div class="line" style="margin-left:auto;"></div>
         @endif
-        <div style="font-weight:bold; margin-top:6px;">YUDHISTIRA JALU</div>
-        <div class="small">Bekasi, {{ \Carbon\Carbon::now()->timezone('Asia/Jakarta')->locale('id')->translatedFormat('d F Y') }}</div>
+        <div style="font-weight:700; margin-top:4px;">YUDHISTIRA JALU</div>
+        <div class="small">Bekasi, {{ \Carbon\Carbon::now()->timezone('Asia/Jakarta')->locale('id')->translatedFormat('d M Y') }}</div>
       </td>
     </tr>
   </table>
